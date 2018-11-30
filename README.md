@@ -9,3 +9,26 @@ $ source env/bin/activate
 $ pip install -r requirements.txt
 ```
 
+Right now, local development with mongodb (on x86-64 macOS)
+```bash
+$ brew update
+$ brew install mongodb
+```
+
+It should already have a config file defined in `/usr/local/etc/mongod.conf`  
+```
+systemLog:
+  destination: file
+  path: /usr/local/var/log/mongodb/mongo.log
+  logAppend: true
+storage:
+  dbPath: /usr/local/var/mongodb
+net:
+  bindIp: 127.0.0.1
+```
+
+Then you can simply run local dev server with
+```bash
+$ mongod --config /usr/local/etc/mongod.conf
+```
+
