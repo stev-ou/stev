@@ -1,5 +1,8 @@
 pdf_copies_of_reviews
 
+# virtual environment
+env/
+
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
