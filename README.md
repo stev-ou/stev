@@ -3,9 +3,9 @@ A project to create a better data visualization for anonymous student reviews of
 
 ## Building  
 Clone repo and make venv for python (assumes python 3.7.0) and install requirements  
-```python3
-python3 -m venv env  
-source env/bin/activate
-pip install -r requirements.txt
+```bash
+$ python3 -m venv env  
+$ source env/bin/activate
+$ pip install -r requirements.txt
 ```
 
