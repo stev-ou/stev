@@ -31,4 +31,3 @@ Then you can simply run local dev server with
 ```bash
 $ mongod --config /usr/local/etc/mongod.conf
 ```
-
