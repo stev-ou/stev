@@ -2,24 +2,38 @@ import datetime
 import pprint
 from pymongo import MongoClient
 
-# create mongo client (just connecting to local db)
-client = MongoClient()
-client = MongoClient('localhost', 27017)
 
-# get the database and a collection in the database
-db = client.test_database
-collection = db.test_collection
+class mongo_driver():
+    def __init__(self):
+        # create mongo client (just connecting to local db)
+        self.client = MongoClient("mongodb+srv://zach:G8GqPsUgP6b9VUvc"
+        "@cluster0-svcn3.gcp.mongodb.net/test?retryWrites=true")
 
-# make a post and attempt to insert
-post = {
-        "user": "Sam",
-        "text": "Remi is a sick lad",
-        "date": datetime.datetime.utcnow() 
-       }
+    def get_client(self):
+        return self.client
 
-post_id = collection.insert_one(post).inserted_id
+    def get_db(self, db_name):
+        return self.client[db_name]
 
-print(post_id)
+    def get_db_collection(self, db_name, collection_name):
+        # get the database and a collection in the database
+        db = self.get_db(db_name)
+        collection = db[collection_name]
+        return collection
 
-pprint.pprint(collection.find_one({"user": "Sam"}))
+if __name__ == '__main__':
+    # make a post and attempt to insert
+    post = {
+            "user": "Sam",
+            "text": "Remi is a sick lad",
+            "date": datetime.datetime.utcnow() 
+          }
+
+    db = mongo_driver()
+    collection = db.get_db_collection("test_db", "test_col")
+    post_id = collection.insert_one(post).inserted_id
+
+    print(post_id)
+
+    pprint.pprint(collection.find_one({"user": "Sam"}))
 
