@@ -1,0 +1,6 @@
+pandas
+pymongo
+dnspython
+flask
+Flask-GraphQL
+graphene
