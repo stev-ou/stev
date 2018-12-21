@@ -1,15 +1,7 @@
 from flask import Flask
 from flask_graphql import GraphQLView
-import graphene
-# from schema import schema
-
-class Query(graphene.ObjectType):
-    hello = graphene.String(description='A typical hello world')
-
-    def resolve_hello(self, info):
-        return 'World'
-
-schema = graphene.Schema(query=Query)
+from schema import schema
+from data_loader import update_database
 
 app = Flask(__name__)
 
@@ -20,7 +12,9 @@ app.add_url_rule(
 
 @app.route('/')
 def hello_world():
-    return 'Hello, World!'
+    return 'Ping /graphql for api endpoint'
 
 if __name__ == '__main__':
+    print("Updating database...")
+    update_database()
     app.run(host='127.0.0.1', port=5050)
