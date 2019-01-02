@@ -1,6 +1,7 @@
 import pandas as pd
 from mongo import mongo_driver as db_conn
 import json
+import os
 
 DB_NAME = "reviews-db"
 
