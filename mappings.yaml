@@ -1,0 +1,15 @@
+# Builds necessary dictionaries to allow mapping of values from the output data to courses, instructors, etc.
+
+# 
+# The term code dict maps the term code (6 digit code) to a more readable format (e.g., Spring 2017)
+Term_code_dict: {201720: 'Spring 2018'}
+College_code_dict: {'EN': 'GCOE'}
+
+# This dictionary below shows the desired output mappings for each column in aggregated data, alongside a brief description
+# Ag_df_indices:{0: 'Term Code',
+# 1: 'College Code', etc.}
+
+
+
+# I don't think we will need to use the below dictionary
+# Department_code_dict: {'EN00': 'ENGR', 'EN01': 'AME', 'EN02': 'CH E', 'EN03':'CEES'}
