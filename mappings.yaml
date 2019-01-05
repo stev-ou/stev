@@ -2,14 +2,16 @@
 
 # 
 # The term code dict maps the term code (6 digit code) to a more readable format (e.g., Spring 2017)
-Term_code_dict: {201720: 'Spring 2018'}
+Term_code_dict: {201720: 'Spring 2018'} # Need to fill this out with all term codes we will receive
 College_code_dict: {'EN': 'GCOE'}
 
 # This dictionary below shows the desired output mappings for each column in aggregated data, alongside a brief description
 # Ag_df_indices:{0: 'Term Code',
 # 1: 'College Code', etc.}
 
-
+# This dictionary will show the weight given to each question response when determining the overall student review of the instructor/course
+# This maps the questions to 
+Instructor_question_weighting: {1: 0, 2: 0.15, 3: 0.20, 4: 0, 5: 0.15, 6: 0.15, 7: 0, 8: 0, 9: 0, 10: 0.35} # Currently only 2,3,5,6,10 are in our data
 
 # I don't think we will need to use the below dictionary
 # Department_code_dict: {'EN00': 'ENGR', 'EN01': 'AME', 'EN02': 'CH E', 'EN03':'CEES'}
