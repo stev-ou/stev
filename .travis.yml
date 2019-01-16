@@ -12,4 +12,5 @@ install:
   - pip install -r backend/requirements.txt
 # command to run tests
 script:
-  - python3 -m unittest -v backend/tests/test.py 
+  - python3 -m unittest discover -v -s backend/tests/
+  - pylint backend/
