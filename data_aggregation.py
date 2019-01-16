@@ -1,16 +1,20 @@
-### 
-# This script will contain functions used to aggregate the input data into more usable metrics. It will create an aggregated dataframe with the refined data and 
-#  will upload this aggregated dataframe to MongoDB to be used alongside the unmodified input data. Further documentation on the combination of means and standard deviations is available 
-#  in the data_aggregation_exploration.ipynb
+'''
+This script will contain functions used to aggregate the input data into more usable metrics. It will create an aggregated dataframe with the refined data and 
+ will upload this aggregated dataframe to MongoDB to be used alongside the unmodified input data. Further documentation on the combination of means and standard deviations is available 
+ in the data_aggregation_exploration.ipynb.
+
+ '''
+
 
 import numpy as np
+import pandas as pd
+import yaml
 
 def combine_means(mean_list, pop_list, weight_list):
     '''
     This function takes lists of means, population sizes, and weights for each population, and combines the result into a single mean value.
     * All lists must be the same length
     '''
-    import numpy as np
     mean_list = np.array(mean_list)
     pop_list = np.array(pop_list)
     weight_list = np.array(weight_list)
@@ -32,7 +36,6 @@ def combine_standard_deviations(sd_list, mean_list,pop_list, weight_list):
     
     * All lists must be same length
     '''
-    import numpy as np
     # Convert all input lists into numpy arrays
     sd_list = np.array(sd_list)
     mean_list = np.array(mean_list)
@@ -52,9 +55,6 @@ def combine_standard_deviations(sd_list, mean_list,pop_list, weight_list):
 
 
 def aggregate_data(df):
-    
-    import numpy as np
-    import pandas as pd
 
     # Initialize the aggregated dataframe by copying the base data frame
     ag_df = df.copy()
@@ -84,7 +84,6 @@ def aggregate_data(df):
     ag_df.drop_duplicates(subset = ag_df.columns.drop('Course Title'), inplace = True)
 
     # Read in the question mappings values from the mappings.yaml
-    import yaml
     with open('mappings.yaml') as f:
         # use safe_load instead load
         mappings = yaml.safe_load(f)
@@ -156,7 +155,6 @@ def aggregate_data(df):
     return ag_df
 
 if __name__ == '__main__':
-    import pandas as pd
     
     df = pd.read_csv("data/data_sp18.csv") # Modify to correct data location
     

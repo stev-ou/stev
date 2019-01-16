@@ -51,9 +51,12 @@ def load_new_data(collection):
     
     # Gets the list of data documents to be checked and potentially inserted. Removes non csv files
     data_files = os.listdir('data')
+
+    # Inform about non csv files
     for file in data_files: 
         if file[-4:] != '.csv':
-            data_files.remove(file)
+            print('The file ' + file + ' is located in the data/ directory, but cannot be uploaded to the DB, because it is not a .csv')
+            dat_files.remove(file)
       
     for data_file in data_files:
         # Check to see if the document already exists in the document in the database
