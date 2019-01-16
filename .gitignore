@@ -1,6 +1,10 @@
 pdf_copies_of_reviews
 tutorial
 
+# IPYNB checkpoints
+notebooks/.ipynb_checkpoints
+.ipynb_checkpoints
+
 # virtual environment
 env/
 
@@ -68,3 +72,6 @@ instance/
 
 # Scrapy stuff:
 .scrapy
+
+# PyCharm Stuff
+.idea
