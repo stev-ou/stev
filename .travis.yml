@@ -1,0 +1,10 @@
+language: python
+python:
+  - "3.6"
+  - "3.7"  # 3.7 development branch
+# command to install dependencies
+install:
+  - pip install -r backend/requirements.txt
+# command to run tests
+script:
+  - python3 -m unittest -v backend/tests/test.py 
