@@ -19,3 +19,7 @@ $ pip install -r requirements.txt
 ## Running Tests (incl. linting)
 
 `make test`
+
+## Deploying
+
+Currently deploying using Docker
