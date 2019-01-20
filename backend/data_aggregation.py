@@ -155,10 +155,9 @@ def aggregate_data(df):
 
 if __name__ == '__main__':
     
-    df = pd.read_csv("data/data_sp18.csv") # Modify to correct data location
+    df = pd.read_csv("data/gcoe_sp18.csv") # Modify to correct data location
     
     ag_df = aggregate_data(df)
-    print(ag_df.head(60))
     
-    
-    
+    if len(ag_df[ag_df[['Course Title', 'Instructor Last Name']].duplicated() == True]) == 0:
+        print("From basic tests, the data aggregation is working correctly.")
