@@ -1,6 +1,7 @@
 import unittest
 from backend import mongo
 from backend import data_aggregation
+import pandas as pd
 
 
 class basictest(unittest.TestCase):
@@ -29,7 +30,7 @@ class basictest(unittest.TestCase):
 
     # Tests for database aggregation
     # Test the computation of the mean and sd for the data aggregation
-    def compute_mean_sd(self):
+    def test_compute_mean_sd(self):
         '''
         This unit test will examine the formulae for computing weighted mean and sd from the data aggregation script.
         '''
@@ -50,7 +51,8 @@ class basictest(unittest.TestCase):
         return self.assertEqual(True, status)
 
     # Test the dataframe aggregation for unique entries 
-    def dataframe_aggregation(self):
+    def test_dataframe_aggregation(self):
+
         '''
         This unit test will examine the aggregated dataframe and ensure it has no course entry repeats with the same 
         course title and instructor.

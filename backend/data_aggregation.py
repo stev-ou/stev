@@ -9,6 +9,10 @@ This script will contain functions used to aggregate the input data into more us
 import numpy as np
 import pandas as pd
 import yaml
+import os
+
+# Get file location for mappings.yaml and reading data
+__location__ = os.path.realpath(os.path.join(os.getcwd(), os.path.dirname(__file__)))
 
 def combine_means(mean_list, pop_list, weight_list):
     '''
@@ -83,7 +87,9 @@ def aggregate_data(df):
     ag_df.drop_duplicates(subset = ag_df.columns.drop('Course Title'), inplace = True)
 
     # Read in the question mappings values from the mappings.yaml
-    with open('mappings.yaml') as f:
+    file_path = __location__+"/mappings.yaml"
+
+    with open(file_path) as f:
         # use safe_load instead load
         mappings = yaml.safe_load(f)
         question_weighting = mappings['Instructor_question_weighting']
