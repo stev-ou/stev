@@ -7,3 +7,6 @@ Bootstrapped with [Create React App](https://github.com/facebook/create-react-ap
 In the project directory, you can run: **use yarn**
 - To begin the development, run `npm start` or `yarn start`.
 - To create a production bundle, use `npm run build` or `yarn build`.
+
+## Prereq's
+- run `npm install` to install deps

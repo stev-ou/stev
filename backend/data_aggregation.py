@@ -62,7 +62,6 @@ def aggregate_data(df):
     # Drop the unnecessary columns
     ag_df.drop(['Department Code', 'Question Number','Section Number','Responses', 'CRN','Campus Code','Question', 'Mean', 'Median', 'Standard Deviation', 'Department Mean', 'Department Median', 'Similar College Mean', 'College Mean', 'College Median', 'Percent Rank - Department', 'Percent Rank - College', 'Percent #1', 'Percent #2', 'Percent #3', 'Percent #4', 'Percent #5', 'ZScore - College', 'ZScore - College Similar Sections', 'Course Level', 'Section Size', 'Similar College Median'], axis=1, inplace = True)
 
-
     # Add in the columns to be filled with the aggregated values
     ag_df.insert(3,'Avg Department Rating', 0.0)
     ag_df.insert(4,'SD Department Rating', 0.0)
