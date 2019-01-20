@@ -3,6 +3,9 @@ from data_loader import update_database
 
 app = Flask(__name__)
 
+# useful for testing
+# curl -i http://localhost:5050/api/v0/
+
 @app.route('/')
 def hello_world():
     return 'Ping <a href="http://{}:5050/api/v0/">/api/v0/</a> for api'.format(str(request.remote_addr))
