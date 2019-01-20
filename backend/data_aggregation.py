@@ -136,6 +136,7 @@ def aggregate_data(df):
             #### IMPORTANT #### NO POPULATION-BASED OR OTHER WEIGHTING USED IN THE CALCULATION OF SD AND AVERAGE COURSE RATING
 
             course_mean, course_sd = combine_standard_deviations(subset['SD Instructor Rating In Section'], subset['Avg Instructor Rating In Section'], np.ones(len(subset['SD Instructor Rating In Section'])), np.ones(len(subset['SD Instructor Rating In Section'])))
+            
             # Find the row of interest in the desired df
             ag_df_course_rows = ag_df[(ag_df['Subject Code']==subject) & (ag_df['Course Number']==course)].index.tolist()
             # Fill the Course ratings columns
@@ -146,6 +147,7 @@ def aggregate_data(df):
         # Modify the dataframe subset that consists only of the entries with the desired subject(see course index above)
         # Note that now our subset consists of aggregated data from all instructors and courses within the desired subject/department
         subset = ag_df[(ag_df['Subject Code']==subject)]
+
         # Compute the combined mean and standard deviation of all of the courses within the department
         #### IMPORTANT #### NO POPULATION-BASED OR OTHER WEIGHTING USED IN THE CALCULATION OF SD AND AVERAGE COURSE RATING
 
@@ -156,6 +158,10 @@ def aggregate_data(df):
         # Fill the Course ratings columns
         ag_df.at[ag_df_course_rows, 'Avg Department Rating'] = department_mean
         ag_df.at[ag_df_course_rows, 'SD Department Rating'] = department_sd
+
+    # Add in a Queryable Course String for the search by course
+    ag_df['Queryable Course String'] = ag_df['Subject Code'].map(str) + ' ' + ag_df['Course Number'].map(str) + ' ' + ag_df['Course Title'].map(str)
+
         
     return ag_df
 

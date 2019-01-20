@@ -37,7 +37,7 @@ def update_database():
 #            upsert=True
 #         )
 
-def load_new_data(collection):
+def load_new_data(collection, force_update = True):
     '''
     Loads new data into the database, from the data folder. Each new .csv file is inserted into the database as a new collection. When inserting,
     the only check is to see if a collection with the name of the csv already exists in the database(i.e., if COE_Spring_2018 already exists in 
@@ -69,6 +69,7 @@ def load_new_data(collection):
         
             # try to update the database with the given data file 
             # can change $setonInsert to $set in the below lines to automatically reenter data(i.e. if the .csv files were changed)
+
             result = collection.update_many({'term_and_name':data_file[:-4]},{'$setOnInsert':{data_file[:-4]:records}}, upsert=True) 
 
             # Update the user on what happened
@@ -78,7 +79,7 @@ def load_new_data(collection):
             print('A document for '+data_file[:-4] + ' already exists in the database collection '+ COLLECTION_NAME + ' and was unmodified.')
             
          # Check to see if the aggregated document already exists in the document in the database
-        if collection.find({ 'term_and_name':'Aggregated_'+data_file[:-4]}).limit(1).count(with_limit_and_skip=True) == False:
+        if collection.find({ 'term_and_name':'Aggregated_'+data_file[:-4]}).limit(1).count(with_limit_and_skip=True) == False or force_update:
             # Reading data into python from the csv
             df = pd.read_csv('data/'+data_file)
             # Create the aggregated database 
@@ -90,7 +91,10 @@ def load_new_data(collection):
 
              # Try to update the aggregated dataframe
             # can change $setonInsert to $set in the below lines to automatically reenter data(i.e. if the .csv files were changed)
-            ag_result = collection.update_many({'term_and_name':'Aggregated_'+data_file[:-4]},{'$setOnInsert':{'Aggregated_' + data_file[:-4]:ag_records}}, upsert=True)
+            if force_update:
+                ag_result = collection.update_many({'term_and_name':'Aggregated_'+data_file[:-4]},{'$set':{'Aggregated_' + data_file[:-4]:ag_records}}, upsert=True)
+            else:
+                ag_result = collection.update_many({'term_and_name':'Aggregated_'+data_file[:-4]},{'$setOnInsert':{'Aggregated_' + data_file[:-4]:ag_records}}, upsert=True)
 
 
             # Update the user on what happened
