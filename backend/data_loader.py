@@ -50,7 +50,7 @@ def load_new_data(collection):
     '''
     
     # Gets the list of data documents to be checked and potentially inserted. Removes non csv files
-    data_files = os.listdir('data')
+    data_files = os.listdir('data/')
 
     # Inform about non csv files
     for file in data_files: 

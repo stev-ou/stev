@@ -4,3 +4,4 @@ dnspython
 flask
 pylint
 pyyaml
+gunicorn
