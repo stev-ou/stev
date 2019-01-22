@@ -65,6 +65,7 @@ def update_database():
         
             # try to update the database with the given data file 
             # can change $setonInsert to $set in the below lines to automatically reenter data(i.e. if the .csv files were changed)
+
             result = collection.update_many({'term_and_name':data_file[:-4]},{'$setOnInsert':{data_file[:-4]:records}}, upsert=True) 
 
             # Update the user on what happened
@@ -74,7 +75,7 @@ def update_database():
             print('A document for '+data_file[:-4] + ' already exists in the database collection '+ collection + ' and was unmodified.')
             
          # Check to see if the aggregated document already exists in the document in the database
-        if collection.find({ 'term_and_name':'Aggregated_'+data_file[:-4]}).limit(1).count(with_limit_and_skip=True) == False:
+        if collection.find({ 'term_and_name':'Aggregated_'+data_file[:-4]}).limit(1).count(with_limit_and_skip=True) == False or force_update:
             # Reading data into python from the csv
             df = pd.read_csv('data/'+data_file)
             # Create the aggregated database 
@@ -86,7 +87,10 @@ def update_database():
 
              # Try to update the aggregated dataframe
             # can change $setonInsert to $set in the below lines to automatically reenter data(i.e. if the .csv files were changed)
-            ag_result = collection.update_many({'term_and_name':'Aggregated_'+data_file[:-4]},{'$setOnInsert':{'Aggregated_' + data_file[:-4]:ag_records}}, upsert=True)
+            if force_update:
+                ag_result = collection.update_many({'term_and_name':'Aggregated_'+data_file[:-4]},{'$set':{'Aggregated_' + data_file[:-4]:ag_records}}, upsert=True)
+            else:
+                ag_result = collection.update_many({'term_and_name':'Aggregated_'+data_file[:-4]},{'$setOnInsert':{'Aggregated_' + data_file[:-4]:ag_records}}, upsert=True)
 
 
             # Update the user on what happened
