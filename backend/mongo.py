@@ -1,8 +1,6 @@
 import datetime 
 import pprint
 from pymongo import MongoClient
-import sys
-
 
 class mongo_driver():
     def __init__(self):
