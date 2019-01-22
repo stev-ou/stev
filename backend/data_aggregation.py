@@ -160,7 +160,7 @@ def aggregate_data(df):
         ag_df.at[ag_df_course_rows, 'SD Department Rating'] = department_sd
 
     # Add in a Queryable Course String for the search by course
-    ag_df['Queryable Course String'] = ag_df['Subject Code'].map(str) + ' ' + ag_df['Course Number'].map(str) + ' ' + ag_df['Course Title'].map(str)
+    ag_df['Queryable Course String'] = ag_df['Subject Code'].map(str).str.lower() + ' ' + ag_df['Course Number'].map(str).str.lower() + ' ' + ag_df['Course Title'].map(str).str.lower()
 
         
     return ag_df
