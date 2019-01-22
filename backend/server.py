@@ -37,7 +37,7 @@ def api_search_by_course():
 	# Expand the cursor and construct the DataFrame
 	df =  pd.DataFrame(list(test_data))
 	# Delete the _id
-	# del df['_id']
+	del df['_id']
 	print(df.head())
 
 	return jsonify({'message': 'You have reached api root endpoint'})
@@ -53,7 +53,7 @@ def api_search_by_instructor():
 # SEARCH BY DEPARTMENT ENDPOINT
 @app.route('/api/v0/searchbydepartment')
 def api_search_by_department():
-	# Get the search query from the url string
+    # Get the search query from the url string
 	query = request.args.get('arg1', default = '--No Search Argument Provided--', type = str)
 	return jsonify({'message': 'You have reached api root endpoint'})
 
