@@ -58,7 +58,7 @@ def instructor_api():
 
     return jsonify(dumps(test_data))
 
-    
+
 # dept search
 @app.route('/api/v0/departments')
 def department_api():
