@@ -8,7 +8,6 @@ from data_aggregation import aggregate_data
 
 # Define the name of the database and the name of the collection. Insert each .csv record as a document within the collection
 DB_NAME = "reviews-db"
-COLLECTION_NAME = "reviews-collection"
 
 def update_database():
     '''
@@ -16,9 +15,6 @@ def update_database():
     '''
     # Establish DB connection
     conn = db_conn()
-    collection = conn.get_db_collection(DB_NAME, COLLECTION_NAME)
-    load_new_data(collection)
-
 
 #     # load data into pandas and parse/clean
 #     # TODO: implement cleaning etc
@@ -36,8 +32,6 @@ def update_database():
 #            {"$set": records },
 #            upsert=True
 #         )
-
-def load_new_data(collection):
     '''
     Loads new data into the database, from the data folder. Each new .csv file is inserted into the database as a new collection. When inserting,
     the only check is to see if a collection with the name of the csv already exists in the database(i.e., if COE_Spring_2018 already exists in 
@@ -59,8 +53,10 @@ def load_new_data(collection):
             data_files.remove(file)
       
     for data_file in data_files:
+        # collection for each data file
+        collection = conn.get_db_collection(DB_NAME, data_file)
         # Check to see if the document already exists in the document in the database
-        if collection.find({ 'term_and_name':data_file[:-4]}).limit(1).count(with_limit_and_skip=True) == False:
+        if collection.find({'term_and_name':data_file[:-4]}).limit(1).count(with_limit_and_skip=True) == False:
             # Reading data into python from the csv
             df = pd.read_csv('data/'+data_file)
 
@@ -73,9 +69,9 @@ def load_new_data(collection):
 
             # Update the user on what happened
 #             if result.upserted_id != None:
-            print('A document for '+data_file[:-4] + ' was added to the database collection '+ COLLECTION_NAME + '.')
+            print('A document for '+data_file[:-4] + ' was added to the database collection '+ collection + '.')
         else:
-            print('A document for '+data_file[:-4] + ' already exists in the database collection '+ COLLECTION_NAME + ' and was unmodified.')
+            print('A document for '+data_file[:-4] + ' already exists in the database collection '+ collection + ' and was unmodified.')
             
          # Check to see if the aggregated document already exists in the document in the database
         if collection.find({ 'term_and_name':'Aggregated_'+data_file[:-4]}).limit(1).count(with_limit_and_skip=True) == False:
