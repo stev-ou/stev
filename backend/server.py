@@ -14,9 +14,9 @@ def hello_world():
 def api():
     return jsonify({'message': 'You have reached api root endpoint'})
 
-@app.route('/api/v0/<int:number>', methods=['GET'])
-def hi_number(number):
-    return jsonify({'your number': number})
+@app.route('/api/v0/course/<string:course_string>', methods=['GET'])
+def get_course(course_string):
+    return jsonify({'course': course_string})
 
 if __name__ == '__main__':
     print("Updating database...")
