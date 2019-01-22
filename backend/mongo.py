@@ -27,7 +27,6 @@ class mongo_driver():
         db = self.get_db(db_name)
         collections = db.collection_names()
         if check_collection in collections:
-            print(check_collection + ' exists within the '+ db_name)
             return True
         else:
             return False
