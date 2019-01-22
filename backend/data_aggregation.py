@@ -9,6 +9,10 @@ This script will contain functions used to aggregate the input data into more us
 import numpy as np
 import pandas as pd
 import yaml
+import os
+
+# Get file location for mappings.yaml and reading data
+__location__ = os.path.realpath(os.path.join(os.getcwd(), os.path.dirname(__file__)))
 
 def combine_means(mean_list, pop_list, weight_list):
     '''
@@ -83,7 +87,9 @@ def aggregate_data(df):
     ag_df.drop_duplicates(subset = ag_df.columns.drop('Course Title'), inplace = True)
 
     # Read in the question mappings values from the mappings.yaml
-    with open('mappings.yaml') as f:
+    file_path = __location__+"/mappings.yaml"
+
+    with open(file_path) as f:
         # use safe_load instead load
         mappings = yaml.safe_load(f)
         question_weighting = mappings['Instructor_question_weighting']
@@ -130,6 +136,7 @@ def aggregate_data(df):
             #### IMPORTANT #### NO POPULATION-BASED OR OTHER WEIGHTING USED IN THE CALCULATION OF SD AND AVERAGE COURSE RATING
 
             course_mean, course_sd = combine_standard_deviations(subset['SD Instructor Rating In Section'], subset['Avg Instructor Rating In Section'], np.ones(len(subset['SD Instructor Rating In Section'])), np.ones(len(subset['SD Instructor Rating In Section'])))
+            
             # Find the row of interest in the desired df
             ag_df_course_rows = ag_df[(ag_df['Subject Code']==subject) & (ag_df['Course Number']==course)].index.tolist()
             # Fill the Course ratings columns
@@ -140,6 +147,7 @@ def aggregate_data(df):
         # Modify the dataframe subset that consists only of the entries with the desired subject(see course index above)
         # Note that now our subset consists of aggregated data from all instructors and courses within the desired subject/department
         subset = ag_df[(ag_df['Subject Code']==subject)]
+
         # Compute the combined mean and standard deviation of all of the courses within the department
         #### IMPORTANT #### NO POPULATION-BASED OR OTHER WEIGHTING USED IN THE CALCULATION OF SD AND AVERAGE COURSE RATING
 
@@ -150,15 +158,18 @@ def aggregate_data(df):
         # Fill the Course ratings columns
         ag_df.at[ag_df_course_rows, 'Avg Department Rating'] = department_mean
         ag_df.at[ag_df_course_rows, 'SD Department Rating'] = department_sd
+
+    # Add in a Queryable Course String for the search by course
+    ag_df['Queryable Course String'] = ag_df['Subject Code'].map(str).str.lower() + ' ' + ag_df['Course Number'].map(str).str.lower() + ' ' + ag_df['Course Title'].map(str).str.lower()
+
         
     return ag_df
 
 if __name__ == '__main__':
     
-    df = pd.read_csv("data/data_sp18.csv") # Modify to correct data location
+    df = pd.read_csv("data/gcoe_sp18.csv") # Modify to correct data location
     
     ag_df = aggregate_data(df)
-    print(ag_df.head(60))
     
-    
-    
+    if len(ag_df[ag_df[['Course Title', 'Instructor Last Name']].duplicated() == True]) == 0:
+        print("From basic tests, the data aggregation is working correctly.")
