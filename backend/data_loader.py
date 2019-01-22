@@ -9,7 +9,7 @@ from data_aggregation import aggregate_data
 # Define the name of the database and the name of the collection. Insert each .csv record as a document within the collection
 DB_NAME = "reviews-db"
 
-def update_database():
+def update_database(force_update = True):
     '''
     This function will update the desired database name and collection above with the data files (.csv) listed inside the data/ directory.
     '''
@@ -53,10 +53,9 @@ def update_database():
             data_files.remove(file)
       
     for data_file in data_files:
-        # collection for each data file
-        collection = conn.get_db_collection(DB_NAME, data_file)
-        # Check to see if the document already exists in the document in the database
-        if collection.find({'term_and_name':data_file[:-4]}).limit(1).count(with_limit_and_skip=True) == False:
+        # If the collection doesnt exist or if the update is forced
+        if conn.collection_existence_check(DB_NAME, data_file[:-4])==False or force_update:
+            collection = conn.get_db_collection(DB_NAME, data_file[:-4])
             # Reading data into python from the csv
             df = pd.read_csv('data/'+data_file)
 
@@ -66,16 +65,18 @@ def update_database():
             # try to update the database with the given data file 
             # can change $setonInsert to $set in the below lines to automatically reenter data(i.e. if the .csv files were changed)
 
-            result = collection.update_many({'term_and_name':data_file[:-4]},{'$setOnInsert':{data_file[:-4]:records}}, upsert=True) 
-
+            # result = collection.update_many({'term_and_name':data_file[:-4]},{'$set':{data_file[:-4]:records}}, upsert=True) 
+            result = collection.update_many({},{'$set':{data_file[:-4]:records}}, upsert=True)
             # Update the user on what happened
 #             if result.upserted_id != None:
-            print('A document for '+data_file[:-4] + ' was added to the database collection '+ collection + '.')
+            print('A collection called '+data_file[:-4] + ' was added to the database '+ DB_NAME + '.')
         else:
-            print('A document for '+data_file[:-4] + ' already exists in the database collection '+ collection + ' and was unmodified.')
+            print('A collection called '+data_file[:-4] + ' already exists in the database '+ DB_NAME + ' and was unmodified.')
             
-         # Check to see if the aggregated document already exists in the document in the database
-        if collection.find({ 'term_and_name':'Aggregated_'+data_file[:-4]}).limit(1).count(with_limit_and_skip=True) == False or force_update:
+#          # Check to see if the aggregated document already exists in the document in the database
+        if conn.collection_existence_check(DB_NAME, 'Aggregated_' +data_file[:-4])==False or force_update:
+
+            collection = conn.get_db_collection(DB_NAME, 'Aggregated_' + data_file[:-4])
             # Reading data into python from the csv
             df = pd.read_csv('data/'+data_file)
             # Create the aggregated database 
@@ -87,21 +88,16 @@ def update_database():
 
              # Try to update the aggregated dataframe
             # can change $setonInsert to $set in the below lines to automatically reenter data(i.e. if the .csv files were changed)
-            if force_update:
-                ag_result = collection.update_many({'term_and_name':'Aggregated_'+data_file[:-4]},{'$set':{'Aggregated_' + data_file[:-4]:ag_records}}, upsert=True)
-            else:
-                ag_result = collection.update_many({'term_and_name':'Aggregated_'+data_file[:-4]},{'$setOnInsert':{'Aggregated_' + data_file[:-4]:ag_records}}, upsert=True)
-
+            ag_result = collection.update_many({},{'$set':{'Aggregated_' + data_file[:-4]:ag_records}}, upsert=True)
 
             # Update the user on what happened
 #             if result.upserted_id != None:
-            print('A document for aggregated '+data_file[:-4] + ' was added to the database collection '+ COLLECTION_NAME + '.')
+            print('A collection called Aggregated_'+data_file[:-4] + ' was added to the database '+ DB_NAME + '.')
         else:
-            print('A document for aggregated '+data_file[:-4] + ' already exists in the database collection '+ COLLECTION_NAME + ' and was unmodified.')
-
-
+            print('A collection called Aggregated_'+data_file[:-4] + ' already exists in the database '+ DB_NAME + ' and was unmodified.')
+            
     # Return the connection to the collection
-    return collection
+    return conn
     
     # 
 if __name__ == '__main__':

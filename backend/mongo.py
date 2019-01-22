@@ -1,6 +1,7 @@
 import datetime 
 import pprint
 from pymongo import MongoClient
+import sys
 
 
 class mongo_driver():
@@ -16,10 +17,21 @@ class mongo_driver():
         return self.client[db_name]
 
     def get_db_collection(self, db_name, collection_name):
-        # get the database and a collection in the database
+
         db = self.get_db(db_name)
         collection = db[collection_name]
         return collection
+
+    def collection_existence_check(self, db_name, check_collection):
+        # Checks to see if a collection exists within a database
+        db = self.get_db(db_name)
+        collections = db.collection_names()
+        if check_collection in collections:
+            print(check_collection + ' exists within the '+ db_name)
+            return True
+        else:
+            return False
+
 
 if __name__ == '__main__':
     # make a post and attempt to insert
