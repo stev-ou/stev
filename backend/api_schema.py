@@ -1,4 +1,5 @@
-//Figure1
+# Figure1
+
 
 {
 	"result": 
@@ -12,9 +13,9 @@
 	}
 }
 
-//Figure2
+# Figure2
 
-// AKA Schema relative_dept_rating_figure:
+# AKA Schema relative_dept_rating_figure:
 
 {'result':{'course name':'The long name of the course',
            'course number': 'NAME',
@@ -25,7 +26,7 @@
 			}
 			}
 
-
+"""
 Pandas = [
 	1=Avg Course Rating, 
 	2=Avg Department Rating
@@ -46,3 +47,4 @@ Pandas = [
 	17=ObjectID
 	18=uuid
 	]
+        """
