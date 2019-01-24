@@ -73,10 +73,11 @@ class SearchForm extends React.Component {
   }
 }
 
+// consider converting to function
 class Landing extends React.Component {
-    constructor(props) {
-        super(props);
-    }
+    //constructor(props) {
+    //    super(props);
+    //}
 
     render () {
         return (
