@@ -73,28 +73,36 @@ class SearchForm extends React.Component {
   }
 }
 
-const Landing = props => (
-    <div className="App">
-        <header className="App-header">
-          <p>
-              University of Oklahoma Student Reviews
-          </p>
-        </header>
-        <div className="Info">
-            <p> Disclaimer: This website is not affiliated with nor approved by the University of Oklahoma. Its sole purpose is to inform students and prompt action against garbage-can professors whom require removal. There is no warranty nor any guaranetee on the validity of the data. Data is publicly available and ingested from the University's public releases. Thank you and have a good time.
-            </p>
-        </div>
-        <a
-            className="App-link"
-            href="https:\/\/www.ou.edu/provost/course-evaluation-data"
-            target="_blank"
-            rel="noopener noreferrer"
-        >
-            Link to data
-        </a>
-        <SearchForm />
-    </div>
-);
+class Landing extends React.Component {
+    constructor(props) {
+        super(props);
+    }
+
+    render () {
+        return (
+            <div className="App">
+                <header className="App-header">
+                  <p>
+                      University of Oklahoma Student Reviews
+                  </p>
+                </header>
+                <div className="Info">
+                    <p> Disclaimer: This website is not affiliated with nor approved by the University of Oklahoma. Its sole purpose is to inform students and prompt action against garbage-can professors whom require removal. There is no warranty nor any guaranetee on the validity of the data. Data is publicly available and ingested from the University's public releases. Thank you and have a good time.
+                    </p>
+                </div>
+                <a
+                    className="App-link"
+                    href="https:\/\/www.ou.edu/provost/course-evaluation-data"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                >
+                    Link to data
+                </a>
+                <SearchForm />
+            </div>
+        );
+    }
+}
 
 class LandingController extends React.Component {
     constructor(props) {
