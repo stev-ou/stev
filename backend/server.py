@@ -39,6 +39,16 @@ def course_api():
     collection = db.get_db_collection(DB_NAME, "gcoe_sp18")
     test_data = collection.find_one({'Subject Code':'ENGR'})
 
+    def relative_dept_rating_figure():
+        '''
+        This function will build the json for the response to build the relative department rating figure 
+        (2nd from top on the left side). The json has structure given in schema.json, for this rating.
+        Inputs: valid_query - a validated query from the co
+
+        '''
+        return
+
+
     return jsonify(dumps(test_data))
 
 
