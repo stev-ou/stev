@@ -39,10 +39,10 @@ if __name__ == '__main__':
           }
 
     db = mongo_driver()
-    collection = db.get_db_collection("reviews-db", "aggregated_gcoe_sp18")
-    #post_id = collection.insert_one(post).inserted_id
+    collection = db.get_db_collection("test_db", "test_col")
+    # post_id = collection.insert_one(post).inserted_id
 
-    #print(post_id)
+    # print(post_id)
 
-    pprint.pprint(db.posts.find_one())
+    # pprint.pprint(collection.find_one({"user": "Sam"}))
 
