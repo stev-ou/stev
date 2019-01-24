@@ -1,1 +1,1 @@
-init-hook='import sys; sys.path.append("backend/")'
+init-hook='import sys; sys.path.append(".")'
