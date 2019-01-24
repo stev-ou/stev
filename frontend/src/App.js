@@ -35,17 +35,24 @@ class SearchForm extends React.Component {
         search_text: ''
     };
 
-    this.handleChange = this.handleChange.bind(this);
+    this.handleInputChange = this.handleInputChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
   }
 
-  handleChange(event) {
-    this.setState({value: event.target.value});
+  handleInputChange(event) {
+    const target = event.target;
+    const value = target.value;
+    const name = target.name;
+
+    this.setState({
+      [name]: value
+    });
   }
 
   handleSubmit(event) {
-    alert('Your favorite flavor is: ' + this.state.value);
-    event.preventDefault();
+    alert('You entered: ' + this.state.search_type + " " + this.state.search_text);
+    //event.preventDefault();
+    this.setState({valid_search: true})
   }
 
   render() {
@@ -53,51 +60,60 @@ class SearchForm extends React.Component {
       <form className="SearchForm" onSubmit={this.handleSubmit}>
         <label>
           Search by:
-          <select style={{'margin-left': '10px'}} value={this.state.value} onChange={this.handleChange}>
+          <select name='search_type' style={{'margin-left': '10px'}} value={this.state.search_type} onChange={this.handleInputChange}>
             <option value="instructor">Instructor</option>
             <option value="department">Department</option>
             <option value="course_number">Course Number</option>
           </select>
         </label>
-        <input type=
+        <input name='search_text' type='text' value={this.state.search_text} onChange={this.handleInputChange} />
         <input type="submit" value="Submit" />
       </form>
     );
   }
 }
 
-const Landing = props => {
-    const valid_search = props.search;
-    if (!valid_search) {
-        return (
-            <div className="App">
-                <header className="App-header">
-                  <p>
-                      University of Oklahoma Student Reviews
-                  </p>
-                </header>
-                <div className="Info">
-                    <p> Disclaimer: This website is not affiliated with nor approved by the University of Oklahoma. Its sole purpose is to inform students and prompt action against garbage-can professors whom require removal. There is no warranty nor any guaranetee on the valididty of the data. Data is publicly available and ingested from the University's public releases. Thank you and have a good time.
-                    </p>
-                </div>
-                <a
-                    className="App-link"
-                    href="https:\/\/www.ou.edu/provost/course-evaluation-data"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                >
-                    Link to data
-                </a>
-                <SearchForm />
-            </div>
-        );
+const Landing = props => (
+    <div className="App">
+        <header className="App-header">
+          <p>
+              University of Oklahoma Student Reviews
+          </p>
+        </header>
+        <div className="Info">
+            <p> Disclaimer: This website is not affiliated with nor approved by the University of Oklahoma. Its sole purpose is to inform students and prompt action against garbage-can professors whom require removal. There is no warranty nor any guaranetee on the validity of the data. Data is publicly available and ingested from the University's public releases. Thank you and have a good time.
+            </p>
+        </div>
+        <a
+            className="App-link"
+            href="https:\/\/www.ou.edu/provost/course-evaluation-data"
+            target="_blank"
+            rel="noopener noreferrer"
+        >
+            Link to data
+        </a>
+        <SearchForm />
+    </div>
+);
+
+class LandingController extends React.Component {
+    constructor(props) {
+        super(props);
+        this.state = {valid_search: false}
     }
-    return <TimeSeriesChart />;
+
+    render() {
+        const valid_search = this.state.valid_search;
+        if (!valid_search) {
+            return <Landing />
+        }
+        return <TimeSeriesChart />;
+    }
 }
 
 const App = props => {
     return (
-        <Landing valid_search={false}/>
+        <LandingController />
     );
 }
 
