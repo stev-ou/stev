@@ -26,7 +26,7 @@
 			}
 
 
-Pandas(
+Pandas = [
 	1=Avg Course Rating, 
 	2=Avg Department Rating
 	3=Avg Inst Rating in Section
@@ -45,4 +45,4 @@ Pandas(
 	16=Term Code
 	17=ObjectID
 	18=uuid
-	)
+	]
