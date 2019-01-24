@@ -162,6 +162,8 @@ def aggregate_data(df):
     # Add in a Queryable Course String for the search by course
     ag_df['Queryable Course String'] = ag_df['Subject Code'].map(str).str.lower() + ' ' + ag_df['Course Number'].map(str).str.lower() + ' ' + ag_df['Course Title'].map(str).str.lower()
 
+    # Add in a uuid field for the course, based on subject code (lowercase) and course number
+    ag_df['uuid'] = ag_df['Subject Code'].map(str).str.lower() + ag_df['Course Number'].map(str)# .str.lower()
         
     return ag_df
 

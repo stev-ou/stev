@@ -45,4 +45,3 @@ if __name__ == '__main__':
     print(post_id)
 
     pprint.pprint(collection.find_one({"user": "Sam"}))
-

@@ -1,6 +1,6 @@
 language: python
 python:
-  - "3.6"
+  # - "3.6" # uncomment to test 3.6 compatability
   # - "3.7"  # 3.7.0 development branch only - below installs stable
 matrix:
   include:

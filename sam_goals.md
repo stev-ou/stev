@@ -1,6 +1,6 @@
 # Sam Jett's Project Goals
 
-**Through completing this project, I would like to:**
+**Through completing this project, I would like to:** 
 - Learn to access, add data to, and read data from a database  
 - Learn to use JS or JS frameworks for data representation and visualization online  
 - Work collaboratively, principally with Zach S but with any of our friends (Tony or Joe) that might like to work on the project. This includes documenting my code more fully, using GitHub to better keep up with the project status, and using branching to maintain a functional codebase while developing.  
