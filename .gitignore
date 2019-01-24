@@ -1,6 +1,7 @@
 pdf_copies_of_reviews
 tutorial
 .idea/
+.DS_Store
 
 # IPYNB checkpoints
 notebooks/.ipynb_checkpoints
