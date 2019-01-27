@@ -26,6 +26,18 @@
 			}
 			}
 
+# Figure 3
+# AKA Time series for Course rating, department rating, and others
+
+{'result':[{'object list':[{'object': 'str, e.g. department_name', 
+'time_series_values':
+[{'year': 2018, 'semester': 'str', 'value': 0.0},{'year': 2017, 'semester': 'str', 'value': 0.0}, {'year': 2016, 'semester': 'str', 'value': 0.0}]}, 
+{'object': 'str, e.g. AME 5553 rating','time_series_values':[{'year': 2018, 'semester': 'str', 'value': 0.0},{'year': 2017, 'semester': 'str', 'value': 0.0}, {'year': 2016, 'semester': 'str', 'value': 0.0}]}]}
+
+# Basically, the response is organized by object, then the semester, value, and year are included in lists for each object
+#   This should leave us some extensibility for adding in other time series easily and parsing them in the same manner, even for
+# 		objects that only have data over a limited period.
+
 """
 Pandas = [
 	1=Avg Course Rating, 
