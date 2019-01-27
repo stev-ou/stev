@@ -4,27 +4,44 @@ from mongo import mongo_driver
 import pandas as pd
 
 
-def get_figure_one_data(uuid):
-	db = mongo_driver()
-	coll = db.get_db_collection('reviews-db', 'aggregated_gcoe_sp18')
-	cursor = coll.find({"uuid": uuid})
-	df = pd.DataFrame(list(cursor))
+def course_instructor_ratings_api_generator(uuid):
+    '''
+    This function will take one validated course-based uuid in the aggregated database and will
+    build a json response to present the values needed for figure 1. Briefly, this api response 
+    will show all of the professors who have taught the course in the most recent semester, what
+    rating each professor received, and what average rating each instructor received on average 
+    in the most recent semester of data.
+    api schema defined in api_schema.py
+    Inputs: valid_uuid - a validated uuid from the 'uuid' field in the dataframe
+    Returns: a valid json needed to generate the figure
+    '''
 
-	# Construct the json containing necessary data for figure 1 on course page
-	ret_json = {"result": {"instructors": []}}
-	for row in df.itertuples():
-		# need to average all ratings across all classes taught by each instructor
-		df_inst = pd.DataFrame(list(coll.find({"Instructor ID": row[8]})))
-		total = 0
-		count = 0
-		for inst_row in df_inst.itertuples():
-			total += inst_row[3]
-			count += 1
-		avg = round(total/count, 7)
+    coll_name = 'aggregated_gcoe_sp18'
+    db = mongo_driver()
+    coll = db.get_db_collection('reviews-db', coll_name)
+    cursor = coll.find({"uuid": uuid})
+    df = pd.DataFrame(list(cursor))
 
-		inst = {"name": row[7] + ' ' + row[9], "crs_rating": row[3], "avg_rating": avg}
-		ret_json["result"]["instructors"].append(inst)
-	return ret_json
+    # Add an error catching if the len(df) !> 1
+    if len(df)==0:
+        print('The uuid '+ uuid + ' was not found within the db collection ' + coll_name)
+        raise Exception('The uuid '+ uuid + ' was not found within the db collection ' + coll_name)
+
+    # Construct the json containing necessary data for figure 1 on course page
+    ret_json = {"result": {"instructors": []}}
+    for row in df.itertuples():
+        # need to average all ratings across all classes taught by each instructor
+        df_inst = pd.DataFrame(list(coll.find({"Instructor ID": row[8]})))
+        total = 0
+        count = 0
+        for inst_row in df_inst.itertuples():
+            total += inst_row[3]
+            count += 1
+        avg = round(total/count, 7)
+
+        inst = {"name": row[7] + ' ' + row[9], "crs rating": row[3], "avg rating": avg}
+        ret_json["result"]["instructors"].append(inst)
+    return ret_json
 
 def relative_dept_rating_figure_json_generator(valid_uuid):
     '''
@@ -63,7 +80,7 @@ def relative_dept_rating_figure_json_generator(valid_uuid):
     # Build a dictionary based on the instructors that have taught the course
     # Define an instructor function to return the instructor dict based on passed parameters
     def instructor(last_name, first_name, mean_in_course ):
-        return {'Name':str(last_name)+str(first_name), 'Instructor_mean_in_course':mean_in_course}
+        return {'name':str(last_name)+str(first_name), 'instructor mean in course':float(mean_in_course)}
     instructors = []
     
     # Fill out the instructors list with entries from the uuid_df
@@ -93,17 +110,17 @@ def relative_dept_rating_figure_json_generator(valid_uuid):
     total_dept = len(subj_df)
     
     # Build the json response
-    response = {'result':{'course name':cname,
-           'course number': cnum,
-           'course_ranking': crank, 
-                          'dept':{'dept_name': subj, 'courses_in_dept': total_dept , 'dept_mean': dept_mean, 'dept_sd':dept_sd}, 
-                          'current_course_mean': cmean, 
-                          'Instructors':instructors}}
+    response = {'result':{'course name':str(cname),
+           'course number': int(cnum),
+           'course ranking': int(crank), 
+                          'dept':{'dept name': str(subj), 'courses in dept': int(total_dept) , 'dept mean': float(dept_mean), 'dept sd':float(dept_sd)}, 
+                          'current course mean': float(cmean), 
+                          'instructors':instructors}}
     return response
 
 
 if __name__ == '__main__':
 
-	pprint.pprint(get_figure_one_data("engr2002"))
-	pprint.pprint(relative_dept_rating_figure_json_generator("engr2002"))
+    pprint.pprint(course_instructor_ratings_api_generator("engr2002"))
+    pprint.pprint(relative_dept_rating_figure_json_generator("engr2002"))
 
