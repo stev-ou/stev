@@ -4,7 +4,7 @@ from mongo import mongo_driver
 from bson.json_util import dumps
 import pandas as pd
 import json
-from course_figure_api_functions import course_instructor_ratings_api_generator, relative_dept_rating_figure_json_generator
+from api_functions import query_function, course_instructor_ratings_api_generator, relative_dept_rating_figure_json_generator
 
 # Establish a database connection
 DB_NAME = "reviews-db"
@@ -28,22 +28,16 @@ def hello_world():
 def api():
     return jsonify({'message': 'You have reached api root endpoint'})
 
-# course search
-@app.route(base_api_route + 'courses')
+# General course search
+@app.route(base_api_route + 'courses/')
 def course_search_api():
-    # Get the search query from the url string
-    query = request.args.get('code', default='', type=str)
+    # Get the search query from the url string and convert to lowercase
+    query = request.args.get('course_code', default='', type=str).lower()
 
-    if query == '':
-        # list all courses
-        return jsonify({"default": "list"})
+    # Use the query function to search for the query
+    result_list = query_function(db, query, ['aggregated_gcoe_sp18'], 'Queryable Course String')
 
-    # Find the query in the collection
-    collection = db.get_db_collection(DB_NAME, "gcoe_sp18")
-    test_data = collection.find_one({'Subject Code':'ENGR'})
-
-    # Use the course query, i.e. test_data, to search through and find figure1
-    return jsonify(dumps(test_data))
+    return jsonify({'result':result_list})
 
 
 # Figure 1 api 
@@ -82,7 +76,6 @@ def instructor_api():
 def department_api():
     # Get the search query from the url string
     query = request.args.get('department', default='', type=str)
-
     if query == '':
         # list all possible departments
         return jsonify({"default": "list"})

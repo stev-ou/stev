@@ -2,6 +2,12 @@ import pprint
 import json
 from mongo import mongo_driver
 import pandas as pd
+from collections import Counter
+import re
+
+# Establish a database connection
+DB_NAME = "reviews-db"
+COLLECTION_NAME = "reviews-collection"
 
 
 def course_instructor_ratings_api_generator(uuid):
@@ -118,9 +124,88 @@ def relative_dept_rating_figure_json_generator(valid_uuid):
                           'instructors':instructors}}
     return response
 
+def query_function(db, query, collections_to_search, field_to_search):
+    '''
+    This function will perform substring querying on a given field in the db, to match an arbitrary user search to an 
+    instance in the db. The function splits the input string 'query' by letter/number interface and whitespace delimiters, 
+    and then searches for each of these in the DB field_to_search. Based on the frequency of appearance, the function then 
+    returns a list of the most likely uuid's for the given search.
+
+    inputs:
+    db: a connection to the db
+    query: a string query, unaltered
+    collections_to_search: a list of distinct collections to look through to try to find the given uuid
+    field_to_search: a single field to search in the db collection
+        - If needed, create a new queryable search field in the data_aggregation.py for your desired search
+            See Queryable Course String field for example of this.
+
+    '''
+
+    #Split the query by the assumed space delimiter
+    query_list_initial = query.split(' ')
+
+    # Split any unsplit entries at letter/number interface
+    query_list = []
+    for q in query_list_initial:
+        split = re.split('(\d+)',q)
+        for i in split:
+            if i != '' and i not in query_list:
+                query_list.append(i)
+
+    # Search through the list of valid collections to find the proper college for the course search
+    collections_to_search = ['aggregated_gcoe_sp18']
+
+    # Create an index to relate uuid query results to the query
+    query_match_results = {}
+
+    for query in query_list:
+        for coll in collections_to_search:
+            # Find the query in the collection
+            collection = db.get_db_collection(DB_NAME, coll)
+            collection.create_index([(field_to_search, 'text')])
+
+            test_data = collection.find({"$text": {"$search": query}}, {'uuid':1, '_id':0})
+            query_match_results[query] = [item['uuid'] for item in list(test_data)]
+    pprint.pprint(query_match_results)
+    # Compare the query_match_results to one another to find the optimal response
+    # Combine all of the lists
+    full_q_list = []
+    for q in query_list:
+        for e in query_match_results[q][:]:
+            full_q_list.append(e)
+
+    # Get the max number of repeat list occurrences
+    full_q_list = Counter(full_q_list).most_common(len(full_q_list))
+    
+
+    # If the most frequent occurence is 1, just return the list with the lowest number of findings
+    if full_q_list[0][1] == 1:
+        result_list = query_match_results[query_list[0]]
+        for i in query_match_results.keys():
+            if len(query_match_results[i])!=0 and len(query_match_results[i])<len(result_list):
+                result_list = query_match_results[i]
+
+    # If there is equal number of occurences for the first and second uuid, return all of the most frequent occurences
+    elif full_q_list[0][1]==full_q_list[1][1]:
+        result_list = [full_q_list[0][0], full_q_list[1][0]]
+        for i in range(2,len(full_q_list)):
+            if full_q_list[i][1] == full_q_list[0][1]:
+                result_list.append(full_q_list[i][0])
+
+    # Else there is a single max occurence in the list, and this is all we will return            
+    else:
+        result_list = [full_q_list[0][0]]
+
+    return result_list
 
 if __name__ == '__main__':
 
-    pprint.pprint(course_instructor_ratings_api_generator("engr2002"))
-    pprint.pprint(relative_dept_rating_figure_json_generator("engr2002"))
+    # pprint.pprint(course_instructor_ratings_api_generator("engr2002"))
+    # pprint.pprint(relative_dept_rating_figure_json_generator("engr2002"))
+
+    # Test the db search
+    db = mongo_driver()
+    print(query_function(db,'dsa 4413 algorithm analysis', 'aggregated_gcoe_sp18', 'Queryable Course String'))
+
+
 
