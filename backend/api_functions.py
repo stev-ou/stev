@@ -170,7 +170,7 @@ def query_function(db, query, collections_to_search, field_to_search):
             collection.create_index([(field_to_search, 'text')])
             test_data = collection.find({"$text": {"$search": query}}, {'uuid':1, '_id':0})
             query_match_results[query] = list(set([item['uuid'] for item in list(test_data)]))
-    pprint.pprint(query_match_results)
+    # pprint.pprint(query_match_results)
     # Compare the query_match_results to one another to find the optimal response
     # Combine all of the lists
     full_q_list = []
@@ -180,7 +180,6 @@ def query_function(db, query, collections_to_search, field_to_search):
 
     # Get the max number of repeat list occurrences
     full_q_list = Counter(full_q_list).most_common(len(full_q_list))
-    print(full_q_list)
 
     if len(full_q_list) == 0:
         print('Using the query function, the query ' + query + ' was not found in the field ' + field_to_search)
@@ -188,7 +187,6 @@ def query_function(db, query, collections_to_search, field_to_search):
 
     # If there is equal number of occurences for the first and second uuid, return all of the most frequent occurences
     elif full_q_list[0][1]==full_q_list[1][1]:
-        print('second case')
         result_list = [full_q_list[0][0], full_q_list[1][0]]
         for i in range(2,len(full_q_list)):
             if full_q_list[i][1] == full_q_list[0][1]:
@@ -196,7 +194,6 @@ def query_function(db, query, collections_to_search, field_to_search):
 
     # If the most frequent occurence is 1, just return the list with the lowest number of findings
     elif full_q_list[0][1] == 1:
-        print('third case')
         result_list = query_match_results[query_list[0]]
         for i in query_match_results.keys():
             if len(query_match_results[i])!=0 and len(query_match_results[i])<len(result_list):
@@ -204,7 +201,6 @@ def query_function(db, query, collections_to_search, field_to_search):
     
     # Else there is a single max occurence in the list, and this is all we will return            
     else:
-        print('4th case')
         result_list = [full_q_list[0][0]]
 
     return result_list
