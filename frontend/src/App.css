@@ -2,15 +2,10 @@
 }
 
 .App-header {
-  /* background-color: #dfe6e9; */
-  background-color: #ffffff;
-  /* min-height: 100vh; */
-  display: flex;
+  display: inline-block;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  font-size: calc(10px + 2vmin);
-  color: black;
 }
 
 .App-link {
@@ -26,8 +21,72 @@
 }
 
 .SearchForm {
-    margin-top: 40px;
+    color:white;
+    padding:1.5em;
     display: flex;
     align-items: center;
     justify-content: center;
 }
+
+body {
+  font-size: .875rem;
+  align-items: center;
+  text-align:center;
+}
+
+
+.bg-dark {
+    background-color: #841617!important;
+}
+
+.feather {
+  width: 16px;
+  height: 16px;
+  vertical-align: text-bottom;
+}
+
+
+.header_title {
+  padding-top: 0.4em;
+  font-size: 1.6em;
+  color: white;
+  text-align: center;
+
+}
+
+
+.dropdown-content a:hover {
+  background-color: #ddd;
+}
+
+
+/*
+ * Navbar
+ */
+
+.navbar .form-control {
+  border-color: rgba(255, 255, 255, .25);
+  box-shadow: 0 0 0 3px rgba(255,255,255,.25);
+  /*background-color: rgba(255, 255, 255, .75);*/
+  align-items: center;
+  text-align:center;
+}
+
+.header-container {
+  border-radius:2em;
+  margin-left:auto;
+  margin-right:auto;
+  background-color: rgba(255, 255, 255, .1);
+/*  align-items: top;*/
+  border-color: rgba(255, 255, 255, 1);
+
+  width:90%;
+
+}
+
+/*
+ * Utilities
+ */
+
+.border-top { border-top: 1px solid #e5e5e5; }
+.border-bottom { border-bottom: 1px solid #e5e5e5; }

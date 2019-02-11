@@ -13,7 +13,29 @@ const data = [
       {name: 'Fall 2020', Janet: 3490, Sam: 4300, Joe: 2100},
 ];
 
+// I hate this
+class Header extends React.Component {
+constructor(props) {
+    super(props);
+
+  };
+  render(){
+    return (
+  <div class="App-header">
+    <nav class="navbar sticky-top p-0 bg-dark">
+      <div class='w-100 p-1 header_title'>
+      <h1 class='header_title'>University of Oklahoma Course & Instructor Reviews</h1>
+    </div>
+      <div class = "header-container flex-md-nowrap w-80 p-1">
+      <SearchForm/>
+  </div>
+    </nav>
+  </div>);
+  }
+};
+
 const TimeSeriesChart = props => (
+  <div>
     <LineChart width={800} height={400} data={data}
     margin={{top: 5, right: 30, left: 20, bottom: 5}}>
         <XAxis dataKey="name" padding={{left: 30, right: 30}}/>
@@ -25,6 +47,8 @@ const TimeSeriesChart = props => (
         <Line type="monotone" dataKey="Janet" stroke="#82ca9d" />
         <Line type="monotone" dataKey="Joe" stroke="#868788" />
     </LineChart>
+    <h1> Sam has been playing with this </h1>
+  </div>
 );
 
 class SearchForm extends React.Component {
@@ -66,7 +90,8 @@ class SearchForm extends React.Component {
             <option value="course_number">Course Number</option>
           </select>
         </label>
-        <input name='search_text' type='text' value={this.state.search_text} onChange={this.handleInputChange} />
+
+        <input class = "form-control w-80" name='search_text' type="text" placeholder="Enter Search Here" aria-label="Search"value={this.state.search_text} onChange={this.handleInputChange} />
         <input type="submit" value="Submit" />
       </form>
     );
@@ -122,7 +147,8 @@ class LandingController extends React.Component {
 
 const App = props => {
     return (
-        <LandingController />
+        //<LandingController />
+        <Header/>
     );
 }
 
