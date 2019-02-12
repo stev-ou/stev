@@ -1,3 +1,6 @@
+# pylint: skip-file
+# don't need linting
+
 # Figure1
 
 
