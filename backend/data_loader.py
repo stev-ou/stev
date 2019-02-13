@@ -37,16 +37,20 @@ def update_database(force_update=True):
     for data_file in data_files:
         # If the collection doesnt exist or if the update is forced
         if conn.collection_existence_check(DB_NAME, data_file[:-4])==False or force_update:
-            collection = conn.get_db_collection(DB_NAME, data_file[:-4])
+            collection = conn.get_db_collection(DB_NAME,data_file[:-4] )
+
+            # Delete all of the current contents from the collection
+            collection.delete_many({})
+
             # Reading data into python from the csv
             df = pd.read_csv('data/'+data_file)
 
             # load the db for the given data file into a json format
-            records = json.loads(df.T.to_json()).values()
-        
+            # records = json.loads(df.T.to_json()).values()
+            records = df.to_dict('records')
+            # print(records)
             # try to update the database with the given data file 
             result = collection.insert_many(records)
-
             # Update the user on what happened
             print('A collection called '+data_file[:-4] + ' was added to the database '+ DB_NAME + '.')
 
@@ -55,8 +59,9 @@ def update_database(force_update=True):
             
         # Check to see if the aggregated document already exists in the document in the database
         if conn.collection_existence_check(DB_NAME, 'aggregated_' +data_file[:-4])==False or force_update:
-
             collection = conn.get_db_collection(DB_NAME, 'aggregated_' + data_file[:-4])
+            # Delete all of the current contents from the collection
+            collection.delete_many({})
             # Reading data into python from the csv
             df = pd.read_csv('data/'+data_file)
             # Create the aggregated database 

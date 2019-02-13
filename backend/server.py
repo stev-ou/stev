@@ -4,10 +4,14 @@ from mongo import mongo_driver
 from bson.json_util import dumps
 import pandas as pd
 import json
+from api_functions import query_function, course_instructor_ratings_api_generator, relative_dept_rating_figure_json_generator
 
 # Establish a database connection
 DB_NAME = "reviews-db"
 COLLECTION_NAME = "reviews-collection"
+
+# base route for this api version
+base_api_route = '/api/v0/'
 
 db = mongo_driver()
 
@@ -16,44 +20,42 @@ app = Flask(__name__)
 # useful for testing
 # curl -i http://localhost:5050/api/v0/
 # algolia for search utility
-
 @app.route('/')
 def hello_world():
     return 'Ping <a href="http://{}:5050/api/v0/">/api/v0/</a> for api'.format(str(request.remote_addr))
 
-@app.route('/api/v0/', methods=['GET'])
+@app.route(base_api_route, methods=['GET'])
 def api():
     return jsonify({'message': 'You have reached api root endpoint'})
 
-# course search
-@app.route('/api/v0/courses')
-def course_api():
-    # Get the search query from the url string
-    query = request.args.get('code', default='', type=str)
+# General course search
+@app.route(base_api_route + 'courses/')
+def course_search_api():
+    # Get the search query from the url string and convert to lowercase
+    query = request.args.get('course_code', default='', type=str).lower()
 
-    if query == '':
-        # list all courses
-        return jsonify({"default": "list"})
+    # Use the query function to search for the query
+    result_list = query_function(db, query, ['aggregated_gcoe_sp18'], 'Queryable Course String')
 
-    # Find the query in the collection
-    collection = db.get_db_collection(DB_NAME, "gcoe_sp18")
-    test_data = collection.find_one({'Subject Code':'ENGR'})
-
-    def relative_dept_rating_figure():
-        '''
-        This function will build the json for the response to build the relative department rating figure 
-        (2nd from top on the left side). The json has structure given in schema.json, for this rating.
-        Inputs: valid_query - a validated query from the co
-
-        '''
-        return
+    return jsonify({'result':result_list})
 
 
-    return jsonify(dumps(test_data))
+# Figure 1 api 
+@app.route(base_api_route+'courses/<string:course_uuid>/figure1', methods=['GET'])
+def figure_1_data_api(course_uuid):
+    response = course_instructor_ratings_api_generator(course_uuid)
 
+    return jsonify(response)
+
+# Figure 2 api 
+@app.route(base_api_route+'courses/<string:course_uuid>/figure2', methods=['GET'])
+def figure_2_data_api(course_uuid):
+    response = relative_dept_rating_figure_json_generator(course_uuid)
+
+    return jsonify(response)
 
 # instructor search
-@app.route('/api/v0/instructors')
+@app.route(base_api_route+'instructors')
 def instructor_api():
     # Get the search query from the url string
     query = request.args.get('name', default='', type=str)
@@ -70,11 +72,10 @@ def instructor_api():
 
 
 # dept search
-@app.route('/api/v0/departments')
+@app.route(base_api_route+'departments')
 def department_api():
     # Get the search query from the url string
     query = request.args.get('department', default='', type=str)
-
     if query == '':
         # list all possible departments
         return jsonify({"default": "list"})
@@ -86,14 +87,15 @@ def department_api():
     return jsonify(dumps(test_data))
 
 ### deprecated
-# courses
-@app.route('/api/v0/course/<string:course_string>', methods=['GET'])
-def get_course(course_string):
-    return jsonify({'course': course_string})
+# # courses
+# @app.route('/api/v0/course/<string:course_string>', methods=['GET'])
+# def get_course(course_string):
+#     return jsonify({'course': course_string})
 
 if __name__ == '__main__':
-    print("Updating database...")
-    update_database()
-    print("Done.")
+    # print("Updating database...")
+    print('IN DEVELOPMENT MODE; NO DATABASE UPDATE PERFORMED')
+    # update_database()
+    # print("Done.")
     print("Starting server...")
     app.run(host='0.0.0.0', port=5050)
