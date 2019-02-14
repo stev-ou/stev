@@ -1,7 +1,7 @@
 import React from 'react';
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend} from 'recharts';
-
 import './App.css';
+import CustomizedTable from './figure1_table.js'
 
 const data = [
       {name: 'Fall 2018', Janet: 4000, Sam: 2400, Joe: 2400},
@@ -13,7 +13,7 @@ const data = [
       {name: 'Fall 2020', Janet: 3490, Sam: 4300, Joe: 2100},
 ];
 
-// I hate this
+
 class Header extends React.Component {
 constructor(props) {
     super(props);
@@ -22,7 +22,7 @@ constructor(props) {
   render(){
     return (
   <div class="App-header">
-    <nav class="navbar sticky-top p-0 bg-dark">
+    <nav class="navbar sticky-top bg-dark">
       <div class='w-100 p-1 header_title'>
       <h1 class='header_title'>University of Oklahoma Course & Instructor Reviews</h1>
     </div>
@@ -82,17 +82,19 @@ class SearchForm extends React.Component {
   render() {
     return (
       <form className="SearchForm" onSubmit={this.handleSubmit}>
-        <label>
+        <label style={{'font-size':'1em', 'font-style':'bold'}}>
+          <h4>
           Search by:
-          <select name='search_type' style={{'margin-left': '10px'}} value={this.state.search_type} onChange={this.handleInputChange}>
-            <option value="instructor">Instructor</option>
-            <option value="department">Department</option>
-            <option value="course_number">Course Number</option>
+          </h4>
+          <select name='search_type' id='search_type' style={{'margin': '1em', 'margin-top': '0.1em','margin-bottom':'0.1em', 'font-size':'1.5em', 'text-align':'left', 'padding':'1.5em'}} value={this.state.search_type} onChange={this.handleInputChange}>
+            <option class = 'search-option' value="instructor">Instructor</option>
+            <option class = 'search-option' value="department">Department</option>
+            <option class = 'search-option' value="course_number">Course Number</option>
           </select>
         </label>
 
-        <input class = "form-control w-80" name='search_text' type="text" placeholder="Enter Search Here" aria-label="Search"value={this.state.search_text} onChange={this.handleInputChange} />
-        <input type="submit" value="Submit" />
+        <input class = "form-control w-80 header-elem" name='search_text' type="text" placeholder="Enter Search Here" aria-label="Search" value={this.state.search_text} onChange={this.handleInputChange} />
+        <input class = 'header-elem' type="submit" value="Submit" />
       </form>
     );
   }
@@ -107,11 +109,6 @@ class Landing extends React.Component {
     render () {
         return (
             <div className="App">
-                <header className="App-header">
-                  <p>
-                      University of Oklahoma Student Reviews
-                  </p>
-                </header>
                 <div className="Info">
                     <p> Disclaimer: This website is not affiliated with nor approved by the University of Oklahoma. Its sole purpose is to inform students and prompt action against garbage-can professors whom require removal. There is no warranty nor any guaranetee on the validity of the data. Data is publicly available and ingested from the University's public releases. Thank you and have a good time.
                     </p>
@@ -121,10 +118,7 @@ class Landing extends React.Component {
                     href="https:\/\/www.ou.edu/provost/course-evaluation-data"
                     target="_blank"
                     rel="noopener noreferrer"
-                >
-                    Link to data
-                </a>
-                <SearchForm />
+                >Link to data</a>
             </div>
         );
     }
@@ -148,7 +142,16 @@ class LandingController extends React.Component {
 const App = props => {
     return (
         //<LandingController />
+        <div>
         <Header/>
+        <div class='graphical-content'>
+        <div class='table-fig1'>
+
+        <CustomizedTable/>
+        </div>
+        </div>
+        <Landing/>
+        </div>
     );
 }
 
