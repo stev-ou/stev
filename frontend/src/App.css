@@ -1,11 +1,13 @@
 .App {
+  margin-top:5em;
 }
 
 .App-header {
-  display: inline-block;
   flex-direction: column;
   align-items: center;
   justify-content: center;
+  line-height: 2;
+  font-weight:100;
 }
 
 .App-link {
@@ -22,7 +24,8 @@
 
 .SearchForm {
     color:white;
-    padding:1.5em;
+    padding:0em;
+    padding-bottom: 0em;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -48,7 +51,8 @@ body {
 
 .header_title {
   padding-top: 0.4em;
-  font-size: 1.6em;
+  padding-bottom:0.4em;
+  font-size: 1.8em;
   color: white;
   text-align: center;
 
@@ -59,7 +63,20 @@ body {
   background-color: #ddd;
 }
 
+.search-type {
+  text-align: left;
+  padding:0.2em;
+  font-size: 40px;
+}
 
+.select {
+    cursor:pointer;
+    display:inline-block;
+    position:relative;
+    font:normal 11px/22px Arial, Sans-Serif;
+    color:black;
+    border:1px solid #ccc;
+}
 /*
  * Navbar
  */
@@ -72,6 +89,26 @@ body {
   text-align:center;
 }
 
+.header-elem {
+  margin:1em;
+  font-size: 1.25em;
+  border-radius: 5px;
+  text-align: left !important;
+
+
+}
+search-option {
+  color:red;
+  width: auto;
+  padding:1.5em;
+}
+
+select {
+  width: 12em; 
+  overflow: hidden;
+  text-indent: 5px;
+}
+
 .header-container {
   border-radius:2em;
   margin-left:auto;
@@ -82,6 +119,20 @@ body {
 
   width:90%;
 
+}
+.graphical-content {
+  text-align: center!important;
+  width:100%;
+}
+/*
+* Figure 1
+*/
+
+.table-fig1 {
+  align-self: center;
+  display: inline-block;
+  width:80%;
+  align-items: center;
 }
 
 /*
