@@ -1,4 +1,5 @@
 from flask import Flask, jsonify, request
+from flask_cors import CORS
 from data_loader import update_database
 from mongo import mongo_driver
 from bson.json_util import dumps
@@ -16,7 +17,7 @@ base_api_route = '/api/v0/'
 db = mongo_driver()
 
 app = Flask(__name__)
-
+CORS(app)
 # useful for testing
 # curl -i http://localhost:5050/api/v0/
 # algolia for search utility

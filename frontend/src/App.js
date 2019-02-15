@@ -1,7 +1,7 @@
 import React from 'react';
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend} from 'recharts';
 import './App.css';
-import CustomizedTable from './figure1_table.js'
+import Fig1 from './figure1_table.js'
 
 const data = [
       {name: 'Fall 2018', Janet: 4000, Sam: 2400, Joe: 2400},
@@ -13,6 +13,15 @@ const data = [
       {name: 'Fall 2020', Janet: 3490, Sam: 4300, Joe: 2100},
 ];
 
+const new_data = [
+      {name: 'Fall 2018', Janet: 4000, Sam: 2400, Joe: 2400},
+      {name: 'Spring 2019', Janet: 3000, Sam: 1398, Joe: 2210},
+      {name: 'Summer 2019', Janet: 2000, Sam: 2000, Joe: 2290},
+      {name: 'Fall 2019', Janet: 2780, Sam: 3908, Joe: 2000},
+      {name: 'Spring 2020', Janet: 1890, Sam: 4800, Joe: 2181},
+      {name: 'Summer 2020', Janet: 2390, Sam: 3800, Joe: 2500},
+      {name: 'Fall 2020', Janet: 3490, Sam: 4300, Joe: 2100},
+];
 
 class Header extends React.Component {
 constructor(props) {
@@ -36,7 +45,7 @@ constructor(props) {
 
 const TimeSeriesChart = props => (
   <div>
-    <LineChart width={800} height={400} data={data}
+    <LineChart width={800} height={400} data={props.data}
     margin={{top: 5, right: 30, left: 20, bottom: 5}}>
         <XAxis dataKey="name" padding={{left: 30, right: 30}}/>
         <YAxis/>
@@ -146,11 +155,11 @@ const App = props => {
         <Header/>
         <div class='graphical-content'>
         <div class='table-fig1'>
-
-        <CustomizedTable/>
+        <Fig1/>
         </div>
         </div>
         <Landing/>
+        <TimeSeriesChart data={new_data}/>
         </div>
     );
 }

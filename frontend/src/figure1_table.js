@@ -35,13 +35,15 @@ const styles = theme => ({
   },
 });
 
+
 let id = 0;
+
 function createData(name, calories, fat, carbs, protein) {
   id += 1;
   return { id, name, calories, fat, carbs, protein };
 }
 
-const rows = [
+var rows = [
   createData('Frozen yoghurt', 159, 6.0, 24, 4.0),
   createData('Ice cream sandwich', 237, 9.0, 37, 4.3),
   createData('Eclair', 262, 16.0, 24, 6.0),
@@ -49,10 +51,47 @@ const rows = [
   createData('Gingerbread', 356, 16.0, 49, 3.9),
 ];
 
-function CustomizedTable(props) {
-  const { classes } = props;
+var new_rows = [
+  createData('lil dicky aka bop bop', 159, 6.0, 24, 4.0),
+  createData('Ice cream sandwich', 237, 9.0, 37, 4.3),
+  createData('Eclair', 262, 16.0, 24, 6.0),
+  createData('Cupcake', 305, 3.7, 67, 4.3),
+  createData('Gingerbread', 356, 16.0, 49, 3.9),
+];
 
+// This is the function that will fetch the desired data from the api 
+const API = 'http://localhost:5050/api/v0/courses/ame3440/figure1';
+const DEFAULT_QUERY = '';
+// const API = 'https://hn.algolia.com/api/v1/search?query=';
+// const DEFAULT_QUERY = 'redux';
+
+class Fig1 extends React.Component {
+  
+  constructor(props) {
+    super(props);
+    this.state = {hits:[]}
+
+  }
+
+  componentDidMount() {
+    fetch(API+DEFAULT_QUERY)
+    .then(response => response.json())
+    .then(data => this.state.hits= data.result, console.log(JSON.stringify(this.state.hits, null, 2)) );
+  }
+
+  render(){let MyTable = withStyles(styles)(CustomizedTable);
+    return(<MyTable rows={new_rows}/>)
+  }
+}
+
+//This is the function to create the table for figure 1
+function CustomizedTable(props) {
+
+  const { classes } = props;
+  const rows=props.rows
+  var data = 'nononfnsd'
   return (
+    <div>
     <Paper className={classes.root}>
       <Table className={classes.table}>
         <TableHead>
@@ -79,11 +118,16 @@ function CustomizedTable(props) {
         </TableBody>
       </Table>
     </Paper>
+    <h1>
+    {data}
+    </h1>
+    </div>
   );
 }
 
 CustomizedTable.propTypes = {
   classes: PropTypes.object.isRequired,
 };
-
-export default withStyles(styles)(CustomizedTable);
+console.log(styles)
+// export default withStyles(styles)(CustomizedTable);
+export default Fig1;
