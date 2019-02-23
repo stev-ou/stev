@@ -57,6 +57,7 @@ var new_rows = [
   createData('Eclair', 262, 16.0, 24, 6.0),
   createData('Cupcake', 305, 3.7, 67, 4.3),
   createData('Gingerbread', 356, 16.0, 49, 3.9),
+  createData('Gingerbred', 356, 16.0, 49, 3.9),
 ];
 
 // This is the function that will fetch the desired data from the api 
@@ -66,21 +67,29 @@ const DEFAULT_QUERY = '';
 // const DEFAULT_QUERY = 'redux';
 
 class Fig1 extends React.Component {
-  
   constructor(props) {
     super(props);
-    this.state = {hits:[]}
+    this.state = {data:[]}
 
   }
 
   componentDidMount() {
+    // This will call the api when the component "Mounts", i.e. when the page is accessed
     fetch(API+DEFAULT_QUERY)
     .then(response => response.json())
-    .then(data => this.state.hits= data.result, console.log(JSON.stringify(this.state.hits, null, 2)) );
+    .then(data => this.setState({data:data.result.instructors}));
   }
 
   render(){let MyTable = withStyles(styles)(CustomizedTable);
-    return(<MyTable rows={new_rows}/>)
+    // Get the data to pass to the table
+    var table_data = this.state.data
+    var i=0
+    table_data.forEach((item, i) => {
+      console.log(item)
+        item['id'] = i + 1;
+      });
+    console.log(table_data)
+    return(<MyTable rows={table_data} data={'temp'}/>)
   }
 }
 
@@ -88,31 +97,31 @@ class Fig1 extends React.Component {
 function CustomizedTable(props) {
 
   const { classes } = props;
+  console.log(props)
   const rows=props.rows
-  var data = 'nononfnsd'
+  const data = props.data
+  // var data = 'nononfnsd'
   return (
     <div>
+    <h1> These professors have taught the course in the past 2 years </h1>
     <Paper className={classes.root}>
       <Table className={classes.table}>
         <TableHead>
           <TableRow>
-            <CustomTableCell>Dessert (100g serving)</CustomTableCell>
-            <CustomTableCell align="right">Calories</CustomTableCell>
-            <CustomTableCell align="right">Fat (g)</CustomTableCell>
-            <CustomTableCell align="right">Carbs (g)</CustomTableCell>
-            <CustomTableCell align="right">Protein (g)</CustomTableCell>
+            <CustomTableCell>Instructor Name</CustomTableCell>
+            <CustomTableCell align="right">Average Rating (0-5)</CustomTableCell>
+            <CustomTableCell align="right">Course Rating (0-5)</CustomTableCell>
+
           </TableRow>
         </TableHead>
         <TableBody>
           {rows.map(row => (
-            <TableRow className={classes.row} key={row.id}>
+            <TableRow className={classes.name} key={row.id}>
               <CustomTableCell component="th" scope="row">
                 {row.name}
               </CustomTableCell>
-              <CustomTableCell align="right">{row.calories}</CustomTableCell>
-              <CustomTableCell align="right">{row.fat}</CustomTableCell>
-              <CustomTableCell align="right">{row.carbs}</CustomTableCell>
-              <CustomTableCell align="right">{row.protein}</CustomTableCell>
+              <CustomTableCell align="right">{row['avg rating']}</CustomTableCell>
+              <CustomTableCell align="right">{row['crs rating']}</CustomTableCell>
             </TableRow>
           ))}
         </TableBody>
@@ -128,6 +137,5 @@ function CustomizedTable(props) {
 CustomizedTable.propTypes = {
   classes: PropTypes.object.isRequired,
 };
-console.log(styles)
 // export default withStyles(styles)(CustomizedTable);
 export default Fig1;
