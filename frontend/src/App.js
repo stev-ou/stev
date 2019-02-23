@@ -1,5 +1,5 @@
 import React from 'react';
-import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend} from 'recharts';
+import { AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip, Legend} from 'recharts';
 import './App.css';
 import Fig1 from './figure1_table.js'
 
@@ -45,18 +45,17 @@ constructor(props) {
 
 const TimeSeriesChart = props => (
   <div>
-    <LineChart width={800} height={400} data={props.data}
+    <AreaChart width={800} height={400} data={props.data}
     margin={{top: 5, right: 30, left: 20, bottom: 5}}>
         <XAxis dataKey="name" padding={{left: 30, right: 30}}/>
         <YAxis/>
         <CartesianGrid strokeDasharray="3 3"/>
         <Tooltip/>
         <Legend />
-        <Line type="monotone" dataKey="Sam" stroke="#8884d8" strokeWidth={3} activeDot={{r: 6}}/>
-        <Line type="monotone" dataKey="Janet" stroke="#82ca9d" />
-        <Line type="monotone" dataKey="Joe" stroke="#868788" />
-    </LineChart>
-    <h1> Sam has been playing with this </h1>
+        <Area type="monotone" dataKey="Sam" stroke="#8884d8" fill="#8884d8" strokeWidth={3} activeDot={{r: 6}}/>
+        <Area type="monotone" dataKey="Janet" stroke="#82ca9d" fill='#82ca9d'/>
+        <Area  type="monotone" dataKey="Joe" stroke="#868788" fill='#868788'/>
+    </AreaChart>
   </div>
 );
 
