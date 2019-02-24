@@ -4,15 +4,9 @@ import './App.css';
 import Fig1 from './figure1_table.js';
 import Fig2 from './figure2_chart.js'
 
-const new_data = [
-      {name: 'Fall 2018', Janet: 4000, Sam: 2400, Joe: 2400},
-      {name: 'Spring 2019', Janet: 3000, Sam: 1398, Joe: 2210},
-      {name: 'Summer 2019', Janet: 2000, Sam: 2000, Joe: 2290},
-      {name: 'Fall 2019', Janet: 2780, Sam: 3908, Joe: 2000},
-      {name: 'Spring 2020', Janet: 1890, Sam: 4800, Joe: 2181},
-      {name: 'Summer 2020', Janet: 2390, Sam: 3800, Joe: 2500},
-      {name: 'Fall 2020', Janet: 3490, Sam: 4300, Joe: 2100},
-];
+// I LOVE GLOBAL VARIABLES
+var API_RESULT = {}
+var VALID_SEARCH = false
 
 class Header extends React.Component {
 constructor(props) {
@@ -34,28 +28,15 @@ constructor(props) {
   }
 };
 
-const TimeSeriesChart = props => (
-  <div>
-    <AreaChart width={800} height={400} data={props.data}
-    margin={{top: 5, right: 30, left: 20, bottom: 5}}>
-        <XAxis dataKey="name" padding={{left: 30, right: 30}}/>
-        <YAxis/>
-        <CartesianGrid strokeDasharray="3 3"/>
-        <Tooltip/>
-        <Legend />
-        <Area type="monotone" dataKey="Sam" stroke="#8884d8" fill="#8884d8" strokeWidth={3} activeDot={{r: 6}}/>
-        <Area type="monotone" dataKey="Janet" stroke="#82ca9d" fill='#82ca9d'/>
-        <Area  type="monotone" dataKey="Joe" stroke="#868788" fill='#868788'/>
-    </AreaChart>
-  </div>
-);
 
 class SearchForm extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-        search_type: 'instructor',
-        search_text: ''
+        search_type: 'course',
+        search_text: '',
+        result:{},
+        valid_search: false
     };
 
     this.handleInputChange = this.handleInputChange.bind(this);
@@ -73,9 +54,21 @@ class SearchForm extends React.Component {
   }
 
   handleSubmit(event) {
-    alert('You entered: ' + this.state.search_type + " " + this.state.search_text);
+    // Add an api query based on 
+    const api_map = {'course':'courses/?course=', 'department':'department/?department=', 'instructor':'instructors/?instructor='}
+    const api_endpoint = "http://localhost:5050/api/v0/"
+
+    // Fetch the object from the api endpoint
+    fetch(api_endpoint+api_map[this.state.search_type]+this.state.search_text)
+    .then(response => response.json())
+    .then(data => this.setState({result:data.result, loadedAPI:true})); 
+
+
+    // alert('You entered: ' + this.state.search_type + " " + JSON.stringify(this.state.result));
+    // console.log('Api response:')
+    // console.log(this.state.result)
     //event.preventDefault();
-    this.setState({valid_search: true})
+
   }
 
   render() {
@@ -88,7 +81,7 @@ class SearchForm extends React.Component {
           <select name='search_type' id='search_type' style={{'margin': '1em', 'margin-top': '0.1em','margin-bottom':'0.1em', 'font-size':'1.5em', 'text-align':'left', 'padding':'1.5em'}} value={this.state.search_type} onChange={this.handleInputChange}>
             <option class = 'search-option' value="instructor">Instructor</option>
             <option class = 'search-option' value="department">Department</option>
-            <option class = 'search-option' value="course_number">Course Number</option>
+            <option class = 'search-option' value="course">Course</option>
           </select>
         </label>
 
@@ -101,9 +94,9 @@ class SearchForm extends React.Component {
 
 // consider converting to function
 class Landing extends React.Component {
-    //constructor(props) {
-    //    super(props);
-    //}
+    constructor(props) {
+       super(props);
+    }
 
     render () {
         return (
@@ -134,11 +127,21 @@ class LandingController extends React.Component {
         if (!valid_search) {
             return <Landing />
         }
-        return <TimeSeriesChart />;
+        return <h1> This is where the timeserieschart would go. </h1>
     }
 }
 
-const App = props => {
+class App extends React.Component {
+  constructor(props) {
+        super(props);
+        this.state = {valid_search: props.valid_search}
+    }
+
+  render() {
+    // THIS DOESNT WORK. Need to figure out some way to get the data from Header -> SearchForm back up to the App level 
+    //so that I can send it to the Fig1 and Fig2 components. For now, I have a temp uuid I'll pass
+    const temp_uuid = 'ame3440'
+  if (!this.state.valid_search){
     return (
         //<LandingController />
         <div>
@@ -148,11 +151,19 @@ const App = props => {
         <Fig1/>
         </div>
         </div>
-        <Landing/>
         <Fig2 />
+        <Landing/>
         </div>
-    );
-}
+    );}
+  else {
+    return(
+    <div>
+    <Header/>
+    <Landing/>
+    </div>
+    )
+  }
+}}
 
 // <TimeSeriesChart data={new_data}/>
 
