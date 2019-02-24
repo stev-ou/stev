@@ -1,17 +1,8 @@
 import React from 'react';
 import { AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip, Legend} from 'recharts';
 import './App.css';
-import Fig1 from './figure1_table.js'
-
-const data = [
-      {name: 'Fall 2018', Janet: 4000, Sam: 2400, Joe: 2400},
-      {name: 'Spring 2019', Janet: 3000, Sam: 1398, Joe: 2210},
-      {name: 'Summer 2019', Janet: 2000, Sam: 9800, Joe: 2290},
-      {name: 'Fall 2019', Janet: 2780, Sam: 3908, Joe: 2000},
-      {name: 'Spring 2020', Janet: 1890, Sam: 4800, Joe: 2181},
-      {name: 'Summer 2020', Janet: 2390, Sam: 3800, Joe: 2500},
-      {name: 'Fall 2020', Janet: 3490, Sam: 4300, Joe: 2100},
-];
+import Fig1 from './figure1_table.js';
+import Fig2 from './figure2_chart.js'
 
 const new_data = [
       {name: 'Fall 2018', Janet: 4000, Sam: 2400, Joe: 2400},
@@ -158,9 +149,11 @@ const App = props => {
         </div>
         </div>
         <Landing/>
-        <TimeSeriesChart data={new_data}/>
+        <Fig2 />
         </div>
     );
 }
+
+// <TimeSeriesChart data={new_data}/>
 
 export default App;

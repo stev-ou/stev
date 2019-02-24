@@ -36,29 +36,21 @@ const styles = theme => ({
 });
 
 
-let id = 0;
+// let id = 0;
 
-function createData(name, calories, fat, carbs, protein) {
-  id += 1;
-  return { id, name, calories, fat, carbs, protein };
-}
+// function createData(name, calories, fat, carbs, protein) {
+//   id += 1;
+//   return { id, name, calories, fat, carbs, protein };
+// }
 
-var rows = [
-  createData('Frozen yoghurt', 159, 6.0, 24, 4.0),
-  createData('Ice cream sandwich', 237, 9.0, 37, 4.3),
-  createData('Eclair', 262, 16.0, 24, 6.0),
-  createData('Cupcake', 305, 3.7, 67, 4.3),
-  createData('Gingerbread', 356, 16.0, 49, 3.9),
-];
-
-var new_rows = [
-  createData('lil dicky aka bop bop', 159, 6.0, 24, 4.0),
-  createData('Ice cream sandwich', 237, 9.0, 37, 4.3),
-  createData('Eclair', 262, 16.0, 24, 6.0),
-  createData('Cupcake', 305, 3.7, 67, 4.3),
-  createData('Gingerbread', 356, 16.0, 49, 3.9),
-  createData('Gingerbred', 356, 16.0, 49, 3.9),
-];
+// var new_rows = [
+//   createData('lil dicky aka bop bop', 159, 6.0, 24, 4.0),
+//   createData('Ice cream sandwich', 237, 9.0, 37, 4.3),
+//   createData('Eclair', 262, 16.0, 24, 6.0),
+//   createData('Cupcake', 305, 3.7, 67, 4.3),
+//   createData('Gingerbread', 356, 16.0, 49, 3.9),
+//   createData('Gingerbred', 356, 16.0, 49, 3.9),
+// ];
 
 // This is the function that will fetch the desired data from the api 
 const API = 'http://localhost:5050/api/v0/courses/ame3440/figure1';
@@ -70,7 +62,6 @@ class Fig1 extends React.Component {
   constructor(props) {
     super(props);
     this.state = {data:[]}
-
   }
 
   componentDidMount() {
@@ -80,16 +71,16 @@ class Fig1 extends React.Component {
     .then(data => this.setState({data:data.result.instructors}));
   }
 
-  render(){let MyTable = withStyles(styles)(CustomizedTable);
+  render(){let MyTable = withStyles(styles)(CustomizedTable); // This is important 
     // Get the data to pass to the table
     var table_data = this.state.data
-    var i=0
     table_data.forEach((item, i) => {
-      console.log(item)
+        item['crs rating'] = item['crs rating'].toFixed(2) // Convert the long floats to 2 decimal places
+        item['avg rating'] = item['avg rating'].toFixed(2)
         item['id'] = i + 1;
       });
-    console.log(table_data)
-    return(<MyTable rows={table_data} data={'temp'}/>)
+
+    return(<MyTable rows={table_data} />)
   }
 }
 
@@ -97,20 +88,17 @@ class Fig1 extends React.Component {
 function CustomizedTable(props) {
 
   const { classes } = props;
-  console.log(props)
   const rows=props.rows
-  const data = props.data
-  // var data = 'nononfnsd'
   return (
     <div>
-    <h1> These professors have taught the course in the past 2 years </h1>
+    <h1 style={{padding: '0.5em'}}> These professors have taught the course in the past 2 years </h1>
     <Paper className={classes.root}>
       <Table className={classes.table}>
         <TableHead>
           <TableRow>
-            <CustomTableCell>Instructor Name</CustomTableCell>
-            <CustomTableCell align="right">Average Rating (0-5)</CustomTableCell>
-            <CustomTableCell align="right">Course Rating (0-5)</CustomTableCell>
+            <CustomTableCell style={{ fontWeight: 'bold', fontSize: '1.2em' }}>Instructor Name</CustomTableCell>
+            <CustomTableCell style={{ fontWeight: 'bold', fontSize: '1.2em' }} align="right">Average Instructor Rating (0-5)</CustomTableCell>
+            <CustomTableCell style={{ fontWeight: 'bold', fontSize: '1.2em' }}align="right">Instructor Rating in Course (0-5)</CustomTableCell>
 
           </TableRow>
         </TableHead>
@@ -128,7 +116,6 @@ function CustomizedTable(props) {
       </Table>
     </Paper>
     <h1>
-    {data}
     </h1>
     </div>
   );
