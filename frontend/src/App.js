@@ -1,26 +1,25 @@
 import React from 'react';
-import { AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip, Legend} from 'recharts';
 import './App.css';
-import Fig1 from './figure1_table.js';
-import Fig2 from './figure2_chart.js'
+import Fig1 from './components/figure1_table.js';
+import Fig2 from './components/figure2_chart.js'
 
-// I LOVE GLOBAL VARIABLES
-var API_RESULT = {}
-var VALID_SEARCH = false
+// API mapping, based on search type selected from the Header menu
+const api_map = {'course':'courses/', 'department':'department/', 'instructor':'instructors/'}
+const api_arg_map = {'course':'?course=', 'department': '?department=', 'instructor': '?instructor='}
+const api_endpoint = "http://localhost:5050/api/v0/"
 
 class Header extends React.Component {
-constructor(props) {
-    super(props);
-
-  };
+  constructor(props) {
+      super(props);
+    };
   render(){
     return (
-  <div class="App-header">
-    <nav class="navbar sticky-top bg-dark">
-      <div class='w-100 p-1 header_title'>
-      <h1 class='header_title'>University of Oklahoma Course & Instructor Reviews</h1>
+  <div className="App-header">
+    <nav className="navbar sticky-top bg-dark">
+      <div className='w-100 p-1 header_title'>
+      <h1 className='header_title'>University of Oklahoma Course & Instructor Reviews</h1>
     </div>
-      <div class = "header-container flex-md-nowrap w-80 p-1">
+      <div className = "header-container flex-md-nowrap w-80 p-1">
       <SearchForm/>
   </div>
     </nav>
@@ -54,39 +53,36 @@ class SearchForm extends React.Component {
   }
 
   handleSubmit(event) {
-    // Add an api query based on 
-    const api_map = {'course':'courses/?course=', 'department':'department/?department=', 'instructor':'instructors/?instructor='}
-    const api_endpoint = "http://localhost:5050/api/v0/"
+    // Add an api query based on the input
 
     // Fetch the object from the api endpoint
-    fetch(api_endpoint+api_map[this.state.search_type]+this.state.search_text)
+    fetch(api_endpoint+api_map[this.state.search_type]+api_arg_map[this.state.search_type]+this.state.search_text)
     .then(response => response.json())
     .then(data => this.setState({result:data.result, loadedAPI:true})); 
 
 
-    // alert('You entered: ' + this.state.search_type + " " + JSON.stringify(this.state.result));
+    alert('You entered: ' + this.state.search_type + " " );
     // console.log('Api response:')
     // console.log(this.state.result)
     //event.preventDefault();
-
   }
 
   render() {
     return (
       <form className="SearchForm" onSubmit={this.handleSubmit}>
-        <label style={{'font-size':'1em', 'font-style':'bold'}}>
+        <label style={{'fontSize':'1em', 'fontStyle':'bold'}}>
           <h4>
           Search by:
           </h4>
-          <select name='search_type' id='search_type' style={{'margin': '1em', 'margin-top': '0.1em','margin-bottom':'0.1em', 'font-size':'1.5em', 'text-align':'left', 'padding':'1.5em'}} value={this.state.search_type} onChange={this.handleInputChange}>
-            <option class = 'search-option' value="instructor">Instructor</option>
-            <option class = 'search-option' value="department">Department</option>
-            <option class = 'search-option' value="course">Course</option>
+          <select name='search_type' id='search_type' style={{'margin': '1em', 'marginTop': '0.1em','marginBottom':'0.1em', 'fontSize':'1.5em', 'textAlign':'left', 'padding':'1.5em'}} value={this.state.search_type} onChange={this.handleInputChange}>
+            <option className = 'search-option' value="instructor">Instructor</option>
+            <option className = 'search-option' value="department">Department</option>
+            <option className = 'search-option' value="course">Course</option>
           </select>
         </label>
 
-        <input class = "form-control w-80 header-elem" name='search_text' type="text" placeholder="Enter Search Here" aria-label="Search" value={this.state.search_text} onChange={this.handleInputChange} />
-        <input class = 'header-elem' type="submit" value="Submit" />
+        <input className = "form-control w-80 header-elem" name='search_text' type="text" placeholder="Enter Search Here" aria-label="Search" value={this.state.search_text} onChange={this.handleInputChange} />
+        <input className = 'header-elem' type="submit" value="Submit" />
       </form>
     );
   }
@@ -140,18 +136,20 @@ class App extends React.Component {
   render() {
     // THIS DOESNT WORK. Need to figure out some way to get the data from Header -> SearchForm back up to the App level 
     //so that I can send it to the Fig1 and Fig2 components. For now, I have a temp uuid I'll pass
-    const temp_uuid = 'ame3440'
+
+    // Heres some other options: "ame4442", "ame5720", "ame4970", "ame3523", "ame5903", 
+    const temp_uuid = 'ame4970' 
   if (!this.state.valid_search){
     return (
         //<LandingController />
         <div>
         <Header/>
-        <div class='graphical-content'>
-        <div class='table-fig1'>
-        <Fig1/>
+        <div className='graphical-content'>
+        <div className='table-fig1'>
+        <Fig1 uuid={temp_uuid}/>
         </div>
         </div>
-        <Fig2 />
+        <Fig2 uuid={temp_uuid} />
         <Landing/>
         </div>
     );}

@@ -6,31 +6,30 @@ import {schemeSet3} from 'd3-scale-chromatic'; // This is the colors for the bar
 function ordinal_suffix_of(i) {
     var j = i % 10,
         k = i % 100;
-    if (j == 1 && k != 11) {
+    if (j === 1 && k !== 11) {
         return i + "st";
     }
-    if (j == 2 && k != 12) {
+    if (j === 2 && k !== 12) {
         return i + "nd";
     }
-    if (j == 3 && k != 13) {
+    if (j === 3 && k !== 13) {
         return i + "rd";
     }
     return i + "th";
 }
 
 // Define API parameters
-const API = 'http://localhost:5050/api/v0/courses/ame3440/figure2';
-const DEFAULT_QUERY = '';
+const API = 'http://localhost:5050/api/v0/courses/';
 
 class Fig2 extends React.Component {
 	constructor(props) {
 	super(props)
-	this.state = {result:{}, loadedAPI:false}
+	this.state = {result:{}, loadedAPI:false, uuid:props.uuid}
 	}
 
 	componentWillMount() {
     // This will call the api when the component "Mounts", i.e. when the page is accessed
-    fetch(API+DEFAULT_QUERY)
+    fetch(API+this.state.uuid+'/figure2')
     .then(response => response.json())
     .then(data => this.setState({result:data.result, loadedAPI:true})); // Initial keying into result
     this.render()
