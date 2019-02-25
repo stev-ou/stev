@@ -25,13 +25,13 @@ def course_instructor_ratings_api_generator(uuid):
     coll_name = 'aggregated_gcoe_sp18'
     db = mongo_driver()
     coll = db.get_db_collection('reviews-db', coll_name)
-    cursor = coll.find({"uuid": uuid})
+    cursor = coll.find({"course_uuid": uuid})
     df = pd.DataFrame(list(cursor))
 
     # Add an error catching if the len(df) !> 1
     if len(df)==0:
-        print('The uuid '+ uuid + ' was not found within the db collection ' + coll_name)
-        raise Exception('The uuid '+ uuid + ' was not found within the db collection ' + coll_name)
+        print('The course_uuid '+ uuid + ' was not found within the db collection ' + coll_name)
+        raise Exception('The course_uuid '+ uuid + ' was not found within the db collection ' + coll_name)
 
     # Construct the json containing necessary data for figure 1 on course page
     ret_json = {"result": {"instructors": []}}
@@ -63,15 +63,15 @@ def relative_dept_rating_figure_json_generator(valid_uuid):
     coll = db.get_db_collection('reviews-db', coll_name)
 
     # search the collection of interest for the valid_uuid
-    cursor = coll.find({'uuid':valid_uuid})
+    cursor = coll.find({'course_uuid':valid_uuid})
 
     # convert the query result to a df
     uuid_df =  pd.DataFrame(list(cursor))
     
     # Add an error catching if the len(df) !> 1
     if len(uuid_df)==0:
-        print('The uuid '+ valid_uuid + ' was not found within the db collection ' + coll_name)
-        raise Exception('The uuid '+ valid_uuid + ' was not found within the db collection ' + coll_name)
+        print('The course_uuid '+ valid_uuid + ' was not found within the db collection ' + coll_name)
+        raise Exception('The course_uuid '+ valid_uuid + ' was not found within the db collection ' + coll_name)
 
     # Get various parameters of the search
     subj = uuid_df['Subject Code'].unique()[0]

@@ -65,6 +65,7 @@ def update_database(force_update=True):
             # Reading data into python from the csv
             df = pd.read_csv('data/'+data_file)
             # Create the aggregated database 
+            print('Aggregating the ' + data_file + '. This usually takes about a minute.')
             ag_df = aggregate_data(df)
 
             # load the db for the given data file into a json format

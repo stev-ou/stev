@@ -62,9 +62,10 @@ def aggregate_data(df):
 
     # Initialize the aggregated dataframe by copying the base data frame
     ag_df = df.copy()
+    unaltered_df = df.copy()
 
     # Drop the unnecessary columns
-    ag_df.drop(['Department Code', 'Question Number','Section Number','Responses', 'CRN','Campus Code','Question', 'Mean', 'Median', 'Standard Deviation', 'Department Mean', 'Department Median', 'Similar College Mean', 'College Mean', 'College Median', 'Percent Rank - Department', 'Percent Rank - College', 'Percent #1', 'Percent #2', 'Percent #3', 'Percent #4', 'Percent #5', 'ZScore - College', 'ZScore - College Similar Sections', 'Course Level', 'Section Size', 'Similar College Median'], axis=1, inplace = True)
+    ag_df.drop(['Department Code', 'Question Number','Section Number','CRN','Campus Code','Question', 'Mean', 'Median', 'Standard Deviation', 'Department Mean', 'Department Median', 'Similar College Mean', 'College Mean', 'College Median', 'Percent Rank - Department', 'Percent Rank - College', 'Percent #1', 'Percent #2', 'Percent #3', 'Percent #4', 'Percent #5', 'ZScore - College', 'ZScore - College Similar Sections', 'Course Level', 'Section Size', 'Similar College Median'], axis=1, inplace = True)
 
     # Add in the columns to be filled with the aggregated values
     ag_df.insert(3,'Avg Department Rating', 0.0)
@@ -73,18 +74,13 @@ def aggregate_data(df):
     ag_df.insert(8,'SD Course Rating', 0.0)
     ag_df.insert(12, 'Avg Instructor Rating In Section', 0.0)
     ag_df.insert(13, 'SD Instructor Rating In Section', 0.0)
-    ag_df.insert(14, 'Num Responses', 0)
-    # # Swap the columns Section Number and Section Title
-    # swap_col_order = list(ag_df.columns)
-    # # swap_col_order[6] = 'Instructor ID'
-    # # swap_col_order[9] = 'Section Number'
-    # ag_df = ag_df.reindex(columns = swap_col_order)
+    ag_df.insert(15, 'Course Enrollment', 0)
 
     # Rename the Instructor 1 ID, Instructor 1 First Name, Last Name columns
-    ag_df.rename(columns = {'Section Title':'Course Title', 'Responses':'Num Responses','Instructor 1 ID': 'Instructor ID', 'Instructor 1 First Name':'Instructor First Name', 'Instructor 1 Last Name':'Instructor Last Name'}, inplace= True)
+    ag_df.rename(columns = {'Section Title':'Course Title', 'Responses':'Instructor Enrollment','Instructor 1 ID': 'Instructor ID', 'Instructor 1 First Name':'Instructor First Name', 'Instructor 1 Last Name':'Instructor Last Name'}, inplace= True)
 
     # Remove the repeat rows that will occur because we are taking 1-10 question responses down to 1
-    ag_df.drop_duplicates(subset = ag_df.columns.drop('Course Title'), inplace = True)
+    ag_df.drop_duplicates(subset = ag_df.columns.drop(['Course Title', 'Instructor Enrollment']), inplace = True)
 
     # Read in the question mappings values from the mappings.yaml
     file_path = __location__+"/mappings.yaml"
@@ -94,84 +90,88 @@ def aggregate_data(df):
         mappings = yaml.safe_load(f)
         question_weighting = mappings['Instructor_question_weighting']
 
-    # Lets fill the average instructor ranking in each section, i.e. the combined rating for each question per section
-    for subject in df['Subject Code'].unique(): # Iterate over all subjects (test case - for subject in ['DSA']:)
-        for course in df[(df['Subject Code']==subject)]['Course Number'].unique(): # Iterate over courses with the desired subject 
-            for instructor in df[(df['Subject Code']==subject) & (df['Course Number']==course)]['Instructor 1 ID'].unique(): # Iterate over instructors with desired subject and course number
-                # Modify the subset based on the desired instructor (see section index above)
-                subset = df[(df['Subject Code']==subject) & (df['Course Number']==course) & (df['Instructor 1 ID']==instructor)]        
-                if len(subset)!=0: 
-                    # Compute the combined mean and standard deviation of the questions
-                    # Input the standard deviation, mean, number of responses, and the question number mapped to the weights for each subject-course-instructor combination
-    #                 print(len(subset['Standard Deviation']))
-                    instructor_mean, instructor_sd = combine_standard_deviations(subset['Standard Deviation'], subset['Mean'], subset['Responses'], subset['Question Number'].map(arg=question_weighting))
+    # Lets fill the average instructor rating in each section, i.e. the combined rating for each question per section per term
+    for term in df['Term Code'].unique():
+        subset = df[(df['Term Code']==term)] # Subset the df based on the current term
+        for subject in subset['Subject Code'].unique(): # Iterate over all subjects (test case - for subject in ['DSA']:)
+            subset = df[(df['Term Code']==term) & (df['Subject Code']==subject)] # Subset the df based on the current subject
+            for course in subset['Course Number'].unique(): # Iterate over courses with the desired subject 
+                subset = df[(df['Term Code']==term) & (df['Subject Code']==subject) & (df['Course Number']==course)]# Subset the df based on the current course
+                for instructor in subset['Instructor 1 ID'].unique(): # Iterate over instructors with desired subject and course number
+                    subset = df[(df['Term Code']==term) & (df['Subject Code']==subject) & (df['Course Number']==course) & (df['Instructor 1 ID']==instructor)] # Modify the subset based on the current instructor 
+                    if len(subset)!=0: 
+                        # Set the combined mean and combined sd value into the aggregated dataframe
+                        # Find the row of interest in the aggregated df
+                        ag_df_section_row = ag_df[((ag_df['Term Code']==term) & (ag_df['Subject Code']==subject) & (ag_df['Course Number']==course) & (ag_df['Instructor ID']==instructor))].index.tolist() 
+                        if len(ag_df_section_row)!=1:
+                            print('Aggregated Dataframe contains incorrect number of entries (number entries = ' + str(len(ag_df_section_row))+ ') for term' + str(term)+ ', subject: '+ str(subject)+ ', course: '+ str(course)+ ', and instructor: '+ str(instructor))
+                        else:
+                            # Compute the combined mean and standard deviation of the questions
+                            # Input the standard deviation, mean, number of responses, and the question number mapped to the weights for each subject-course-instructor combination
+                            instructor_mean, instructor_sd = combine_standard_deviations(subset['Standard Deviation'], subset['Mean'], subset['Responses'], subset['Question Number'].map(str).map(arg=question_weighting[str(subset['College Code'].unique()[0])]))
+                            # Fill the Instructor Ratings Columns
+                            ag_df.at[ag_df_section_row[0], 'Avg Instructor Rating In Section'] = instructor_mean
+                            ag_df.at[ag_df_section_row[0], 'SD Instructor Rating In Section'] = instructor_sd
 
-                    # Set the combined mean and combined sd value into the aggregated dataframe
-                    # Find the row of interest in the aggregated df
-                    ag_df_section_row = ag_df[(ag_df['Subject Code']==subject) & (ag_df['Course Number']==course) & (ag_df['Instructor ID']==instructor)].index.tolist()
-                    if len(ag_df_section_row)!=1:
-                        print('Aggregated Dataframe contains incorrect number of entries (number entries =' + str(len(ag_df_section_row))+ ') for subject: '+ str(subject)+ ', course: '+ str(course)+ ', and instructor: '+ str(instructor))
+                            # Fill the Num Responses column, based on the minimum number of responses in the group of questions
+                            # if they teach two or more courses, add the number of students in each course to get the total number
+                            total_responses = 0
+                            if int(len(subset['Responses'])/5) <1:
+                                print('Less than 5 questions are available for subject: '+ str(subject)+ ', course: '+ str(course)+ ', and instructor: '+ str(instructor))
+                            for i in range(int(len(subset['Responses'])/5)):
+                                total_responses = total_responses + list(subset['Responses'])[5*i]
+                            # Set the Num Responses in the agg df equal to the total responses in this course
+                            ag_df.at[ag_df_section_row[0], 'Instructor Enrollment'] = total_responses
+
                     else:
-                        # Fill the Instructor Ratings Columns
-                        ag_df.at[ag_df_section_row[0], 'Avg Instructor Rating In Section'] = instructor_mean
-                        ag_df.at[ag_df_section_row[0], 'SD Instructor Rating In Section'] = instructor_sd
+                        print('Could not find the combination for subject: '+ str(subject)+ ', course: '+ str(course)+ ', and instructor: '+ str(instructor))
+                # Back to Course level of tree, now that we've filled out the instructor level info
+                # Modify the dataframe subset that consists only of the entries with the desired course (see course index above)
+                # Note that now our subset consists of aggregated data from all instructors within the desired course
+                subset = ag_df[(ag_df['Term Code']==term) & (ag_df['Subject Code']==subject) & (ag_df['Course Number']==course)]
+                # Compute the combined mean and standard deviation of all of the instructors within the course
 
-                        # Fill the Num Responses column, based on the minimum number of responses of the group of questions
-                        # if they teach two or more courses, add the number of students in each course to get the total number
-                        total_responses = 0
-                        if int(len(subset['Responses'])/5) <1:
-                            print('Less than 5 questions are available for subject: '+ str(subject)+ ', course: '+ str(course)+ ', and instructor: '+ str(instructor))
-                        for i in range(int(len(subset['Responses'])/5)):
-                            total_responses = total_responses + list(subset['Responses'])[5*i]
-                        # Set the Num Responses in the agg df equal to the total responses in this course
-                        ag_df.at[ag_df_section_row[0], 'Num Responses'] = total_responses
+                #### IMPORTANT #### Population weighting used in calculation of mean and sd for course ratings, based on instructor ratings
 
-                else:
-                    print('Could not find the combination for subject: '+ str(subject)+ ', course: '+ str(course)+ ', and instructor: '+ str(instructor))
-            # Back to Course level of tree, now that we've filled out the instructor level info
-            # Modify the dataframe subset that consists only of the entries with the desired course (see course index above)
-            # Note that now our subset consists of aggregated data from all instructors within the desired course
-            subset = ag_df[(ag_df['Subject Code']==subject) & (ag_df['Course Number']==course)]
-            # Compute the combined mean and standard deviation of all of the instructors within the course
-            #### IMPORTANT #### NO POPULATION-BASED OR OTHER WEIGHTING USED IN THE CALCULATION OF SD AND AVERAGE COURSE RATING
+                course_mean, course_sd = combine_standard_deviations(subset['SD Instructor Rating In Section'], subset['Avg Instructor Rating In Section'], subset['Instructor Enrollment'], np.ones(len(subset['SD Instructor Rating In Section'])))
+                
+                # Find the row of interest in the desired df
+                ag_df_course_rows = ag_df[(ag_df['Subject Code']==subject) & (ag_df['Course Number']==course)].index.tolist()
+                # Fill the Course ratings columns
+                ag_df.at[ag_df_course_rows, 'Avg Course Rating'] = course_mean
+                ag_df.at[ag_df_course_rows, 'SD Course Rating'] = course_sd
+                ag_df.at[ag_df_course_rows, 'Course Enrollment'] = np.sum(np.array(subset['Instructor Enrollment']))
 
-            course_mean, course_sd = combine_standard_deviations(subset['SD Instructor Rating In Section'], subset['Avg Instructor Rating In Section'], np.ones(len(subset['SD Instructor Rating In Section'])), np.ones(len(subset['SD Instructor Rating In Section'])))
+            # Back to Department level of tree, now that we've filled out the instructor and course level info
+            # Modify the dataframe subset that consists only of the entries with the desired subject(see course index above)
+            # Note that now our subset consists of aggregated data from all instructors and courses within the desired subject/department
+            subset = ag_df[(ag_df['Term Code']==term) & (ag_df['Subject Code']==subject)]
+
+            # Compute the combined mean and standard deviation of all of the courses within the department
+            #### IMPORTANT #### Population Weighting used in calculation of department parameters
+
+            department_mean, department_sd = combine_standard_deviations(subset['SD Course Rating'], subset['Avg Course Rating'], subset['Course Enrollment'], np.ones(len(subset['Avg Course Rating'])))
             
             # Find the row of interest in the desired df
-            ag_df_course_rows = ag_df[(ag_df['Subject Code']==subject) & (ag_df['Course Number']==course)].index.tolist()
+            ag_df_course_rows = ag_df[(ag_df['Subject Code']==subject)].index.tolist()
+            
             # Fill the Course ratings columns
-            ag_df.at[ag_df_course_rows, 'Avg Course Rating'] = course_mean
-            ag_df.at[ag_df_course_rows, 'SD Course Rating'] = course_sd
-
-        # Back to Department level of tree, now that we've filled out the instructor and course level info
-        # Modify the dataframe subset that consists only of the entries with the desired subject(see course index above)
-        # Note that now our subset consists of aggregated data from all instructors and courses within the desired subject/department
-        subset = ag_df[(ag_df['Subject Code']==subject)]
-
-        # Compute the combined mean and standard deviation of all of the courses within the department
-        #### IMPORTANT #### NO POPULATION-BASED OR OTHER WEIGHTING USED IN THE CALCULATION OF SD AND AVERAGE COURSE RATING
-
-        department_mean, department_sd = combine_standard_deviations(subset['SD Course Rating'], subset['Avg Course Rating'], np.ones(len(subset['Avg Course Rating'])), np.ones(len(subset['Avg Course Rating'])))
-        # Find the row of interest in the desired df
-        ag_df_course_rows = ag_df[(ag_df['Subject Code']==subject)].index.tolist()
-        
-        # Fill the Course ratings columns
-        ag_df.at[ag_df_course_rows, 'Avg Department Rating'] = department_mean
-        ag_df.at[ag_df_course_rows, 'SD Department Rating'] = department_sd
+            ag_df.at[ag_df_course_rows, 'Avg Department Rating'] = department_mean
+            ag_df.at[ag_df_course_rows, 'SD Department Rating'] = department_sd
 
     # Add in a Queryable Course String for the search by course
     ag_df['Queryable Course String'] = ag_df['Subject Code'].map(str).str.lower() + ' ' + ag_df['Course Number'].map(str).str.lower() + ' ' + ag_df['Course Title'].map(str).str.lower()
 
     # Add in a uuid field for the course, based on subject code (lowercase) and course number
-    ag_df['uuid'] = ag_df['Subject Code'].map(str).str.lower() + ag_df['Course Number'].map(str)# .str.lower()
+    ag_df['uuid_course'] = ag_df['Subject Code'].map(str).str.lower() + ag_df['Course Number'].map(str)# .str.lower()
         
     return ag_df
 
 if __name__ == '__main__':
     
-    df = pd.read_csv("data/gcoe_sp18.csv") # Modify to correct data location
+    df = pd.read_csv("data/GCOE.csv") # Modify to correct data location
     
     ag_df = aggregate_data(df)
     
-    if len(ag_df[ag_df[['Course Title', 'Instructor Last Name']].duplicated() == True]) == 0:
+    if len(ag_df[ag_df[['Term Code','Course Title', 'Instructor Last Name']].duplicated() == True]) == 0:
         print("From basic tests, the data aggregation is working correctly.")
