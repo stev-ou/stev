@@ -36,32 +36,32 @@ def course_instructor_ratings_api_generator(uuid):
         # cursor = coll.find({"course_uuid": uuid})
         cursor = coll.find({{'$and':[
         {"course_uuid":uuid},
-        {"Term Code":{"$in":CURRENT_SEMESTERS}}]}})
-        # This assumes that there will be no uuid's across the different
+        {"Term Code":{"$in":CURRENT_SEMESTER}}]}})
+        # This assumes that there will be no same uuid's across the different collections, e.g. the same uuid in GCOE and JRCOE
         if len(list(cursor))==0:
             continue
-        else: {
-        df = pd.DataFrame(list(cursor))
+        else: 
+            df = pd.DataFrame(list(cursor))
 
-        # Add an error catching if the len(df) !> 1
-        if len(df)==0:
-            print('The course_uuid '+ uuid + ' was not found within the db collection ' + coll_name)
-            raise Exception('The course_uuid '+ uuid + ' was not found within the db collection ' + coll_name)
+            # Add an error catching if the len(df) !> 1
+            if len(df)==0:
+                print('The course_uuid '+ uuid + ' was not found within the db collection ' + coll_name)
+                raise Exception('The course_uuid '+ uuid + ' was not found within the db collection ' + coll_name)
 
-        # Construct the json containing necessary data for figure 1 on course page
-        ret_json = {"result": {"instructors": []}}
-        for row in df.itertuples():
-            # need to average all ratings across all classes taught by each instructor
-            df_inst = pd.DataFrame(list(coll.find({"Instructor ID": row[8]})))
-            total = 0
-            count = 0
-            for inst_row in df_inst.itertuples():
-                total += inst_row[3]
-                count += 1
-            avg = round(total/count, 7)
+            # Construct the json containing necessary data for figure 1 on course page
+            ret_json = {"result": {"instructors": []}}
+            for row in df.itertuples():
+                # need to average all ratings across all classes taught by each instructor
+                df_inst = pd.DataFrame(list(coll.find({"Instructor ID": row[8]})))
+                total = 0
+                count = 0
+                for inst_row in df_inst.itertuples():
+                    total += inst_row[3]
+                    count += 1
+                avg = round(total/count, 7)
 
-            inst = {"name": row[7] + ' ' + row[9], "crs rating": row[3], "avg rating": avg}
-            ret_json["result"]["instructors"].append(inst)
+                inst = {"name": row[7] + ' ' + row[9], "crs rating": row[3], "avg rating": avg}
+                ret_json["result"]["instructors"].append(inst)
     return ret_json
 
 def relative_dept_rating_figure_json_generator(valid_uuid):
@@ -229,12 +229,12 @@ def query_function(db, query, field_to_search):
 
 if __name__ == '__main__':
 
-    # pprint.pprint(course_instructor_ratings_api_generator("engr2002"))
-    # pprint.pprint(relative_dept_rating_figure_json_generator("engr2002"))
+    pprint.pprint(course_instructor_ratings_api_generator("engr2002"))
+    pprint.pprint(relative_dept_rating_figure_json_generator("engr2002"))
 
     # Test the db search
     db = mongo_driver()
-    print(query_function(db,'thermodynamics','Queryable Course String'))
+    # print(query_function(db,'thermodynamics','Queryable Course String'))
 
 
 

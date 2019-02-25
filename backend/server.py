@@ -36,7 +36,7 @@ def course_search_api():
     query = request.args.get('course_code', default='', type=str).lower()
 
     # Use the query function to search for the query
-    result_list = query_function(db, query, ['aggregated_gcoe_sp18'], 'Queryable Course String')
+    result_list = query_function(db, query, 'Queryable Course String')
 
     return jsonify({'result':result_list})
 
@@ -96,7 +96,7 @@ def department_api():
 if __name__ == '__main__':
     # print("Updating database...")
     # print('IN DEVELOPMENT MODE; NO DATABASE UPDATE PERFORMED')
-    update_database()
+    update_database(force_update=False)
     print("Done.")
     print("Starting server...")
     app.run(host='0.0.0.0', port=5050)
