@@ -10,6 +10,7 @@ import numpy as np
 import pandas as pd
 import yaml
 import os
+import math
 
 # Get file location for mappings.yaml and reading data
 __location__ = os.path.realpath(os.path.join(os.getcwd(), os.path.dirname(__file__)))
@@ -60,9 +61,11 @@ def combine_standard_deviations(sd_list, mean_list,pop_list, weight_list):
 
 def aggregate_data(df):
 
+    # Drop rows where the NaN value exists from the dataframe
+    df.dropna(inplace=True)
+
     # Initialize the aggregated dataframe by copying the base data frame
     ag_df = df.copy()
-    unaltered_df = df.copy()
 
     # Drop the unnecessary columns
     ag_df.drop(['Department Code', 'Question Number','Section Number','CRN','Campus Code','Question', 'Mean', 'Median', 'Standard Deviation', 'Department Mean', 'Department Median', 'Similar College Mean', 'College Mean', 'College Median', 'Percent Rank - Department', 'Percent Rank - College', 'Percent #1', 'Percent #2', 'Percent #3', 'Percent #4', 'Percent #5', 'ZScore - College', 'ZScore - College Similar Sections', 'Course Level', 'Section Size', 'Similar College Median'], axis=1, inplace = True)
@@ -109,17 +112,26 @@ def aggregate_data(df):
                             # Compute the combined mean and standard deviation of the questions
                             # Input the standard deviation, mean, number of responses, and the question number mapped to the weights for each subject-course-instructor combination
                             instructor_mean, instructor_sd = combine_standard_deviations(subset['Standard Deviation'], subset['Mean'], subset['Responses'], subset['Question Number'].map(str).map(arg=question_weighting[str(subset['College Code'].unique()[0])]))
+                            
+                            if math.isnan(instructor_mean) or math.isnan(instructor_sd):
+                                print(subset['Mean'])
+                                print(subset['Standard Deviation'])
+                                print(subset['Responses'])
+                                print(subset['Question Number'].map(str).map(arg=question_weighting[str(subset['College Code'].unique()[0])]))
+                                print('Nan for (number entries = ' + str(len(ag_df_section_row))+ ') for term' + str(term)+ ', subject: '+ str(subject)+ ', course: '+ str(course)+ ', and instructor: '+ str(instructor))
+                                return 1
+
                             # Fill the Instructor Ratings Columns
                             ag_df.at[ag_df_section_row[0], 'Avg Instructor Rating In Section'] = instructor_mean
                             ag_df.at[ag_df_section_row[0], 'SD Instructor Rating In Section'] = instructor_sd
 
                             # Fill the Num Responses column, based on the minimum number of responses in the group of questions
-                            # if they teach two or more courses, add the number of students in each course to get the total number
+                            # if they teach two or more sections, add the number of students in each course to get the total number
+                            subset = subset.drop_duplicates(subset=['Course Number', 'Section Number'])
                             total_responses = 0
-                            if int(len(subset['Responses'])/5) <1:
-                                print('Less than 5 questions are available for subject: '+ str(subject)+ ', course: '+ str(course)+ ', and instructor: '+ str(instructor))
-                            for i in range(int(len(subset['Responses'])/5)):
-                                total_responses = total_responses + list(subset['Responses'])[5*i]
+
+                            for i in list(subset['Responses']):
+                                total_responses = total_responses + i
                             # Set the Num Responses in the agg df equal to the total responses in this course
                             ag_df.at[ag_df_section_row[0], 'Instructor Enrollment'] = total_responses
 
@@ -134,7 +146,16 @@ def aggregate_data(df):
                 #### IMPORTANT #### Population weighting used in calculation of mean and sd for course ratings, based on instructor ratings
 
                 course_mean, course_sd = combine_standard_deviations(subset['SD Instructor Rating In Section'], subset['Avg Instructor Rating In Section'], subset['Instructor Enrollment'], np.ones(len(subset['SD Instructor Rating In Section'])))
-                
+
+                # Quick Nan check to make sure we arent computing Nan values
+                if math.isnan(course_mean) or math.isnan(course_sd):
+                    print(subset['SD Instructor Rating In Section'])
+                    print(subset['Avg Instructor Rating In Section'])
+                    print(subset['Instructor Enrollment'])
+                    print('Nan within (number entries = ' + str(len(subset))+ ') for term' + str(term)+ ', subject: '+ str(subject)+ ', and course: '+ str(course)+'.')
+                    print(subset)
+                    return 1
+
                 # Find the row of interest in the desired df
                 ag_df_course_rows = ag_df[(ag_df['Subject Code']==subject) & (ag_df['Course Number']==course)].index.tolist()
                 # Fill the Course ratings columns
@@ -163,7 +184,7 @@ def aggregate_data(df):
     ag_df['Queryable Course String'] = ag_df['Subject Code'].map(str).str.lower() + ' ' + ag_df['Course Number'].map(str).str.lower() + ' ' + ag_df['Course Title'].map(str).str.lower()
 
     # Add in a uuid field for the course, based on subject code (lowercase) and course number
-    ag_df['uuid_course'] = ag_df['Subject Code'].map(str).str.lower() + ag_df['Course Number'].map(str)# .str.lower()
+    ag_df['course_uuid'] = ag_df['Subject Code'].map(str).str.lower() + ag_df['Course Number'].map(str)# .str.lower()
         
     return ag_df
 

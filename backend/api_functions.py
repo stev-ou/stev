@@ -5,9 +5,16 @@ import pandas as pd
 from collections import Counter
 import re
 
-# Establish a database connection
+# Establish the DB Name 
 DB_NAME = "reviews-db"
-COLLECTION_NAME = "reviews-collection"
+
+# This is the set of that will be queried by the API
+COLLECTION_NAMES = ["aggregated_GCOE", "aggregated_JRCOE"]
+
+# This is the period that will be considered "current" by the API. 
+# These are term codes, where the first 4 digits corresponds to year, last 2 digits to semester (10:fall, 20:spring, 30:summer), 
+# e.g. 201710 is Fall 2017
+CURRENT_SEMESTERS = [201810, 201820, 201830, 201710, 201720, 201730]
 
 
 def course_instructor_ratings_api_generator(uuid):
@@ -21,32 +28,40 @@ def course_instructor_ratings_api_generator(uuid):
     Inputs: valid_uuid - a validated uuid from the 'uuid' field in the dataframe
     Returns: a valid json needed to generate the figure
     '''
-
-    coll_name = 'aggregated_gcoe_sp18'
     db = mongo_driver()
-    coll = db.get_db_collection('reviews-db', coll_name)
-    cursor = coll.find({"course_uuid": uuid})
-    df = pd.DataFrame(list(cursor))
 
-    # Add an error catching if the len(df) !> 1
-    if len(df)==0:
-        print('The course_uuid '+ uuid + ' was not found within the db collection ' + coll_name)
-        raise Exception('The course_uuid '+ uuid + ' was not found within the db collection ' + coll_name)
+    for coll_name in COLLECTION_NAMES:
+        coll = db.get_db_collection('reviews-db', coll_name)
+        # Use the database query to pull needed data
+        # cursor = coll.find({"course_uuid": uuid})
+        cursor = coll.find({{'$and':[
+        {"course_uuid":uuid},
+        {"Term Code":{"$in":CURRENT_SEMESTERS}}]}})
+        # This assumes that there will be no uuid's across the different
+        if len(list(cursor))==0:
+            continue
+        else: {
+        df = pd.DataFrame(list(cursor))
 
-    # Construct the json containing necessary data for figure 1 on course page
-    ret_json = {"result": {"instructors": []}}
-    for row in df.itertuples():
-        # need to average all ratings across all classes taught by each instructor
-        df_inst = pd.DataFrame(list(coll.find({"Instructor ID": row[8]})))
-        total = 0
-        count = 0
-        for inst_row in df_inst.itertuples():
-            total += inst_row[3]
-            count += 1
-        avg = round(total/count, 7)
+        # Add an error catching if the len(df) !> 1
+        if len(df)==0:
+            print('The course_uuid '+ uuid + ' was not found within the db collection ' + coll_name)
+            raise Exception('The course_uuid '+ uuid + ' was not found within the db collection ' + coll_name)
 
-        inst = {"name": row[7] + ' ' + row[9], "crs rating": row[3], "avg rating": avg}
-        ret_json["result"]["instructors"].append(inst)
+        # Construct the json containing necessary data for figure 1 on course page
+        ret_json = {"result": {"instructors": []}}
+        for row in df.itertuples():
+            # need to average all ratings across all classes taught by each instructor
+            df_inst = pd.DataFrame(list(coll.find({"Instructor ID": row[8]})))
+            total = 0
+            count = 0
+            for inst_row in df_inst.itertuples():
+                total += inst_row[3]
+                count += 1
+            avg = round(total/count, 7)
+
+            inst = {"name": row[7] + ' ' + row[9], "crs rating": row[3], "avg rating": avg}
+            ret_json["result"]["instructors"].append(inst)
     return ret_json
 
 def relative_dept_rating_figure_json_generator(valid_uuid):
@@ -124,7 +139,7 @@ def relative_dept_rating_figure_json_generator(valid_uuid):
                           'instructors':instructors}}
     return response
 
-def query_function(db, query, collections_to_search, field_to_search):
+def query_function(db, query, field_to_search):
     '''
     This function will perform substring querying on a given field in the db, to match an arbitrary user search to an 
     instance in the db. The function splits the input string 'query' by letter/number interface and whitespace delimiters, 
@@ -149,7 +164,7 @@ def query_function(db, query, collections_to_search, field_to_search):
     #Split the query by the assumed space delimiter
     query_list_initial = query.split(' ')
 
-    # Split any unsplit entries at letter/number interface
+    # Split any unsplit entries at letter/number interface or symbol, e.g. :
     query_list = []
     for q in query_list_initial:
         split = re.split('(\d+)',q)
@@ -158,18 +173,25 @@ def query_function(db, query, collections_to_search, field_to_search):
                 query_list.append(i)
 
     # Search through the list of valid collections to find the proper college for the course search
-    collections_to_search = ['aggregated_gcoe_sp18']
-
     # Create an index to relate uuid query results to the query
     query_match_results = {}
+    # print(query_list)
 
-    for query in query_list:
-        for coll in collections_to_search:
+    for coll in COLLECTION_NAMES:
+        for query in query_list:
             # Find the query in the collection
             collection = db.get_db_collection(DB_NAME, coll)
             collection.create_index([(field_to_search, 'text')])
-            test_data = collection.find({"$text": {"$search": query}}, {'uuid':1, '_id':0})
-            query_match_results[query] = list(set([item['uuid'] for item in list(test_data)]))
+            test_data = collection.find({"$text": {"$search": query}}, {'course_uuid':1, '_id':0})
+            # print(list(set([item['course_uuid'] for item in list(test_data)])))
+
+            # Add the query to the query_match_results if it isnt already in there, if it is leave it and delete duplicates
+            if query not in query_match_results.keys():
+                query_match_results[query] = list(set([item['course_uuid'] for item in list(test_data)]))
+            else:
+                new_set = set(query_match_results[query] + list(set([item['course_uuid'] for item in list(test_data)])))
+                query_match_results[query] = list(new_set)
+
     # pprint.pprint(query_match_results)
     # Compare the query_match_results to one another to find the optimal response
     # Combine all of the lists
@@ -212,7 +234,7 @@ if __name__ == '__main__':
 
     # Test the db search
     db = mongo_driver()
-    print(query_function(db,'dsa 4413 algorithm analysis', 'aggregated_gcoe_sp18', 'Queryable Course String'))
+    print(query_function(db,'thermodynamics','Queryable Course String'))
 
 
 
