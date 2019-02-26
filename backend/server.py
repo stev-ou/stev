@@ -33,7 +33,7 @@ def api():
 @app.route(base_api_route + 'courses/')
 def course_search_api():
     # Get the search query from the url string and convert to lowercase
-    query = request.args.get('course_code', default='', type=str).lower()
+    query = request.args.get('course', default='', type=str).lower()
 
     # Use the query function to search for the query
     result_list = query_function(db, query, ['aggregated_gcoe_sp18'], 'Queryable Course String')
@@ -59,7 +59,7 @@ def figure_2_data_api(course_uuid):
 @app.route(base_api_route+'instructors')
 def instructor_api():
     # Get the search query from the url string
-    query = request.args.get('name', default='', type=str)
+    query = request.args.get('instructor', default='', type=str)
 
     if query == '':
         # list all instructors
