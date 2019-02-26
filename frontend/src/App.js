@@ -1,12 +1,12 @@
 import React from 'react';
 import './App.css';
 import Fig1 from './components/figure1_table.js';
-import Fig2 from './components/figure2_chart.js'
+import Fig2 from './components/figure2_chart.js';
 
 // API mapping, based on search type selected from the Header menu
-const api_map = {'course':'courses/', 'department':'department/', 'instructor':'instructors/'}
-const api_arg_map = {'course':'?course=', 'department': '?department=', 'instructor': '?instructor='}
-const api_endpoint = "http://localhost:5050/api/v0/"
+const api_map = {'course':'courses/', 'department':'department/', 'instructor':'instructors/'};
+const api_arg_map = {'course':'?course=', 'department': '?department=', 'instructor': '?instructor='};
+const api_endpoint = "http://localhost:5050/api/v0/";
 
 class Header extends React.Component {
   constructor(props) {
@@ -115,53 +115,55 @@ class Landing extends React.Component {
 class LandingController extends React.Component {
     constructor(props) {
         super(props);
-        this.state = {valid_search: false}
+        this.state = {valid_search: false};
     }
 
     render() {
         const valid_search = this.state.valid_search;
         if (!valid_search) {
-            return <Landing />
+            return <Landing />;
         }
-        return <h1> This is where the timeserieschart would go. </h1>
+        return <h1> This is where the timeserieschart would go. </h1>;
     }
 }
 
 class App extends React.Component {
   constructor(props) {
-        super(props);
-        this.state = {valid_search: props.valid_search}
-    }
+      super(props);
+      this.state = {valid_search: props.valid_search};
+  }
 
   render() {
     // THIS DOESNT WORK. Need to figure out some way to get the data from Header -> SearchForm back up to the App level 
     //so that I can send it to the Fig1 and Fig2 components. For now, I have a temp uuid I'll pass
 
     // Heres some other options: "ame4442", "ame5720", "ame4970", "ame3523", "ame5903", 
-    const temp_uuid = 'ame4970' 
-  if (!this.state.valid_search){
-    return (
-        //<LandingController />
-        <div>
-        <Header/>
-        <div className='graphical-content'>
-        <div className='table-fig1'>
-        <Fig1 uuid={temp_uuid}/>
-        </div>
-        </div>
-        <Fig2 uuid={temp_uuid} />
-        <Landing/>
-        </div>
-    );}
-  else {
-    return(
-    <div>
-    <Header/>
-    <Landing/>
-    </div>
-    )
+      const temp_uuid = 'ame4970';
+      if (!this.state.valid_search){
+          return (
+              //<LandingController />
+              <div>
+                <Header/>
+                <div className='graphical-content'>
+                  <div className='table-fig1'>
+                    <Fig1 uuid={temp_uuid}/>
+                  </div>
+                </div>
+                <Fig2 uuid={temp_uuid} />
+                <Landing/>
+              </div>
+          );
+      }
+      else {
+          return(
+              <div>
+                  <Header/>
+                  <Landing/>
+              </div>
+          );
+      }
   }
-}}
+}
 
 // <TimeSeriesChart data={new_data}/>
 
