@@ -72,16 +72,25 @@ def relative_dept_rating_figure_json_generator(valid_uuid):
     Inputs: valid_uuid - a validated uuid from the 'uuid' field in the dataframe
     Returns: a valid json needed to generate the figure
     '''
-    coll_name = 'aggregated_gcoe_sp18'
+
     # Make a connection to the db
     db = mongo_driver()
-    coll = db.get_db_collection('reviews-db', coll_name)
 
-    # search the collection of interest for the valid_uuid
-    cursor = coll.find({'course_uuid':valid_uuid})
+    # Search through each of the collections 
+    for coll_name in COLLECTION_NAMES:
+        coll = db.get_db_collection('reviews-db', coll_name)
 
-    # convert the query result to a df
-    uuid_df =  pd.DataFrame(list(cursor))
+        # search the collection of interest for the valid_uuid
+        # cursor = coll.find({'course_uuid':valid_uuid})
+        cursor = coll.find({{'$and':[
+        {"course_uuid":uuid},
+        {"Term Code":{"$in":CURRENT_SEMESTER}}]}})
+
+        # convert the query result to a df
+        uuid_df =  pd.DataFrame(list(cursor))
+        if len(uuid_df)==0:
+            # This means we found uuid results in this collection, so we can go to next
+            continue
     
     # Add an error catching if the len(df) !> 1
     if len(uuid_df)==0:
