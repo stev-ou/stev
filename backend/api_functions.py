@@ -4,6 +4,7 @@ from mongo import mongo_driver
 import pandas as pd
 from collections import Counter
 import re
+import os
 import yaml
 from data_aggregation import combine_means
 
@@ -20,12 +21,15 @@ CURRENT_SEMESTERS = [201810, 201820, 201830, 201710, 201720, 201730]
 
 # Import the mappings to find the semester for each course
 # Read in the question mappings values from the mappings.yaml
+# Get file location for mappings.yaml and reading data
+__location__ = os.path.realpath(os.path.join(os.getcwd(), os.path.dirname(__file__)))
 file_path = __location__+"/mappings.yaml"
 
 with open(file_path) as f:
     # use safe_load instead load
     mappings = yaml.safe_load(f)
     SEMESTER_MAPPINGS = mappings['Term_code_dict']
+
 
 def course_instructor_ratings_api_generator(uuid):
     '''
@@ -97,7 +101,6 @@ def relative_dept_rating_figure_json_generator(valid_uuid):
     # Define an instructor function to return the instructor dict based on passed parameters
     def instructor(last_name, first_name, mean_in_course, semester_taught):
         return {'name':str(last_name)+str(first_name), 'instructor mean in course':float(mean_in_course), 'semester':str(semester_taught)}
-    instructors = []
 
     # Make a connection to the db
     db = mongo_driver()
@@ -126,6 +129,8 @@ def relative_dept_rating_figure_json_generator(valid_uuid):
     if len(uuid_df)==0:
         print('The course_uuid '+ valid_uuid + ' was not found within the db collection ' + coll_name)
         raise Exception('The course_uuid '+ valid_uuid + ' was not found within the db collection ' + coll_name)
+    # Make sure that the df is unique wrt Term Code and instructor
+    uuid_df.drop_duplicates(subset=['Term Code', 'Instructor Last Name', 'Instructor First Name', 'Instructor ID'], inplace=True)
 
     # Get various parameters of the search
     subj = uuid_df['Subject Code'].unique()[0]
@@ -137,17 +142,48 @@ def relative_dept_rating_figure_json_generator(valid_uuid):
     dept_sd = uuid_df['SD Department Rating'].unique()[0]
     
     ## Get the instructor details
-    # Build a dictionary based on the instructors that have taught the course
-    
+    # Build a dictionary based on the instructors that have taught the course  
     # Fill out the instructors list with entries from the uuid_df
+    instructors = []
     for i in range(len(uuid_df)):
         # Add a new list entry to instructors for each instructor in the df
         instructors.append(instructor(uuid_df['Instructor First Name'][i], uuid_df['Instructor Last Name'][i], uuid_df['Avg Instructor Rating In Section'][i]))
         
-    ## Get the course ranking for the department from the uuid
-    
+    # Get the course ranking for the department from the uuid
+    # Start by finding the most recent appearance of the course
+    def most_recent_semester_ind(semester_int_list):
+        year_list = [int(str(i)[0:4]) for i in semester_int_list]
+        # find the most recent year positions
+        max_year = max(year_list)
+        # Find the max indices
+        max_inds = [i for i, j in enumerate(year_list) if j == max_year]
+
+        # Find the max semester in this index
+        semesters = [str(i)[-2:] for i in semester_int_list[max_inds]]
+
+        if '10' in semesters:
+            ind = '10'
+        elif '30' in semesters:
+            ind = '30'
+        elif '20' in semesters:
+            ind = '20'
+        else:
+            raise Exception('Unable to find most recent semester in api for figure 2')
+
+        # Translate the ind to a semester
+        most_recent_sem = int(str(max_year)+ ind)
+        most_recent_ind = semester_int_list.index(most_recent_sem)
+        return most_recent_sem
+
+    # Find the most recent term
+    sem = most_recent_semester_ind(list(uuid_df['Term Code']))
+
     # Find all courses with given subject in ag_df
-    subj_search = coll.find({'Subject Code':subj})
+    subj_search = coll.find({'$and':[
+            {"course_uuid":uuid},
+            {"Term Code":sem}
+            ]
+        })
     subj_df = pd.DataFrame(list(subj_search))
 
     # Sort out the repeat courses such that we only get a single entry for course rating
@@ -173,6 +209,8 @@ def relative_dept_rating_figure_json_generator(valid_uuid):
                           'current course mean': float(cmean), 
                           'instructors':instructors}}
     return response
+
+
 
 def query_function(db, query, field_to_search):
     '''
