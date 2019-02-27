@@ -1,19 +1,13 @@
 const valid_search = (state = [], action) => {
   switch (action.type) {
-    case 'VALID':
-      return [
-        ...state,
-        {
-          valid_search: true,
-        },
-      ];
-    case 'INVALID':
-      return [
-        ...state,
-        {
-          valid_search: false,
-        },
-      ];
+  case 'SET_SEARCH_STATUS':
+      return action.status;
+    //  return [
+    //    ...state,
+    //    {
+    //      valid_search: action.status,
+    //    },
+    //  ];
     default:
       return state;
   }

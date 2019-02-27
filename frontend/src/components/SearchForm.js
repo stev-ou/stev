@@ -1,4 +1,6 @@
 import React from 'react';
+import { connect } from 'react-redux';
+import { SetSearchStatus, SearchStatus } from '../actions';
 
 // API mapping, based on search type selected from the Header menu
 const api_map = {
@@ -102,4 +104,17 @@ class SearchForm extends React.Component {
   }
 }
 
-export default SearchForm;
+// read
+// https://stackoverflow.com/questions/44668042/mapdispatchtoprops-with-react-redux-connect-and-class-components
+
+const mapDispatchToProps = (dispatch, ownProps) => ({
+  handleSubmit: () => dispatch(SetSearchStatus(SearchStatus.VALID))
+});
+
+const mapStateToProps = state => {
+  return {
+    valid_search: state.valid_search,
+  };
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(SearchForm);
