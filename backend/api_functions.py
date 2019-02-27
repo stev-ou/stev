@@ -18,14 +18,6 @@ COLLECTION_NAMES = ["aggregated_GCOE", "aggregated_JRCOE"]
 # e.g. 201710 is Fall 2017
 CURRENT_SEMESTERS = [201810, 201820, 201830, 201710, 201720, 201730]
 
-# Import the mappings to find the semester for each course
-# Read in the question mappings values from the mappings.yaml
-file_path = __location__+"/mappings.yaml"
-
-with open(file_path) as f:
-    # use safe_load instead load
-    mappings = yaml.safe_load(f)
-    SEMESTER_MAPPINGS = mappings['Term_code_dict']
 
 def course_instructor_ratings_api_generator(uuid):
     '''
@@ -42,6 +34,8 @@ def course_instructor_ratings_api_generator(uuid):
 
     # Construct the json containing necessary data for figure 1 on course page
     ret_json = {"result": {"instructors": []}}
+    # location of the yaml file containing term mappings
+    file_path = "./mappings.yaml"
 
 
     for coll_name in COLLECTION_NAMES:
@@ -82,10 +76,20 @@ def course_instructor_ratings_api_generator(uuid):
                 avg = round(total/count, 7)
 
 
+                # Import the mappings to find the semester for each course
+                # Read in the question mappings values from the mappings.yaml
+                with open(file_path) as f:
+                    # use safe_load instead load
+                    mappings = yaml.safe_load(f)
+                    SEMESTER_MAPPINGS = mappings['Term_code_dict']
+                f.close()
+
+
                 inst = {
                     "name": df.at()[i, "Instructor First Name"] + ' ' + df.at()[i, "Instructor Last Name"],
-                    "crs rating": (df.at()[i, "Avg Instructor Rating In Section"]),
-                    "avg rating": (avg)
+                    "crs rating": df.at()[i, "Avg Instructor Rating In Section"],
+                    "avg rating": avg,
+                    "term": SEMESTER_MAPPINGS[str(df.at()[i, "Term Code"])]
                     }
 
                 ret_json["result"]["instructors"].append(inst)
@@ -276,7 +280,8 @@ if __name__ == '__main__':
     # Test the db search
     db = mongo_driver()
 
-    pprint.pprint(relative_dept_rating_figure_json_generator("engr2002"))
+    pprint.pprint(course_instructor_ratings_api_generator("engr2002"))
+    #pprint.pprint(relative_dept_rating_figure_json_generator("engr2002"))
     #pprint.pprint(relative_dept_rating_figure_json_generator("engr2002"))
     #print(query_function(db,'thermodynamics','Queryable Course String'))
 
