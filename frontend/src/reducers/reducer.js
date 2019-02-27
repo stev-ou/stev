@@ -4,15 +4,15 @@ const valid_search = (state = [], action) => {
       return [
         ...state,
         {
-          valid_search: true
-        }
+          valid_search: true,
+        },
       ];
     case 'INVALID':
       return [
-          ...state,
-          {
-              valid_search: false
-          }
+        ...state,
+        {
+          valid_search: false,
+        },
       ];
     default:
       return state;

@@ -1,5 +1,5 @@
 // actions
-export const VisibilityFilters = {
+export const SearchStatus = {
   VALID: 'VALID',
-  INVALID: 'INVALID'
+  INVALID: 'INVALID',
 };
