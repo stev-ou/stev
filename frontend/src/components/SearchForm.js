@@ -106,9 +106,10 @@ class SearchForm extends React.Component {
 
 // read
 // https://stackoverflow.com/questions/44668042/mapdispatchtoprops-with-react-redux-connect-and-class-components
+// https://stackoverflow.com/questions/37661166/what-do-function-parameter-lists-inside-of-curly-braces-do-in-es6
 
 const mapDispatchToProps = (dispatch, ownProps) => ({
-  handleSubmit: () => dispatch(SetSearchStatus(SearchStatus.VALID))
+  handleSubmit: () => dispatch(SetSearchStatus(SearchStatus.VALID)),
 });
 
 const mapStateToProps = state => {
@@ -117,4 +118,7 @@ const mapStateToProps = state => {
   };
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(SearchForm);
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(SearchForm);

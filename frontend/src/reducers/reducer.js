@@ -1,6 +1,6 @@
 const valid_search = (state = [], action) => {
   switch (action.type) {
-  case 'SET_SEARCH_STATUS':
+    case 'SET_SEARCH_STATUS':
       return action.status;
     //  return [
     //    ...state,
