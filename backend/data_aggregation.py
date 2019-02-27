@@ -157,7 +157,7 @@ def aggregate_data(df):
                     return 1
 
                 # Find the row of interest in the desired df
-                ag_df_course_rows = ag_df[(ag_df['Subject Code']==subject) & (ag_df['Course Number']==course)].index.tolist()
+                ag_df_course_rows = ag_df[(ag_df['Term Code']==term) & (ag_df['Subject Code']==subject) & (ag_df['Course Number']==course)].index.tolist()
                 # Fill the Course ratings columns
                 ag_df.at[ag_df_course_rows, 'Avg Course Rating'] = course_mean
                 ag_df.at[ag_df_course_rows, 'SD Course Rating'] = course_sd

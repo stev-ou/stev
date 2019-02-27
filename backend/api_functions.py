@@ -4,6 +4,8 @@ from mongo import mongo_driver
 import pandas as pd
 from collections import Counter
 import re
+import yaml
+from data_aggregation import combine_means
 
 # Establish the DB Name 
 DB_NAME = "reviews-db"
@@ -16,6 +18,14 @@ COLLECTION_NAMES = ["aggregated_GCOE", "aggregated_JRCOE"]
 # e.g. 201710 is Fall 2017
 CURRENT_SEMESTERS = [201810, 201820, 201830, 201710, 201720, 201730]
 
+# Import the mappings to find the semester for each course
+# Read in the question mappings values from the mappings.yaml
+file_path = __location__+"/mappings.yaml"
+
+with open(file_path) as f:
+    # use safe_load instead load
+    mappings = yaml.safe_load(f)
+    SEMESTER_MAPPINGS = mappings['Term_code_dict']
 
 def course_instructor_ratings_api_generator(uuid):
     '''
@@ -32,6 +42,7 @@ def course_instructor_ratings_api_generator(uuid):
 
     # Construct the json containing necessary data for figure 1 on course page
     ret_json = {"result": {"instructors": []}}
+
 
     for coll_name in COLLECTION_NAMES:
         coll = db.get_db_collection('reviews-db', coll_name)
@@ -90,16 +101,36 @@ def relative_dept_rating_figure_json_generator(valid_uuid):
     Inputs: valid_uuid - a validated uuid from the 'uuid' field in the dataframe
     Returns: a valid json needed to generate the figure
     '''
-    coll_name = 'aggregated_gcoe_sp18'
+    ##### Initial setup stuff
+    
+
+    # Define an instructor function to return the instructor dict based on passed parameters
+    def instructor(last_name, first_name, mean_in_course, semester_taught):
+        return {'name':str(last_name)+str(first_name), 'instructor mean in course':float(mean_in_course), 'semester':str(semester_taught)}
+    instructors = []
+
     # Make a connection to the db
     db = mongo_driver()
-    coll = db.get_db_collection('reviews-db', coll_name)
 
-    # search the collection of interest for the valid_uuid
-    cursor = coll.find({'course_uuid':valid_uuid})
+    # Search through each of the collections 
+    for coll_name in COLLECTION_NAMES:
+        print("NEXT")
+        coll = db.get_db_collection('reviews-db', coll_name)
+        # Use the database query to pull needed data
+        # cursor = coll.find({"course_uuid": uuid})
+        cursor = coll.find({'$and':[
+            {"course_uuid":valid_uuid},
+            {"Term Code": {'$in': CURRENT_SEMESTERS}}
+            ]
+        })
+        # print(cursor.count())
+        uuid_df = pd.DataFrame(list(cursor))
+        # pprint.pprint(uuid_df.head())
+        # print(len(uuid_df))
 
-    # convert the query result to a df
-    uuid_df =  pd.DataFrame(list(cursor))
+        if len(uuid_df)!=0:
+            # This means we found uuid results in this collection, so we can skip the rest of the collections
+            break
     
     # Add an error catching if the len(df) !> 1
     if len(uuid_df)==0:
@@ -117,10 +148,6 @@ def relative_dept_rating_figure_json_generator(valid_uuid):
     
     ## Get the instructor details
     # Build a dictionary based on the instructors that have taught the course
-    # Define an instructor function to return the instructor dict based on passed parameters
-    def instructor(last_name, first_name, mean_in_course ):
-        return {'name':str(last_name)+str(first_name), 'instructor mean in course':float(mean_in_course)}
-    instructors = []
     
     # Fill out the instructors list with entries from the uuid_df
     for i in range(len(uuid_df)):
@@ -249,7 +276,7 @@ if __name__ == '__main__':
     # Test the db search
     db = mongo_driver()
 
-    pprint.pprint(course_instructor_ratings_api_generator("engr2002"))
+    pprint.pprint(relative_dept_rating_figure_json_generator("engr2002"))
     #pprint.pprint(relative_dept_rating_figure_json_generator("engr2002"))
     #print(query_function(db,'thermodynamics','Queryable Course String'))
 
