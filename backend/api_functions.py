@@ -40,7 +40,6 @@ def course_instructor_ratings_api_generator(uuid):
             ]
         })
         # This assumes that there will be no same uuid's across the different collections, e.g. the same uuid in GCOE and JRCOE
-        pprint.pprint(list(cursor))
         if len(list(cursor))==0:
             continue
         else: 
