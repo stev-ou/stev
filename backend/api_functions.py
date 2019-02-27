@@ -34,10 +34,13 @@ def course_instructor_ratings_api_generator(uuid):
         coll = db.get_db_collection('reviews-db', coll_name)
         # Use the database query to pull needed data
         # cursor = coll.find({"course_uuid": uuid})
-        cursor = coll.find({{'$and':[
-        {"course_uuid":uuid},
-        {"Term Code":{"$in":CURRENT_SEMESTER}}]}})
+        cursor = coll.find({'$and':[
+            {"course_uuid":uuid},
+            {"Term Code": {'$in': CURRENT_SEMESTERS}}
+            ]
+        })
         # This assumes that there will be no same uuid's across the different collections, e.g. the same uuid in GCOE and JRCOE
+        pprint.pprint(list(cursor))
         if len(list(cursor))==0:
             continue
         else: 
@@ -234,7 +237,7 @@ if __name__ == '__main__':
 
     # Test the db search
     db = mongo_driver()
-    # print(query_function(db,'thermodynamics','Queryable Course String'))
+    print(query_function(db,'thermodynamics','Queryable Course String'))
 
 
 
