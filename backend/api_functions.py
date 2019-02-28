@@ -6,6 +6,7 @@ from collections import Counter
 import re
 import yaml
 from data_aggregation import combine_means
+import pymongo
 
 # Establish the DB Name 
 DB_NAME = "reviews-db"
@@ -34,21 +35,25 @@ def course_instructor_ratings_api_generator(uuid):
 
     # Construct the json containing necessary data for figure 1 on course page
     ret_json = {"result": {"instructors": []}}
+
     # location of the yaml file containing term mappings
     file_path = "./mappings.yaml"
+
+    # filter that we use on the collection
+    coll_filter = {'$and':[
+            {"course_uuid":uuid},
+            {"Term Code": {'$in': CURRENT_SEMESTERS}}
+            ]
+        }
 
 
     for coll_name in COLLECTION_NAMES:
         coll = db.get_db_collection('reviews-db', coll_name)
         # Use the database query to pull needed data
-        cursor = coll.find({'$and':[
-            {"course_uuid":uuid},
-            {"Term Code": {'$in': CURRENT_SEMESTERS}}
-            ]
-        })
+        cursor = coll.find(coll_filter)
         
         # For whatever reason, generating a dataframe clears the cursor, so get population here
-        population =  cursor.count()
+        population = coll.count_documents(coll_filter)
 
         df = pd.DataFrame(list(cursor))
 
@@ -70,7 +75,7 @@ def course_instructor_ratings_api_generator(uuid):
                 # WARNING: Complex averaging algorithm
                 total = 0
                 count = 0
-                for x in range(int(coll.find({"Instructor ID": inst_id}).count())):
+                for x in range(int(coll.count_documents({"Instructor ID": inst_id}))):
                     total += df_inst.at()[x, 'Avg Instructor Rating In Section']
                     count += 1
                 avg = round(total/count, 7)
@@ -275,6 +280,11 @@ def query_function(db, query, field_to_search):
         result_list = [full_q_list[0][0]]
 
     return result_list
+
+
+
+
+
 
 if __name__ == '__main__':
     # Test the db search
