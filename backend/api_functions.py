@@ -49,41 +49,51 @@ def course_instructor_ratings_api_generator(uuid):
 
 
     for coll_name in COLLECTION_NAMES:
-        print("NEXT")
         coll = db.get_db_collection('reviews-db', coll_name)
         # Use the database query to pull needed data
-        # cursor = coll.find({"course_uuid": uuid})
         cursor = coll.find({'$and':[
             {"course_uuid":uuid},
             {"Term Code": {'$in': CURRENT_SEMESTERS}}
             ]
         })
         
-        # For whatever reason, generating a dataframe clears the cursor, so logic check here
-        populated =  cursor.count() > 0
+        # For whatever reason, generating a dataframe clears the cursor, so get population here
+        population =  cursor.count()
 
-        print(cursor.count())
         df = pd.DataFrame(list(cursor))
 
         # This assumes that there will be no same uuid's across the different collections, e.g. the same uuid in GCOE and JRCOE
-        if populated:
-            # Add an error catching if the len(df) !> 1
+        if population > 0:
+            # Add an error catching if the len(df) == 0
             if len(df)==0:
                 print('The course_uuid '+ uuid + ' was not found within the db collection ' + coll_name)
                 raise Exception('The course_uuid '+ uuid + ' was not found within the db collection ' + coll_name)
 
-            for row in df.itertuples():
+
+            for i in range(population):
                 # need to average all ratings across all classes taught by each instructor
-                df_inst = pd.DataFrame(list(coll.find({"Instructor ID": row[8]})))
+                # Do this by getting inst_id - all classes taught by this instructor
+                # Necessary to cast int here since MongoDB cannot use Int64
+                inst_id = int(df.at()[i, 'Instructor ID'])
+                df_inst = pd.DataFrame(list(coll.find({"Instructor ID": inst_id})))
+
+                # WARNING: Complex averaging algorithm
                 total = 0
                 count = 0
-                for inst_row in df_inst.itertuples():
-                    total += inst_row[3]
+                for x in range(int(coll.find({"Instructor ID": inst_id}).count())):
+                    total += df_inst.at()[x, 'Avg Instructor Rating In Section']
                     count += 1
                 avg = round(total/count, 7)
 
-                inst = {"name": row[7] + ' ' + row[9], "crs rating": row[3], "avg rating": avg}
+
+                inst = {
+                    "name": df.at()[i, "Instructor First Name"] + ' ' + df.at()[i, "Instructor Last Name"],
+                    "crs rating": (df.at()[i, "Avg Instructor Rating In Section"]),
+                    "avg rating": (avg)
+                    }
+
                 ret_json["result"]["instructors"].append(inst)
+                
 
     return ret_json
 
