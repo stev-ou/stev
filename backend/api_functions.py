@@ -8,6 +8,7 @@ import os
 import yaml
 from data_aggregation import combine_means
 import pymongo
+import numpy as np
 
 # Establish the DB Name 
 DB_NAME = "reviews-db"
@@ -31,7 +32,33 @@ with open(file_path) as f:
     mappings = yaml.safe_load(f)
     SEMESTER_MAPPINGS = mappings['Term_code_dict']
 
+# Might be useful for multiple apis
+def most_recent_semester_ind(semester_int_list):
+    """
+    Input a list of term codes, it will return the most recent term code
+    """
+    year_list = [int(str(i)[0:4]) for i in semester_int_list]
+    # find the most recent year positions
+    max_year = max(year_list)
+    # Find the semesters of the most recent year
+    max_sems = [semester_int_list[i] for i, j in enumerate(year_list) if j == max_year]
 
+    # Find the max semester in this index
+    semesters = [str(i)[-2:] for i in max_sems]
+
+    if '10' in semesters:
+        ind = '10'
+    elif '30' in semesters:
+        ind = '30'
+    elif '20' in semesters:
+        ind = '20'
+    else:
+        raise Exception('Unable to find most recent semester in api for figure 2')
+
+    # Translate the ind to a semester
+    most_recent_sem = int(str(max_year)+ ind)
+    most_recent_ind = semester_int_list.index(most_recent_sem)
+    return most_recent_sem # return the most recent sem as a term code
 
 def course_instructor_ratings_api_generator(db, uuid):
     '''
@@ -52,10 +79,7 @@ def course_instructor_ratings_api_generator(db, uuid):
     # filter that we use on the collection
     coll_filter = {'$and':[
             {"course_uuid":uuid},
-            {"Term Code": {'$in': CURRENT_SEMESTERS}}
-            ]
-        }
-
+            {"Term Code": {'$in': CURRENT_SEMESTERS}}]}
 
     for coll_name in COLLECTION_NAMES:
         coll = db.get_db_collection('reviews-db', coll_name)
@@ -79,8 +103,9 @@ def course_instructor_ratings_api_generator(db, uuid):
     # Get the list of the most popular Course Titles of this course, and trim any entries that arent the most popular course name
     most_frequent_course = df['Course Title'].value_counts().idxmax()
     df = df[(df['Course Title']==most_frequent_course)]
+    print(df.drop_duplicates('Instructor ID', inplace=False))
 
-    for i in df.index:
+    for i in df.drop_duplicates('Instructor ID', inplace=False).index:
         # need to average all ratings across all classes taught by each instructor
         # Do this by getting inst_id - all classes taught by this instructor
         # Necessary to cast int here since MongoDB cannot use Int64
@@ -98,12 +123,22 @@ def course_instructor_ratings_api_generator(db, uuid):
             count += 1
         avg = round(total/count, 7)
 
+        # Define a list of the term codes this instructor has taught
+        term_code_list = [SEMESTER_MAPPINGS[str(i)] for i in list(df[(df['Instructor ID']==df.at()[i, 'Instructor ID'])]["Term Code"])]
+        term_code_list = list(reversed(list(term_code_list)))
+        terms_taught = ''
+        for j in term_code_list:
+            terms_taught += j
+            if j != term_code_list[-1]:
+                terms_taught+=', '
+            else:
+                break
+
         inst = {
             "name": df.at()[i, "Instructor First Name"] + ' ' + df.at()[i, "Instructor Last Name"],
-            "crs rating": df.at()[i, "Avg Instructor Rating In Section"],
+            "crs rating": np.mean(list(df[(df['Instructor ID']==df.at()[i, 'Instructor ID'])]["Avg Instructor Rating In Section"])),
             "avg rating": avg,
-            "term": SEMESTER_MAPPINGS[str(df.at()[i, "Term Code"])],
-            "enrollment": df.at()[i, "Instructor Enrollment"]
+            "term": terms_taught
             }
 
         ret_json["result"]["instructors"].append(inst)
@@ -131,8 +166,9 @@ def relative_dept_rating_figure_json_generator(db, valid_uuid):
     
 
     # Define an instructor function to return the instructor dict based on passed parameters
-    def instructor(last_name, first_name, mean_in_course, semester_taught):
-        return {'name':str(last_name)+' '+str(first_name), 'instructor mean in course':float(mean_in_course), 'semester':str(semester_taught)}
+    def instructor(last_name, first_name, mean_in_course, semester_taught, enrollment):
+        return {'name':str(last_name)+' '+str(first_name), 'instructor mean in course':float(mean_in_course), 
+                'semester':str(semester_taught), 'enrollment':int(enrollment)}
 
     # Search through each of the collections 
     for coll_name in COLLECTION_NAMES:
@@ -145,8 +181,6 @@ def relative_dept_rating_figure_json_generator(db, valid_uuid):
             ]
         })
         uuid_df = pd.DataFrame(list(cursor))
-        # pprint.pprint(uuid_df.head())
-        # print(len(uuid_df))
 
         if len(uuid_df)!=0:
             # This means we found uuid results in this collection, so we can skip the rest of the collections
@@ -179,36 +213,13 @@ def relative_dept_rating_figure_json_generator(db, valid_uuid):
     instructors = []
     for i in uuid_df.index:
         # Add a new list entry to instructors for each instructor in the df
-        instructors.append(instructor(uuid_df.at()[i,'Instructor First Name'], uuid_df.at()[i,'Instructor Last Name'], uuid_df.at()[i,'Avg Instructor Rating In Section'], SEMESTER_MAPPINGS[str(uuid_df.at()[i,'Term Code'])]))
+        instructors.append(instructor(uuid_df.at()[i,'Instructor First Name'], uuid_df.at()[i,'Instructor Last Name'], 
+            uuid_df.at()[i,'Avg Instructor Rating In Section'], SEMESTER_MAPPINGS[str(uuid_df.at()[i,'Term Code'])],
+            uuid_df.at()[i, 'Instructor Enrollment']))
     # Reverse Instructors
     instructors = list(reversed(instructors))
     # Get the course ranking for the department from the uuid
     # Start by finding the most recent appearance of the course
-    def most_recent_semester_ind(semester_int_list):
-        year_list = [int(str(i)[0:4]) for i in semester_int_list]
-        # find the most recent year positions
-        max_year = max(year_list)
-        # Find the semesters of the most recent year
-        max_sems = [semester_int_list[i] for i, j in enumerate(year_list) if j == max_year]
-
-        # Find the max semester in this index
-        semesters = [str(i)[-2:] for i in max_sems]
-
-        if '10' in semesters:
-            ind = '10'
-        elif '30' in semesters:
-            ind = '30'
-        elif '20' in semesters:
-            ind = '20'
-        else:
-            raise Exception('Unable to find most recent semester in api for figure 2')
-
-        # Translate the ind to a semester
-        most_recent_sem = int(str(max_year)+ ind)
-        most_recent_ind = semester_int_list.index(most_recent_sem)
-        return most_recent_sem # return the most recent sem as a term code
-
-    # Find the most recent term
     sem = most_recent_semester_ind(list(uuid_df['Term Code']))
 
     # Find all courses with given subject in ag_df
@@ -344,8 +355,8 @@ if __name__ == '__main__':
     # Test the db search
     db = mongo_driver()
 
-    # pprint.pprint(course_instructor_ratings_api_generator(mongo_driver(),"engr1411"))
-    pprint.pprint(relative_dept_rating_figure_json_generator(mongo_driver(),"engr1411"))
+    pprint.pprint(course_instructor_ratings_api_generator(mongo_driver(),"engr1411"))
+    # pprint.pprint(relative_dept_rating_figure_json_generator(mongo_driver(),"engr1411"))
     #pprint.pprint(relative_dept_rating_figure_json_generator("engr2002"))
     #print(query_function(db,'thermodynamics','Queryable Course String'))
 
