@@ -139,7 +139,7 @@ def relative_dept_rating_figure_json_generator(db, valid_uuid):
             # This means we found uuid results in this collection, so we can skip the rest of the collections
             break
     
-    # Add an error catching if the len(df) !> 1
+    # Add an error catching if the len(df) == 0
     if len(uuid_df)==0:
         print('The course_uuid '+ valid_uuid + ' was not found within the db collection ' + coll_name)
         raise Exception('The course_uuid '+ valid_uuid + ' was not found within the db collection ' + coll_name)
