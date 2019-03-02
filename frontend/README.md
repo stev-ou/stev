@@ -4,6 +4,14 @@ Bootstrapped with [Create React App](https://github.com/facebook/create-react-ap
 
 ## Available Scripts
 
+Formatting (run from frontend root) [**will override**]
+```bash
+# commit before 
+$ make pretty
+# review changes
+$ git diff 
+```
+
 In the project directory, you can run: **use yarn**
 - To begin the development, run `npm start` or `yarn start`.
 - To create a production bundle, use `npm run build` or `yarn build`.

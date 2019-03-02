@@ -5,3 +5,4 @@ flask
 pylint
 pyyaml
 gunicorn
+flask-cors
