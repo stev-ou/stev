@@ -7,6 +7,7 @@ import re
 import os
 import yaml
 from data_aggregation import combine_means
+import pymongo
 
 # Establish the DB Name 
 DB_NAME = "reviews-db"
@@ -31,6 +32,7 @@ with open(file_path) as f:
     SEMESTER_MAPPINGS = mappings['Term_code_dict']
 
 
+
 def course_instructor_ratings_api_generator(uuid):
     '''
     This function will take one validated course-based uuid in the aggregated database and will
@@ -47,18 +49,24 @@ def course_instructor_ratings_api_generator(uuid):
     # Construct the json containing necessary data for figure 1 on course page
     ret_json = {"result": {"instructors": []}}
 
+    # location of the yaml file containing term mappings
+    file_path = "./mappings.yaml"
+
+    # filter that we use on the collection
+    coll_filter = {'$and':[
+            {"course_uuid":uuid},
+            {"Term Code": {'$in': CURRENT_SEMESTERS}}
+            ]
+        }
+
 
     for coll_name in COLLECTION_NAMES:
         coll = db.get_db_collection('reviews-db', coll_name)
         # Use the database query to pull needed data
-        cursor = coll.find({'$and':[
-            {"course_uuid":uuid},
-            {"Term Code": {'$in': CURRENT_SEMESTERS}}
-            ]
-        })
+        cursor = coll.find(coll_filter)
         
         # For whatever reason, generating a dataframe clears the cursor, so get population here
-        population =  cursor.count()
+        population = coll.count_documents(coll_filter)
 
         df = pd.DataFrame(list(cursor))
 
@@ -80,16 +88,26 @@ def course_instructor_ratings_api_generator(uuid):
                 # WARNING: Complex averaging algorithm
                 total = 0
                 count = 0
-                for x in range(int(coll.find({"Instructor ID": inst_id}).count())):
+                for x in range(int(coll.count_documents({"Instructor ID": inst_id}))):
                     total += df_inst.at()[x, 'Avg Instructor Rating In Section']
                     count += 1
                 avg = round(total/count, 7)
 
 
+                # Import the mappings to find the semester for each course
+                # Read in the question mappings values from the mappings.yaml
+                with open(file_path) as f:
+                    # use safe_load instead load
+                    mappings = yaml.safe_load(f)
+                    SEMESTER_MAPPINGS = mappings['Term_code_dict']
+                f.close()
+
+
                 inst = {
                     "name": df.at()[i, "Instructor First Name"] + ' ' + df.at()[i, "Instructor Last Name"],
-                    "crs rating": (df.at()[i, "Avg Instructor Rating In Section"]),
-                    "avg rating": (avg)
+                    "crs rating": df.at()[i, "Avg Instructor Rating In Section"],
+                    "avg rating": avg,
+                    "term": SEMESTER_MAPPINGS[str(df.at()[i, "Term Code"])]
                     }
 
                 ret_json["result"]["instructors"].append(inst)
@@ -310,11 +328,17 @@ def query_function(db, query, field_to_search):
 
     return result_list
 
+
+
+
+
+
 if __name__ == '__main__':
     # Test the db search
     db = mongo_driver()
 
-    pprint.pprint(relative_dept_rating_figure_json_generator("engr2002"))
+    pprint.pprint(course_instructor_ratings_api_generator("engr2002"))
+    #pprint.pprint(relative_dept_rating_figure_json_generator("engr2002"))
     #pprint.pprint(relative_dept_rating_figure_json_generator("engr2002"))
     #print(query_function(db,'thermodynamics','Queryable Course String'))
 
