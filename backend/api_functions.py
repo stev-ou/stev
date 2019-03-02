@@ -33,7 +33,7 @@ with open(file_path) as f:
 
 
 
-def course_instructor_ratings_api_generator(uuid):
+def course_instructor_ratings_api_generator(db, uuid):
     '''
     This function will take one validated course-based uuid in the aggregated database and will
     build a json response to present the values needed for figure 1. Briefly, this api response 
@@ -41,10 +41,10 @@ def course_instructor_ratings_api_generator(uuid):
     rating each professor received, and what average rating each instructor received on average 
     in the most recent semester of data.
     api schema defined in api_schema.py
-    Inputs: valid_uuid - a validated uuid from the 'uuid' field in the dataframe
+    Inputs: db - a connection to the mongodb, i.e. db = mongo_driver()
+            valid_uuid - a validated uuid from the 'uuid' field in the dataframe
     Returns: a valid json needed to generate the figure
     '''
-    db = mongo_driver()
 
     # Construct the json containing necessary data for figure 1 on course page
     ret_json = {"result": {"instructors": []}}
@@ -68,59 +68,53 @@ def course_instructor_ratings_api_generator(uuid):
         # For whatever reason, generating a dataframe clears the cursor, so get population here
         population = coll.count_documents(coll_filter)
 
-        df = pd.DataFrame(list(cursor))
-
         # This assumes that there will be no same uuid's across the different collections, e.g. the same uuid in GCOE and JRCOE
         if population > 0:
-            # Add an error catching if the len(df) == 0
-            if len(df)==0:
-                print('The course_uuid '+ uuid + ' was not found within the db collection ' + coll_name)
-                raise Exception('The course_uuid '+ uuid + ' was not found within the db collection ' + coll_name)
+            df = pd.DataFrame(list(cursor))
+            break
+
+    # Add an error catching if the len(df) == 0
+    if len(df)==0:
+        print('The course_uuid '+ uuid + ' was not found within the db collection ' + coll_name)
+        raise Exception('The course_uuid '+ uuid + ' was not found within the db collection ' + coll_name)
 
 
-            for i in range(population):
-                # need to average all ratings across all classes taught by each instructor
-                # Do this by getting inst_id - all classes taught by this instructor
-                # Necessary to cast int here since MongoDB cannot use Int64
-                inst_id = int(df.at()[i, 'Instructor ID'])
-                df_inst = pd.DataFrame(list(coll.find({"Instructor ID": inst_id})))
+    for i in range(population):
+        # need to average all ratings across all classes taught by each instructor
+        # Do this by getting inst_id - all classes taught by this instructor
+        # Necessary to cast int here since MongoDB cannot use Int64
+        inst_id = int(df.at()[i, 'Instructor ID'])
+        df_inst = pd.DataFrame(list(coll.find({'$and':[
+            {"Instructor ID":inst_id},
+            {"Term Code": {'$in': CURRENT_SEMESTERS}}]}))) ## SAM - added term code here so that we only consider the instructor average over recent semesters
 
-                # WARNING: Complex averaging algorithm
-                total = 0
-                count = 0
-                for x in range(int(coll.count_documents({"Instructor ID": inst_id}))):
-                    total += df_inst.at()[x, 'Avg Instructor Rating In Section']
-                    count += 1
-                avg = round(total/count, 7)
+        # WARNING: Complex averaging algorithm # SAM - hahahaha
+        total = 0
+        count = 0
+        for x in range(len(df_inst)):  # range(int(coll.count_documents({"Instructor ID": inst_id}))): # SAM - modified so we dont have to access collection here
+            total += df_inst.at()[x, 'Avg Instructor Rating In Section']
+            count += 1
+        avg = round(total/count, 7)
 
+        inst = {
+            "name": df.at()[i, "Instructor First Name"] + ' ' + df.at()[i, "Instructor Last Name"],
+            "crs rating": df.at()[i, "Avg Instructor Rating In Section"],
+            "avg rating": avg,
+            "term": SEMESTER_MAPPINGS[str(df.at()[i, "Term Code"])]
+            }
 
-                # Import the mappings to find the semester for each course
-                # Read in the question mappings values from the mappings.yaml
-                with open(file_path) as f:
-                    # use safe_load instead load
-                    mappings = yaml.safe_load(f)
-                    SEMESTER_MAPPINGS = mappings['Term_code_dict']
-                f.close()
-
-
-                inst = {
-                    "name": df.at()[i, "Instructor First Name"] + ' ' + df.at()[i, "Instructor Last Name"],
-                    "crs rating": df.at()[i, "Avg Instructor Rating In Section"],
-                    "avg rating": avg,
-                    "term": SEMESTER_MAPPINGS[str(df.at()[i, "Term Code"])]
-                    }
-
-                ret_json["result"]["instructors"].append(inst)
+        ret_json["result"]["instructors"].append(inst)
                 
 
     return ret_json
 
-def relative_dept_rating_figure_json_generator(valid_uuid):
+def relative_dept_rating_figure_json_generator(db, valid_uuid):
     '''
     This function will build the json for the response to build the relative department rating figure 
     (2nd from top on the left side). The json has structure given in schema.json, for this rating.
 
-    Inputs: valid_uuid - a validated uuid from the 'uuid' field in the dataframe
+    Inputs: db - a connection to the mongodb, i.e. db=mongo_driver()
+            valid_uuid - a validated uuid from the 'uuid' field in the dataframe
     Returns: a valid json needed to generate the figure
     '''
     ##### Initial setup stuff
@@ -130,12 +124,8 @@ def relative_dept_rating_figure_json_generator(valid_uuid):
     def instructor(last_name, first_name, mean_in_course, semester_taught):
         return {'name':str(last_name)+str(first_name), 'instructor mean in course':float(mean_in_course), 'semester':str(semester_taught)}
 
-    # Make a connection to the db
-    db = mongo_driver()
-
     # Search through each of the collections 
     for coll_name in COLLECTION_NAMES:
-        print("NEXT")
         coll = db.get_db_collection('reviews-db', coll_name)
         # Use the database query to pull needed data
         # cursor = coll.find({"course_uuid": uuid})
@@ -144,7 +134,6 @@ def relative_dept_rating_figure_json_generator(valid_uuid):
             {"Term Code": {'$in': CURRENT_SEMESTERS}}
             ]
         })
-        # print(cursor.count())
         uuid_df = pd.DataFrame(list(cursor))
         # pprint.pprint(uuid_df.head())
         # print(len(uuid_df))
@@ -157,8 +146,9 @@ def relative_dept_rating_figure_json_generator(valid_uuid):
     if len(uuid_df)==0:
         print('The course_uuid '+ valid_uuid + ' was not found within the db collection ' + coll_name)
         raise Exception('The course_uuid '+ valid_uuid + ' was not found within the db collection ' + coll_name)
+
     # Make sure that the df is unique wrt Term Code and instructor
-    uuid_df.drop_duplicates(subset=['Term Code', 'Instructor Last Name', 'Instructor First Name', 'Instructor ID'], inplace=True)
+    uuid_df.drop_duplicates(subset=['Term Code', 'Instructor ID'], inplace=True)
 
     # Get various parameters of the search
     subj = uuid_df['Subject Code'].unique()[0]
@@ -175,19 +165,20 @@ def relative_dept_rating_figure_json_generator(valid_uuid):
     instructors = []
     for i in range(len(uuid_df)):
         # Add a new list entry to instructors for each instructor in the df
-        instructors.append(instructor(uuid_df['Instructor First Name'][i], uuid_df['Instructor Last Name'][i], uuid_df['Avg Instructor Rating In Section'][i]))
-        
+        instructors.append(instructor(uuid_df['Instructor First Name'][i], uuid_df['Instructor Last Name'][i], uuid_df['Avg Instructor Rating In Section'][i], SEMESTER_MAPPINGS[str(uuid_df['Term Code'][i])]))
+    # Reverse Instructors
+    instructors = list(reversed(instructors))
     # Get the course ranking for the department from the uuid
     # Start by finding the most recent appearance of the course
     def most_recent_semester_ind(semester_int_list):
         year_list = [int(str(i)[0:4]) for i in semester_int_list]
         # find the most recent year positions
         max_year = max(year_list)
-        # Find the max indices
-        max_inds = [i for i, j in enumerate(year_list) if j == max_year]
+        # Find the semesters of the most recent year
+        max_sems = [semester_int_list[i] for i, j in enumerate(year_list) if j == max_year]
 
         # Find the max semester in this index
-        semesters = [str(i)[-2:] for i in semester_int_list[max_inds]]
+        semesters = [str(i)[-2:] for i in max_sems]
 
         if '10' in semesters:
             ind = '10'
@@ -201,22 +192,22 @@ def relative_dept_rating_figure_json_generator(valid_uuid):
         # Translate the ind to a semester
         most_recent_sem = int(str(max_year)+ ind)
         most_recent_ind = semester_int_list.index(most_recent_sem)
-        return most_recent_sem
+        return most_recent_sem # return the most recent sem as a term code
 
     # Find the most recent term
     sem = most_recent_semester_ind(list(uuid_df['Term Code']))
 
     # Find all courses with given subject in ag_df
     subj_search = coll.find({'$and':[
-            {"course_uuid":uuid},
+            {'Subject Code':subj},
             {"Term Code":sem}
             ]
         })
     subj_df = pd.DataFrame(list(subj_search))
-
     # Sort out the repeat courses such that we only get a single entry for course rating
     # Get the number of unique courses in a given department
     num_courses = subj_df['Course Number'].nunique()
+
 
     # Drop all duplicates from subj_df
     subj_df.drop_duplicates(subset = ['Course Number'], inplace=True)
@@ -231,8 +222,9 @@ def relative_dept_rating_figure_json_generator(valid_uuid):
     
     # Build the json response
     response = {'result':{'course name':str(cname),
-           'course number': int(cnum),
-           'course ranking': int(crank), 
+            'most recent sem': SEMESTER_MAPPINGS[str(sem)],
+            'course number': int(cnum),
+            'course ranking': int(crank), 
                           'dept':{'dept name': str(subj), 'courses in dept': int(total_dept) , 'dept mean': float(dept_mean), 'dept sd':float(dept_sd)}, 
                           'current course mean': float(cmean), 
                           'instructors':instructors}}
@@ -337,8 +329,8 @@ if __name__ == '__main__':
     # Test the db search
     db = mongo_driver()
 
-    pprint.pprint(course_instructor_ratings_api_generator("engr2002"))
-    #pprint.pprint(relative_dept_rating_figure_json_generator("engr2002"))
+    pprint.pprint(course_instructor_ratings_api_generator(mongo_driver(),"engr2002"))
+    # pprint.pprint(relative_dept_rating_figure_json_generator(mongo_driver(),"engr2002"))
     #pprint.pprint(relative_dept_rating_figure_json_generator("engr2002"))
     #print(query_function(db,'thermodynamics','Queryable Course String'))
 

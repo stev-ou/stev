@@ -44,14 +44,14 @@ def course_search_api():
 # Figure 1 api 
 @app.route(base_api_route+'courses/<string:course_uuid>/figure1', methods=['GET'])
 def figure_1_data_api(course_uuid):
-    response = course_instructor_ratings_api_generator(course_uuid)
+    response = course_instructor_ratings_api_generator(db, course_uuid)
 
     return jsonify(response)
 
 # Figure 2 api 
 @app.route(base_api_route+'courses/<string:course_uuid>/figure2', methods=['GET'])
 def figure_2_data_api(course_uuid):
-    response = relative_dept_rating_figure_json_generator(course_uuid)
+    response = relative_dept_rating_figure_json_generator(db, course_uuid)
 
     return jsonify(response)
 
@@ -96,7 +96,7 @@ def department_api():
 if __name__ == '__main__':
     # print("Updating database...")
     # print('IN DEVELOPMENT MODE; NO DATABASE UPDATE PERFORMED')
-    update_database(force_update=True)
+    update_database(force_update=False)
     print("Done.")
     print("Starting server...")
     app.run(host='0.0.0.0', port=5050)
