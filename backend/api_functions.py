@@ -49,9 +49,6 @@ def course_instructor_ratings_api_generator(db, uuid):
     # Construct the json containing necessary data for figure 1 on course page
     ret_json = {"result": {"instructors": []}}
 
-    # location of the yaml file containing term mappings
-    file_path = "./mappings.yaml"
-
     # filter that we use on the collection
     coll_filter = {'$and':[
             {"course_uuid":uuid},
@@ -91,7 +88,7 @@ def course_instructor_ratings_api_generator(db, uuid):
         # WARNING: Complex averaging algorithm # SAM - hahahaha
         total = 0
         count = 0
-        for x in range(len(df_inst)):  # range(int(coll.count_documents({"Instructor ID": inst_id}))): # SAM - modified so we dont have to access collection here
+        for x in range(len(df_inst)):  # SAM - modified so we dont have to access collection here
             total += df_inst.at()[x, 'Avg Instructor Rating In Section']
             count += 1
         avg = round(total/count, 7)
