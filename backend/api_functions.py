@@ -101,8 +101,12 @@ def course_instructor_ratings_api_generator(db, uuid):
             }
 
         ret_json["result"]["instructors"].append(inst)
-                
 
+    # SAM - Added a couple other features to ret_json for plotting a title on the frontend
+    ret_json['result']['course name'] = str(df['Course Title'][0])
+    ret_json['result']['dept name'] = str(df['Subject Code'][0])
+    ret_json['result']['course number'] = str(df['Course Number'][0])
+                
     return ret_json
 
 def relative_dept_rating_figure_json_generator(db, valid_uuid):
@@ -119,7 +123,7 @@ def relative_dept_rating_figure_json_generator(db, valid_uuid):
 
     # Define an instructor function to return the instructor dict based on passed parameters
     def instructor(last_name, first_name, mean_in_course, semester_taught):
-        return {'name':str(last_name)+str(first_name), 'instructor mean in course':float(mean_in_course), 'semester':str(semester_taught)}
+        return {'name':str(last_name)+' '+str(first_name), 'instructor mean in course':float(mean_in_course), 'semester':str(semester_taught)}
 
     # Search through each of the collections 
     for coll_name in COLLECTION_NAMES:
@@ -210,7 +214,7 @@ def relative_dept_rating_figure_json_generator(db, valid_uuid):
     subj_df.drop_duplicates(subset = ['Course Number'], inplace=True)
 
     # Sort the subj_df based on Avg Course Rating field
-    subj_df.sort_values(by = 'Avg Course Rating', ascending=True,inplace=True)
+    subj_df.sort_values(by = 'Avg Course Rating', ascending=False,inplace=True)
 
     # Find placement within the sorted subj_df 
     subj_df.reset_index(inplace=True)
@@ -326,8 +330,8 @@ if __name__ == '__main__':
     # Test the db search
     db = mongo_driver()
 
-    pprint.pprint(course_instructor_ratings_api_generator(mongo_driver(),"engr2002"))
-    # pprint.pprint(relative_dept_rating_figure_json_generator(mongo_driver(),"engr2002"))
+    # pprint.pprint(course_instructor_ratings_api_generator(mongo_driver(),"engr2002"))
+    pprint.pprint(relative_dept_rating_figure_json_generator(mongo_driver(),"engr2002"))
     #pprint.pprint(relative_dept_rating_figure_json_generator("engr2002"))
     #print(query_function(db,'thermodynamics','Queryable Course String'))
 
