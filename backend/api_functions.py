@@ -75,12 +75,17 @@ def course_instructor_ratings_api_generator(db, uuid):
         print('The course_uuid '+ uuid + ' was not found within the db collection ' + coll_name)
         raise Exception('The course_uuid '+ uuid + ' was not found within the db collection ' + coll_name)
 
+    # SAM - The goal is to remove discussion and the lab sections, because they mess with the enrollment numbers and aren't actually the course of interest
+    # Get the list of the most popular Course Titles of this course, and trim any entries that arent the most popular course name
+    most_frequent_course = df['Course Title'].value_counts().idxmax()
+    df = df[(df['Course Title']==most_frequent_course)]
 
-    for i in range(population):
+    for i in df.index:
         # need to average all ratings across all classes taught by each instructor
         # Do this by getting inst_id - all classes taught by this instructor
         # Necessary to cast int here since MongoDB cannot use Int64
         inst_id = int(df.at()[i, 'Instructor ID'])
+
         df_inst = pd.DataFrame(list(coll.find({'$and':[
             {"Instructor ID":inst_id},
             {"Term Code": {'$in': CURRENT_SEMESTERS}}]}))) ## SAM - added term code here so that we only consider the instructor average over recent semesters
@@ -97,10 +102,14 @@ def course_instructor_ratings_api_generator(db, uuid):
             "name": df.at()[i, "Instructor First Name"] + ' ' + df.at()[i, "Instructor Last Name"],
             "crs rating": df.at()[i, "Avg Instructor Rating In Section"],
             "avg rating": avg,
-            "term": SEMESTER_MAPPINGS[str(df.at()[i, "Term Code"])]
+            "term": SEMESTER_MAPPINGS[str(df.at()[i, "Term Code"])],
+            "enrollment": df.at()[i, "Instructor Enrollment"]
             }
 
         ret_json["result"]["instructors"].append(inst)
+
+    # SAM - reverse the results so that it plots most recent semesters first
+    ret_json['result']['instructors'] = list(reversed(ret_json['result']['instructors']))
 
     # SAM - Added a couple other features to ret_json for plotting a title on the frontend
     ret_json['result']['course name'] = str(df['Course Title'][0])
@@ -148,6 +157,10 @@ def relative_dept_rating_figure_json_generator(db, valid_uuid):
         print('The course_uuid '+ valid_uuid + ' was not found within the db collection ' + coll_name)
         raise Exception('The course_uuid '+ valid_uuid + ' was not found within the db collection ' + coll_name)
 
+    # Get the list of the most popular Course Titles of this course, and trim any entries that arent the most popular course name
+    most_frequent_course = uuid_df['Course Title'].value_counts().idxmax()
+    uuid_df = uuid_df[(uuid_df['Course Title']==most_frequent_course)]
+
     # Make sure that the df is unique wrt Term Code and instructor
     uuid_df.drop_duplicates(subset=['Term Code', 'Instructor ID'], inplace=True)
 
@@ -164,9 +177,9 @@ def relative_dept_rating_figure_json_generator(db, valid_uuid):
     # Build a dictionary based on the instructors that have taught the course  
     # Fill out the instructors list with entries from the uuid_df
     instructors = []
-    for i in range(len(uuid_df)):
+    for i in uuid_df.index:
         # Add a new list entry to instructors for each instructor in the df
-        instructors.append(instructor(uuid_df['Instructor First Name'][i], uuid_df['Instructor Last Name'][i], uuid_df['Avg Instructor Rating In Section'][i], SEMESTER_MAPPINGS[str(uuid_df['Term Code'][i])]))
+        instructors.append(instructor(uuid_df.at()[i,'Instructor First Name'], uuid_df.at()[i,'Instructor Last Name'], uuid_df.at()[i,'Avg Instructor Rating In Section'], SEMESTER_MAPPINGS[str(uuid_df.at()[i,'Term Code'])]))
     # Reverse Instructors
     instructors = list(reversed(instructors))
     # Get the course ranking for the department from the uuid
@@ -205,6 +218,7 @@ def relative_dept_rating_figure_json_generator(db, valid_uuid):
             ]
         })
     subj_df = pd.DataFrame(list(subj_search))
+
     # Sort out the repeat courses such that we only get a single entry for course rating
     # Get the number of unique courses in a given department
     num_courses = subj_df['Course Number'].nunique()
@@ -330,8 +344,8 @@ if __name__ == '__main__':
     # Test the db search
     db = mongo_driver()
 
-    # pprint.pprint(course_instructor_ratings_api_generator(mongo_driver(),"engr2002"))
-    pprint.pprint(relative_dept_rating_figure_json_generator(mongo_driver(),"engr2002"))
+    # pprint.pprint(course_instructor_ratings_api_generator(mongo_driver(),"engr1411"))
+    pprint.pprint(relative_dept_rating_figure_json_generator(mongo_driver(),"engr1411"))
     #pprint.pprint(relative_dept_rating_figure_json_generator("engr2002"))
     #print(query_function(db,'thermodynamics','Queryable Course String'))
 
