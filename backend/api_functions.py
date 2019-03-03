@@ -129,8 +129,9 @@ def course_instructor_ratings_api_generator(db, uuid):
             df = pd.DataFrame(list(cursor))
             break
 
+
     # Add an error catching if the len(df) == 0
-    if len(df)==0:
+    if population==0:
         print('The course_uuid '+ uuid + ' was not found within the db collection ' + coll_name)
         raise Exception('The course_uuid '+ uuid + ' was not found within the db collection ' + coll_name)
 
@@ -336,7 +337,7 @@ def timeseries_data_generator(db, valid_uuid):
 
     response = {'result': {'course number': 1411,
             'course over time':{
-                'course name': 'Name of course',
+                'course name': 'This Course',
                 # IT is VERY important that this list is in the correct order. You can order the input list via the mergeSort function; I had to use in Fig1 API modifications
                 'semesters':['Fall 2015', 'Spring 2016', 'Summer 2017','Fall 2016', 'Spring 2017', 'Spring 2018'], # This determines number of data points
                 'ratings':[4.212, 4.354, 3.898, 2.98, 3.45, 3.69]},

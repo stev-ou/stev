@@ -186,8 +186,10 @@ class App extends React.Component {
     // THIS DOESNT WORK. Need to figure out some way to get the data from Header -> SearchForm back up to the App level
     //so that I can send it to the Fig1 and Fig2 components. For now, I have a temp uuid I'll pass
 
-    // Heres some other options: "ame4442", "ame5720", "ame4970", "ame3523", "ame5903","ame4822" # LAB = 'ame3112' # Lots of data: 'engr1411'
-    const temp_uuid = 'ame3112';
+    // Heres some testing options: 
+    // For GCOE: "ame4442", "ame5720", "ame4970", "ame3523", "ame5903","ame4822" # LAB = 'ame3112' # Lots of data: 'engr1411'
+    // For JRCOE: "edss3553", "eipt3483", "eipt5033", "edsc4093"
+    const temp_uuid = 'edss3553';
     if (!this.state.valid_search) {
       return (
         //<LandingController />
