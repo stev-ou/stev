@@ -15,12 +15,12 @@ class basictest(unittest.TestCase):
         '''
         This unittest will test whether the mongo driver is connecting successfully to:
         Database name: "reviews-db"
-        collection name = "reviews-collection"
+        collection name = "aggregated_GCOE"
         '''
         try:
             conn = mongo.mongo_driver()
             DB_NAME = "reviews-db"
-            COLLECTION_NAME = "reviews-collection"
+            COLLECTION_NAME = "aggregated_GCOE"
             conn.get_db_collection(DB_NAME, COLLECTION_NAME)
             conn_status = True
         except:
@@ -58,12 +58,12 @@ class basictest(unittest.TestCase):
         course title and instructor.
         '''
         # Test the data aggregation for unique entries
-        df = pd.read_csv('backend/data/gcoe_sp18.csv')
+        df = pd.read_csv('backend/data/GCOE.csv')
 
         ag_df = data_aggregation.aggregate_data(df)
 
-        # There should be no entries with the same course name and instructor name, so the below should be false
-        num_repeats = len(ag_df[ag_df[['Course Title', 'Instructor Last Name', 'Instructor First Name']].duplicated() == True])
+        # There should be no entries with the same course name, Instructor ID, and Term Code, so the below should be false
+        num_repeats = len(ag_df[ag_df[['course_uuid', 'Term Code','Instructor ID']].duplicated() == True])
 
         return self.assertEqual(0, num_repeats)
 

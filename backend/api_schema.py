@@ -3,12 +3,14 @@
 
 {
 	"result": 
-	{
+	{	"course name": ' Long name',
+		"course number": 1441,
+		"dept name": "ENGR",
 		"instructors": 
 		[
-			{"name": "name1", "crs_rating": 1, "avg_rating": 1},
-			{"name": "name2", "crs_rating": 2, "avg_rating": 2},
-			{"name": "name3", "crs_rating": 3, "avg_rating": 3},
+			{"name": "name1", "crs_rating": 1, "avg_rating": 1, "term": "Spring 2017"},
+			{"name": "name2", "crs_rating": 2, "avg_rating": 2, "term": "Spring 2017"},
+			{"name": "name3", "crs_rating": 3, "avg_rating": 3, "term": "Spring 2017"},
 		]
 	}
 }
@@ -29,34 +31,31 @@
 # Figure 3
 # AKA Time series for Course rating, department rating, and others
 
-{'result':[{'object list':[{'object': 'str, e.g. department_name', 
-'time_series_values':
-[{'year': 2018, 'semester': 'str', 'value': 0.0},{'year': 2017, 'semester': 'str', 'value': 0.0}, {'year': 2016, 'semester': 'str', 'value': 0.0}]}, 
-{'object': 'str, e.g. AME 5553 rating','time_series_values':[{'year': 2018, 'semester': 'str', 'value': 0.0},{'year': 2017, 'semester': 'str', 'value': 0.0}, {'year': 2016, 'semester': 'str', 'value': 0.0}]}]}]}
+{'result': {'course number': 1411,
+			'course over time':{
+				'course name': 'Name of course',
+				'semesters':['Fall 2015', 'Spring 2016', 'Summer 2017','Fall 2016', 'Spring 2017', 'Spring 2018'], # This determines number of data points
+				'ratings':[4.212, 4.354, 3.898, 2.98, 3.45, 3.69]},
+			'dept over time':{
+				'dept name': "AME",
+				'semesters':['Fall 2015', 'Spring 2016', 'Summer 2017','Fall 2016', 'Spring 2017', 'Spring 2018'],
+				'ratings':[4.6, 3.456732,4.168, 4.212, 4.354, 3.898]},
+			'instructors':[
+				{'name':'Instr1',
+				'semesters':['Fall 2015','Fall 2016', 'Spring 2017', 'Spring 2018'],
+				'ratings':[4.35, 4.2, 3.76, 2.6]},
+
+				{'name':'Instr2',
+				'semesters':['Fall 2015', 'Spring 2016', 'Summer 2017','Fall 2016'],
+				'ratings':[4.1, 3.1, 3.2, 3.45]},
+
+				{'name':'Instr3',
+				'semesters':['Summer 2017','Fall 2016', 'Spring 2017', 'Spring 2018'],
+				'ratings':[4.6, 4.7, 3.9, 4.4]}
+				]
+			}
+}
 
 # Basically, the response is organized by object, then the semester, value, and year are included in lists for each object
 #   This should leave us some extensibility for adding in other time series easily and parsing them in the same manner, even for
 # 		objects that only have data over a limited period.
-
-"""
-Pandas = [
-	1=Avg Course Rating, 
-	2=Avg Department Rating
-	3=Avg Inst Rating in Section
-	4=College Code
-	5=Course Num
-	6=Course Title
-	7=Inst First
-	8=Inst ID
-	9=Inst Last
-	10=Num Responses
-	11=Queryable Course String
-	12=SD Course Rating
-	13=SD Dept Rating
-	14=SD instructor rating in Section
-	15=Subject Code
-	16=Term Code
-	17=ObjectID
-	18=uuid
-	]
-        """

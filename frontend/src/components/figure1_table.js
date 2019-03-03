@@ -38,20 +38,19 @@ const styles = theme => ({
 
 // This is the function that will fetch the desired data from the api
 const API = 'http://localhost:5050/api/v0/courses/';
-// const API = 'https://hn.algolia.com/api/v1/search?query=';
-// const DEFAULT_QUERY = 'redux';
+// const API_Test = 'https://hn.algolia.com/api/v1/search?query=redux';
 
 class Fig1 extends React.Component {
   constructor(props) {
     super(props);
-    this.state = { data: [], uuid: props.uuid };
+    this.state = { data: [], uuid: props.uuid , info:{}};
   }
 
   componentDidMount() {
     // This will call the api when the component "Mounts", i.e. when the page is accessed
     fetch(API + this.state.uuid + '/figure1')
       .then(response => response.json())
-      .then(data => this.setState({ data: data.result.instructors }));
+      .then(data => this.setState({info:data.result, data: data.result.instructors }));
   }
 
   render() {
@@ -64,7 +63,10 @@ class Fig1 extends React.Component {
       item['id'] = i + 1;
     });
 
-    return <MyTable rows={table_data} />;
+    // Get the info to pass to the table
+    const info = this.state.info
+
+    return <MyTable rows={table_data} info={info}/>;
   }
 }
 
@@ -72,11 +74,14 @@ class Fig1 extends React.Component {
 function CustomizedTable(props) {
   const { classes } = props;
   const rows = props.rows;
+  const info = props.info;
+
   return (
     <div>
-      <h2 style={{ padding: '0.5em' }}>
+    <h1 style={{fontWeight: 'bold',fontSize: '3.5em', padding: '0.75em'}}> {info['dept name']}{info['course number']}: {info['course name']} </h1>
+      <h2 style={{ padding: '0.5em', paddingTop: '0em' }}>
         {' '}
-        These professors have taught the course in the past 2 years{' '}
+        These professors have taught the course in the past 3 years{' '}
       </h2>
       <Paper className={classes.root}>
         <Table className={classes.table}>
@@ -99,6 +104,12 @@ function CustomizedTable(props) {
               >
                 Instructor Rating in Course (0-5)
               </CustomTableCell>
+              <CustomTableCell
+                style={{ fontWeight: 'bold', fontSize: '1.2em' }}
+                align="right"
+              >
+                Semester(s) Taught
+              </CustomTableCell>
             </TableRow>
           </TableHead>
           <TableBody>
@@ -107,11 +118,14 @@ function CustomizedTable(props) {
                 <CustomTableCell component="th" scope="row">
                   {row.name}
                 </CustomTableCell>
-                <CustomTableCell align="right">
+                <CustomTableCell align="center">
                   {row['avg rating']}
                 </CustomTableCell>
-                <CustomTableCell align="right">
+                <CustomTableCell align="center">
                   {row['crs rating']}
+                </CustomTableCell>
+                <CustomTableCell align="right">
+                  {row['term']}
                 </CustomTableCell>
               </TableRow>
             ))}

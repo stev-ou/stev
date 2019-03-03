@@ -2,6 +2,7 @@ import React from 'react';
 import './App.css';
 import Fig1 from './components/figure1_table.js';
 import Fig2 from './components/figure2_chart.js';
+import Fig3 from './components/figure3_timeseries.js'
 
 // API mapping, based on search type selected from the Header menu
 const api_map = {
@@ -135,7 +136,7 @@ class Landing extends React.Component {
 
   render() {
     return (
-      <div className="App">
+      <div className="App" style={{padding:"2em"}}>
         <div className="Info">
           <p>
             {' '}
@@ -152,7 +153,7 @@ class Landing extends React.Component {
           href="https:\/\/www.ou.edu/provost/course-evaluation-data"
           target="_blank"
           rel="noopener noreferrer"
-        >
+          >
           Link to data
         </a>
       </div>
@@ -185,8 +186,10 @@ class App extends React.Component {
     // THIS DOESNT WORK. Need to figure out some way to get the data from Header -> SearchForm back up to the App level
     //so that I can send it to the Fig1 and Fig2 components. For now, I have a temp uuid I'll pass
 
-    // Heres some other options: "ame4442", "ame5720", "ame4970", "ame3523", "ame5903",
-    const temp_uuid = 'ame4970';
+    // Heres some testing options: 
+    // For GCOE: "ame4442", "ame5720", "ame4970", "ame3523", "ame5903","ame4822" # LAB = 'ame3112' # Lots of data: 'engr1411'
+    // For JRCOE: "edss3553", "eipt3483", "eipt5033", "edsc4093"
+    const temp_uuid = 'edss3553';
     if (!this.state.valid_search) {
       return (
         //<LandingController />
@@ -194,10 +197,17 @@ class App extends React.Component {
           <Header />
           <div className="graphical-content">
             <div className="table-fig1">
-              <Fig1 uuid={temp_uuid} />
+             <Fig1 uuid={temp_uuid} /> 
             </div>
+            <hr style={{height:30}}/>
           </div>
-          <Fig2 uuid={temp_uuid} />
+          <div className='graphical-content'>
+          <Fig2 uuid={temp_uuid} /> 
+          </div>
+          <hr style={{height:30}}/>
+          <div className='graphical-content'>
+          <Fig3 uuid={temp_uuid}/>
+          </div>
           <Landing />
         </div>
       );

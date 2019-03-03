@@ -123,6 +123,8 @@ select {
 .graphical-content {
   text-align: center!important;
   width:100%;
+  padding-top: 1em;
+  padding-bottom: 1em;
 }
 /*
 * Figure 1
@@ -133,6 +135,16 @@ select {
   display: inline-block;
   width:80%;
   align-items: center;
+}
+
+/*
+* Figure 3
+*/
+
+.recharts-wrapper {
+  margin:0;
+  margin-left: 8%;
+  margin-right:12%;
 }
 
 /*
