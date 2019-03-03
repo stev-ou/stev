@@ -13,7 +13,7 @@ const api_arg_map = {
   department: '?department=',
   instructor: '?instructor=',
 };
-const api_endpoint = 'http://localhost:5050/api/v0/';
+const api_endpoint = 'http://35.188.130.122/api/v0/';
 
 class SearchForm extends React.Component {
   constructor(props) {
