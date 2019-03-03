@@ -2,9 +2,9 @@ import React from 'react';
 import SearchForm from './SearchForm.js';
 
 class Header extends React.Component {
-  constructor(props) {
-    super(props);
-  }
+  //constructor(props) {
+  //  super(props);
+  //}
   render() {
     return (
       <div className="App-header">

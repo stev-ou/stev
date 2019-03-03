@@ -1,5 +1,6 @@
 import React from 'react';
 
+import DataView from './DataView.js';
 import { connect } from 'react-redux';
 
 class LandingComponent extends React.Component {
@@ -8,7 +9,10 @@ class LandingComponent extends React.Component {
   }
 
   render() {
-    const valid_search = this.props.valid_search;
+      const valid_search = this.props.valid_search === 'VALID';
+      console.log("search");
+      console.log(this.props.valid_search);
+      console.log(valid_search);
     if (!valid_search) {
       return (
         <div className="App">
@@ -34,7 +38,7 @@ class LandingComponent extends React.Component {
         </div>
       );
     } else {
-      return <h1> This is where the timeserieschart would go. </h1>;
+        return <DataView />;
     }
   }
 }
@@ -45,13 +49,6 @@ const mapStateToProps = state => {
   };
 };
 
-const mapDispatchToProps = dispatch => {
-  return;
-};
-
-const Landing = connect(
+export default connect(
   mapStateToProps,
-  mapDispatchToProps
 )(LandingComponent);
-
-export default Landing;

@@ -1,6 +1,6 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import { SetSearchStatus, SearchStatus } from '../actions';
+import { setSearchStatus, SearchStatus } from '../actions';
 
 // API mapping, based on search type selected from the Header menu
 const api_map = {
@@ -53,9 +53,9 @@ class SearchForm extends React.Component {
       .then(data => this.setState({ result: data.result, loadedAPI: true }));
 
     alert('You entered: ' + this.state.search_type + ' ');
-    // console.log('Api response:')
-    // console.log(this.state.result)
-    //event.preventDefault();
+
+      this.props.setSearchStatus(SearchStatus.VALID);
+    event.preventDefault();
   }
 
   render() {
@@ -108,9 +108,9 @@ class SearchForm extends React.Component {
 // https://stackoverflow.com/questions/44668042/mapdispatchtoprops-with-react-redux-connect-and-class-components
 // https://stackoverflow.com/questions/37661166/what-do-function-parameter-lists-inside-of-curly-braces-do-in-es6
 
-const mapDispatchToProps = (dispatch, ownProps) => ({
-  handleSubmit: () => dispatch(SetSearchStatus(SearchStatus.VALID)),
-});
+//const mapDispatchToProps = (dispatch, ownProps) => ({
+//  handleSubmit: () => dispatch(setSearchStatus(SearchStatus.VALID)),
+//});
 
 const mapStateToProps = state => {
   return {
@@ -120,5 +120,5 @@ const mapStateToProps = state => {
 
 export default connect(
   mapStateToProps,
-  mapDispatchToProps
+    {setSearchStatus}
 )(SearchForm);
