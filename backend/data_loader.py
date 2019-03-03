@@ -10,7 +10,7 @@ from data_aggregation import aggregate_data
 DB_NAME = "reviews-db"
 
 ### DEBUG - force_update is always true - off in prod
-def update_database(force_update=True):
+def update_database(force_update=False):
     '''
     Loads new data into the database, from the data folder. Each new .csv file is inserted into the database as a new collection. When inserting,
     the only check is to see if a collection with the name of the csv already exists in the database(i.e., if COE_Spring_2018 already exists in 
@@ -65,6 +65,7 @@ def update_database(force_update=True):
             # Reading data into python from the csv
             df = pd.read_csv('data/'+data_file)
             # Create the aggregated database 
+            print('Aggregating the ' + data_file + '. This usually takes about a minute.')
             ag_df = aggregate_data(df)
 
             # load the db for the given data file into a json format
