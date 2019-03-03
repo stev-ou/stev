@@ -43,14 +43,16 @@ const API = 'http://35.188.130.122/api/v0/courses/';
 class Fig1 extends React.Component {
   constructor(props) {
     super(props);
-    this.state = { data: [], uuid: props.uuid , info:{}};
+    this.state = { data: [], uuid: props.uuid, info: {} };
   }
 
   componentDidMount() {
     // This will call the api when the component "Mounts", i.e. when the page is accessed
     fetch(API + this.state.uuid + '/figure1')
       .then(response => response.json())
-      .then(data => this.setState({info:data.result, data: data.result.instructors }));
+      .then(data =>
+        this.setState({ info: data.result, data: data.result.instructors })
+      );
   }
 
   render() {
@@ -64,9 +66,9 @@ class Fig1 extends React.Component {
     });
 
     // Get the info to pass to the table
-    const info = this.state.info
+    const info = this.state.info;
 
-    return <MyTable rows={table_data} info={info}/>;
+    return <MyTable rows={table_data} info={info} />;
   }
 }
 
@@ -78,7 +80,11 @@ function CustomizedTable(props) {
 
   return (
     <div>
-    <h1 style={{fontWeight: 'bold',fontSize: '3.5em', padding: '0.75em'}}> {info['dept name']}{info['course number']}: {info['course name']} </h1>
+      <h1 style={{ fontWeight: 'bold', fontSize: '3.5em', padding: '0.75em' }}>
+        {' '}
+        {info['dept name']}
+        {info['course number']}: {info['course name']}{' '}
+      </h1>
       <h2 style={{ padding: '0.5em', paddingTop: '0em' }}>
         {' '}
         These professors have taught the course in the past 3 years{' '}
@@ -124,9 +130,7 @@ function CustomizedTable(props) {
                 <CustomTableCell align="center">
                   {row['crs rating']}
                 </CustomTableCell>
-                <CustomTableCell align="right">
-                  {row['term']}
-                </CustomTableCell>
+                <CustomTableCell align="right">{row['term']}</CustomTableCell>
               </TableRow>
             ))}
           </TableBody>
