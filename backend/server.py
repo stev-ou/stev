@@ -5,7 +5,7 @@ from mongo import mongo_driver
 from bson.json_util import dumps
 import pandas as pd
 import json
-from api_functions import query_function, course_instructor_ratings_api_generator, relative_dept_rating_figure_json_generator
+from api_functions import query_function, course_instructor_ratings_api_generator, relative_dept_rating_figure_json_generator, timeseries_data_generator
 
 # Establish a database connection
 DB_NAME = "reviews-db"
@@ -52,6 +52,13 @@ def figure_1_data_api(course_uuid):
 @app.route(base_api_route+'courses/<string:course_uuid>/figure2', methods=['GET'])
 def figure_2_data_api(course_uuid):
     response = relative_dept_rating_figure_json_generator(db, course_uuid)
+
+    return jsonify(response)
+
+# Figure 3 api 
+@app.route(base_api_route+'courses/<string:course_uuid>/figure3', methods=['GET'])
+def figure_3_data_api(course_uuid):
+    response = timeseries_data_generator(db, course_uuid)
 
     return jsonify(response)
 

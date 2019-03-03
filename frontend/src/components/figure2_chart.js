@@ -4,6 +4,7 @@ import { schemeSet3 } from 'd3-scale-chromatic'; // This is the colors for the b
 import * as Math from 'mathjs'
 // import CanvasJS from 'canvasjs';
 
+// This function will add the proper suffix, i.e 1st, 2nd, 3rd, given integer input
 function ordinal_suffix_of(i) {
   var j = i % 10,
     k = i % 100;
@@ -19,7 +20,7 @@ function ordinal_suffix_of(i) {
   return i + 'th';
 }
 
-// Define API parameters
+// Define API input string
 const API = 'http://localhost:5050/api/v0/courses/';
 
 class Fig2 extends React.Component {
@@ -104,6 +105,8 @@ class Fig2 extends React.Component {
       if (max_rating===6) {
         max_rating=5;
       }
+      // Calculate total enrollment
+      var total_enrollment = Math.floor(Math.sum(donut_data.datasets[0].data))
 
       // We'll modify the options for our chart here
       var bar_options = {
@@ -167,9 +170,13 @@ class Fig2 extends React.Component {
         <div className='col-md-8' style={{ padding: '2em'}}>
 
           <HorizontalBar type="horizontalBar" data={bar_data} options={bar_options} />
+
         </div>
-        <div className='col-md-4' style={{ padding: '5em', width: '100%', verticalAlign:'middle'}}>
+        <div className='col-md-4' style={{ padding: '2.5em', verticalAlign:'middle'}}> 
+        <div style={{width:'100%', height:'80%'}}>
         <Doughnut data= {donut_data} options={donut_options}/>
+        </div>
+        <h6 style={{padding:'1em'}}> {total_enrollment} students were enrolled in {result['most recent sem']}</h6>
         </div>
         </div>
         </div>
@@ -178,5 +185,5 @@ class Fig2 extends React.Component {
   }
 }
 // <h1> {result['course name']} is ranked {ordinal_suffix_of(result['course rating'])} out of {result.dept['courses in dept']} courses in the {result['dept']['dept name']} department </h1>
-
+// , verticalAlign:'middle'
 export default Fig2;
