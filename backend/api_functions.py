@@ -60,6 +60,41 @@ def most_recent_semester_ind(semester_int_list):
     most_recent_ind = semester_int_list.index(most_recent_sem)
     return most_recent_sem # return the most recent sem as a term code
 
+# Python program for implementation of MergeSort 
+def mergeSort(arr): 
+    if len(arr) >1: 
+        mid = len(arr)//2 #Finding the mid of the array 
+        L = arr[:mid] # Dividing the array elements  
+        R = arr[mid:] # into 2 halves 
+  
+        mergeSort(L) # Sorting the first half 
+        mergeSort(R) # Sorting the second half 
+  
+        i = j = k = 0
+          
+        # Copy data to temp arrays L[] and R[] 
+        while i < len(L) and j < len(R): 
+            if most_recent_semester_ind([L[i],R[j]]) == L[i]: 
+                arr[k] = L[i] 
+                i+=1
+            else: 
+                arr[k] = R[j] 
+                j+=1
+            k+=1
+          
+        # Checking if any element was left 
+        while i < len(L): 
+            arr[k] = L[i] 
+            i+=1
+            k+=1
+          
+        while j < len(R): 
+            arr[k] = R[j] 
+            j+=1
+            k+=1
+    return
+
+
 def course_instructor_ratings_api_generator(db, uuid):
     '''
     This function will take one validated course-based uuid in the aggregated database and will
@@ -99,26 +134,60 @@ def course_instructor_ratings_api_generator(db, uuid):
         print('The course_uuid '+ uuid + ' was not found within the db collection ' + coll_name)
         raise Exception('The course_uuid '+ uuid + ' was not found within the db collection ' + coll_name)
 
+
+
     # SAM - The goal is to remove discussion and the lab sections, because they mess with the enrollment numbers and aren't actually the course of interest
     # Get the list of the most popular Course Titles of this course, and trim any entries that arent the most popular course name
     most_frequent_course = df['Course Title'].value_counts().idxmax()
     df = df[(df['Course Title']==most_frequent_course)]
-    print(df.drop_duplicates('Instructor ID', inplace=False))
 
-    for i in df.drop_duplicates('Instructor ID', inplace=False).index:
+
+    # The following is a very crappy way to get a list of unique indices that are in the order of the semesters
+
+    #######
+    # Define the instructor list
+    instructor_list = list(reversed(list(df.drop_duplicates('Instructor ID', inplace=False)['Instructor ID'])))
+    term_code_list = list(df.drop_duplicates(['Instructor ID','Term Code'], inplace=False)['Term Code'])
+
+    # Sort the term code list - mergeSort is modified to use the most_recent_term_code function to compare term codes
+    mergeSort(term_code_list)
+
+    # Create the dict for this sorted term code list
+    dict_term_list = {k: v for v, k in enumerate(term_code_list)}
+
+    # Add the column as a mapping to the df
+    instructor_list_ind = df.drop_duplicates(['Instructor ID', 'Term Code'], inplace=False)['Term Code'].map(dict_term_list).sort_values().index
+
+    # Make sure that we have a unique list of instructors, starting from the top and dropping later instructors
+    instr_list= []
+    instr_ind_list = []
+    for p in instructor_list_ind:
+        if df.at()[p, 'Instructor ID'] not in instr_list:
+            instr_list.append(df.at()[p, 'Instructor ID'])
+            instr_ind_list.append(p)
+        else:
+            continue
+
+    #########
+    
+    # Get the large df with all of the instructors
+    df_main = pd.DataFrame(list(coll.find({'$and':[
+    {"Instructor ID":{'$in':instructor_list}},
+    {"Term Code": {'$in': CURRENT_SEMESTERS}}]}))) ## SAM - added term code here so that we only consider the instructor average over recent semesters
+
+    for i in instr_ind_list:
         # need to average all ratings across all classes taught by each instructor
         # Do this by getting inst_id - all classes taught by this instructor
         # Necessary to cast int here since MongoDB cannot use Int64
         inst_id = int(df.at()[i, 'Instructor ID'])
+        print(df.at()[i, 'Instructor First Name'] +df.at()[i, "Instructor Last Name"])
 
-        df_inst = pd.DataFrame(list(coll.find({'$and':[
-            {"Instructor ID":inst_id},
-            {"Term Code": {'$in': CURRENT_SEMESTERS}}]}))) ## SAM - added term code here so that we only consider the instructor average over recent semesters
+        df_inst = df_main[(df_main['Instructor ID']==inst_id)] # Made df_inst once and then slice it for each instructor
 
         # WARNING: Complex averaging algorithm # SAM - hahahaha
         total = 0
         count = 0
-        for x in range(len(df_inst)):  # SAM - modified so we dont have to access collection here
+        for x in df_inst.index:  # SAM - modified so we dont have to access collection here
             total += df_inst.at()[x, 'Avg Instructor Rating In Section']
             count += 1
         avg = round(total/count, 7)
@@ -144,7 +213,7 @@ def course_instructor_ratings_api_generator(db, uuid):
         ret_json["result"]["instructors"].append(inst)
 
     # SAM - reverse the results so that it plots most recent semesters first
-    ret_json['result']['instructors'] = list(reversed(ret_json['result']['instructors']))
+    # ret_json['result']['instructors'] = list(reversed(ret_json['result']['instructors']))
 
     # SAM - Added a couple other features to ret_json for plotting a title on the frontend
     ret_json['result']['course name'] = str(df['Course Title'][0])
@@ -346,14 +415,11 @@ def query_function(db, query, field_to_search):
 
     return result_list
 
-
-
-
-
-
 if __name__ == '__main__':
     # Test the db search
-    db = mongo_driver()
+    # test = [201410, 201420, 201530, 201620, 201230, 201810]
+    # mergeSort(test)
+    # print(test)
 
     pprint.pprint(course_instructor_ratings_api_generator(mongo_driver(),"engr1411"))
     # pprint.pprint(relative_dept_rating_figure_json_generator(mongo_driver(),"engr1411"))
