@@ -9,16 +9,7 @@ import {
   Legend,
   ResponsiveContainer
 } from 'recharts';
-
-const new_data = [
-  { name: 'Fall 2018', Janet: 4000, Sam: 2400, Joe: 2400 },
-  { name: 'Spring 2019', Janet: 3000, Sam: 1398, Joe: 2210 },
-  { name: 'Summer 2019', Janet: 2000, Sam: 2000, Joe: 2290 },
-  { name: 'Fall 2019', Janet: 2780, Sam: 3908, Joe: 2000 },
-  { name: 'Spring 2020', Janet: 1890, Sam: 4800, Joe: 2181 },
-  { name: 'Summer 2020', Janet: 2390, Sam: 3800, Joe: 2500 },
-  { name: 'Fall 2020', Janet: 3490, Sam: 4300, Joe: 2100 },
-];
+import * as Math from 'mathjs'
 
 const newer_data = [
   { name: 'Fall 2018', Sam: 2400, Joe: 2400 },
@@ -52,6 +43,10 @@ class Fig3 extends React.Component {
     } else {
       var result = this.state.result;
 
+      // Define a color pallete to use
+      var colors = ["#3f51b5", "#2196f3", "#03a9f4", "#ff5722", "#e91e63", "#9c27b0","#00bcd4","#4caf50", "#8bc34a","#cddc39", "#ffeb3b","#f44336","#795548", "#607d8b", "#4caf50", "#8bc34a", "#673ab7", "#ffc107", "#ff9800","#009688"]
+      colors.sort(function() { return 0.5 - Math.random() }); //Use this to randomize color order
+      // console.log(colors)
       // Modify the data to get it into the form needed by the TimeSeriesChart function
       var data=[]
 
@@ -80,8 +75,18 @@ class Fig3 extends React.Component {
         // Add current sem to data
         data.push(current_sem)
       }
-      console.log(data)
-      const myTimeSeries = TimeSeriesChart({data:data});
+      // Create the lines for each of our datapoints
+      var instructors =  []
+      for (var k=0; k<result['instructors'].length; k++) {
+        instructors.push([k])
+      }
+
+      // Define the lines used to define the style to plot each instructor
+      var Lines = instructors.map((l) => {
+        return (<Line type='monotone' dataKey={result['instructors'][l[0]]['name']} strokeWidth={4} stroke={colors[l[0]+3]}/>)
+      })
+
+      const myTimeSeries = TimeSeriesChart({data:data, cname:result['course over time']['course name'], dname:result['dept over time']['dept name'], colors:colors, lines:Lines});
 
       return(
       myTimeSeries
@@ -104,21 +109,13 @@ const TimeSeriesChart = props => (
       <CartesianGrid strokeDasharray="3 3" />
       <Tooltip />
       <Legend />
-      <Line
-        type="monotone"
-        dataKey="AME"
-        stroke="#8884d8"
-        fill="#8884d8"
-        strokeWidth={3}
-        activeDot={{ r: 6 }}
-      />
-      <Line type="monotone" dataKey="Instr1" stroke="#82ca9d" fill="#82ca9d" />
-      <Line type="monotone" dataKey="Instr2" stroke="#868788" fill="#868788" /> 
+      <Line type="monotone" dataKey={props.cname} strokeWidth={12} stroke={props.colors[0]}/>
+      <Line type="monotone" dataKey={props.dname} strokeWidth={9} stroke={props.colors[1]} /> 
+      {props.lines}
     </LineChart>
     </ResponsiveContainer>
     </div>
 );
-
 
 
 export default Fig3;

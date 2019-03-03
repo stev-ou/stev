@@ -193,12 +193,16 @@ class App extends React.Component {
         //<LandingController />
         <div>
           <Header />
-         {/* <div className="graphical-content">
+          <div className="graphical-content">
             <div className="table-fig1">
              <Fig1 uuid={temp_uuid} /> 
             </div>
+            <hr style={{height:30}}/>
           </div>
-          <Fig2 uuid={temp_uuid} /> */}
+          <div className='graphical-content'>
+          <Fig2 uuid={temp_uuid} /> 
+          </div>
+          <hr style={{height:30}}/>
           <div className='graphical-content'>
           <Fig3 uuid={temp_uuid}/>
           </div>
