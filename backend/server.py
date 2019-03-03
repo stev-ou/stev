@@ -23,7 +23,7 @@ CORS(app)
 # algolia for search utility
 @app.route('/')
 def hello_world():
-    return 'Ping <a href="http://{}:5050/api/v0/">/api/v0/</a> for api'.format(str(request.remote_addr))
+    return 'Ping <a href="http://{}/api/v0/">/api/v0/</a> for api'.format(str(request.remote_addr))
 
 @app.route(base_api_route, methods=['GET'])
 def api():
@@ -99,4 +99,4 @@ if __name__ == '__main__':
     # update_database()
     # print("Done.")
     print("Starting server...")
-    app.run(host='0.0.0.0', port=5050)
+    app.run(host='0.0.0.0', port=80)

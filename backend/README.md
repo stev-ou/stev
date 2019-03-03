@@ -22,4 +22,11 @@ $ pip install -r requirements.txt
 
 ## Deploying
 
-Currently deploying using Docker
+Currently deploying using Docker.  
+Ensure Docker is installed on your machine before continuing.  
+Python WSGI application deployed behind Gunicorn.  
+```bash
+$ docker build . -t schuermannator/ou-reviews-api
+$ docker run -p 5051:5050 schuermannator/ou-reviews-api:latest
+$ docker push schuermannator/ou-reviews-api:latest
+```
