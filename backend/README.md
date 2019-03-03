@@ -28,5 +28,5 @@ Python WSGI application deployed behind Gunicorn.
 ```bash
 $ docker build . -t schuermannator/ou-reviews-api
 $ docker run -p 5051:5050 schuermannator/ou-reviews-api:latest
-$ docker push
+$ docker push schuermannator/ou-reviews-api:latest
 ```

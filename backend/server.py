@@ -99,4 +99,4 @@ if __name__ == '__main__':
     # update_database()
     # print("Done.")
     print("Starting server...")
-    app.run(host='0.0.0.0', port=5050)
+    app.run(host='0.0.0.0', port=80)
