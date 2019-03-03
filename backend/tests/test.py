@@ -63,7 +63,7 @@ class basictest(unittest.TestCase):
         ag_df = data_aggregation.aggregate_data(df)
 
         # There should be no entries with the same course name, Instructor ID, and Term Code, so the below should be false
-        num_repeats = len(ag_df[ag_df[['Course Title', 'Term Code','Instructor ID']].duplicated() == True])
+        num_repeats = len(ag_df[ag_df[['course_uuid', 'Term Code','Instructor ID']].duplicated() == True])
 
         return self.assertEqual(0, num_repeats)
 
