@@ -13,7 +13,7 @@ import {
 import * as Math from 'mathjs'
 
 // Define API parameters
-const API = 'http://localhost:5050/api/v0/courses/';
+const API = 'http://35.188.130.122/api/v0/courses/';
 
 class Fig3 extends React.Component {
   constructor(props) {

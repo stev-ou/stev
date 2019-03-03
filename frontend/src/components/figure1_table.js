@@ -37,7 +37,7 @@ const styles = theme => ({
 });
 
 // This is the function that will fetch the desired data from the api
-const API = 'http://localhost:5050/api/v0/courses/';
+const API = 'http://35.188.130.122/api/v0/courses/';
 // const API_Test = 'https://hn.algolia.com/api/v1/search?query=redux';
 
 class Fig1 extends React.Component {
