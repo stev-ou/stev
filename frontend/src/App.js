@@ -15,7 +15,7 @@ const api_arg_map = {
   department: '?department=',
   instructor: '?instructor=',
 };
-const api_endpoint = 'http://localhost:5050/api/v0/';
+const api_endpoint = 'http://35.188.130.122/api/v0/';
 
 class Header extends React.Component {
   constructor(props) {
@@ -189,7 +189,7 @@ class App extends React.Component {
     // Heres some testing options: 
     // For GCOE: "ame4442", "ame5720", "ame4970", "ame3523", "ame5903","ame4822" # LAB = 'ame3112' # Lots of data: 'engr1411'
     // For JRCOE: "edss3553", "eipt3483", "eipt5033", "edsc4093"
-    const temp_uuid = 'edss3553';
+    const temp_uuid = 'engr1411';
     if (!this.state.valid_search) {
       return (
         //<LandingController />

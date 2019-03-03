@@ -21,7 +21,7 @@ function ordinal_suffix_of(i) {
 }
 
 // Define API input string
-const API = 'http://localhost:5050/api/v0/courses/';
+const API = 'http://35.188.130.122/api/v0/courses/';
 
 class Fig2 extends React.Component {
   constructor(props) {
