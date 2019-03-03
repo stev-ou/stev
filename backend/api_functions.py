@@ -332,10 +332,10 @@ def timeseries_data_generator(db, valid_uuid):
 
     response = {'result': {'course number': 1411,
             'course over time':{
-                'name': 'Name of course',
+                'course name': 'Name of course',
                 'semesters':['Fall 2015', 'Spring 2016', 'Summer 2017','Fall 2016', 'Spring 2017', 'Spring 2018'], # This determines number of data points
                 'ratings':[4.212, 4.354, 3.898, 2.98, 3.45, 3.69]},
-            'course over time':{
+            'dept over time':{
                 'dept name': "AME",
                 'semesters':['Fall 2015', 'Spring 2016', 'Summer 2017','Fall 2016', 'Spring 2017', 'Spring 2018'],
                 'ratings':[4.6, 3.456732,4.168, 4.212, 4.354, 3.898]},
