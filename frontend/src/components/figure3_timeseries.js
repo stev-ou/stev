@@ -12,15 +12,6 @@ import {
 } from 'recharts';
 import * as Math from 'mathjs'
 
-const newer_data = [
-  { name: 'Fall 2018', Sam: 2400, Joe: 2400 },
-  { name: 'Spring 2019', Janet: 3000, Sam: 1398, Joe: 2210 },
-  { name: 'Summer 2019', Janet: 2000,  Joe: 2290 },
-  { name: 'Fall 2019', Sam: 3908, Joe: 2000 },
-  { name: 'Spring 2020', Janet: 1890, Sam: 4800, Joe: 2181 },
-  { name: 'Summer 2020', Janet: 2390, Sam: 3800},
-  { name: 'Fall 2020', Janet: 3490, Sam: 4300},
-];
 // Define API parameters
 const API = 'http://localhost:5050/api/v0/courses/';
 

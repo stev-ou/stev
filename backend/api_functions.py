@@ -19,7 +19,7 @@ COLLECTION_NAMES = ["aggregated_GCOE", "aggregated_JRCOE"]
 # This is the period that will be considered "current" by the API. 
 # These are term codes, where the first 4 digits corresponds to year, last 2 digits to semester (10:fall, 20:spring, 30:summer), 
 # e.g. 201710 is Fall 2017
-CURRENT_SEMESTERS = [201810, 201820, 201830, 201710, 201720, 201730]
+CURRENT_SEMESTERS = [201810, 201820, 201830, 201710, 201720, 201730, 201610, 201620, 201630]
 
 # Import the mappings to find the semester for each course
 # Read in the question mappings values from the mappings.yaml
@@ -266,6 +266,12 @@ def relative_dept_rating_figure_json_generator(db, valid_uuid):
     # Make sure that the df is unique wrt Term Code and instructor
     uuid_df.drop_duplicates(subset=['Term Code', 'Instructor ID'], inplace=True)
 
+    # Start by finding the most recent appearance of the course
+    sem = most_recent_semester_ind(list(uuid_df['Term Code']))
+
+    # Drop any from uuid that arent from the most recent semester
+    uuid_df = uuid_df[(uuid_df['Term Code']==sem)]
+
     # Get various parameters of the search
     subj = uuid_df['Subject Code'].unique()[0]
     cnum = uuid_df['Course Number'].unique()[0]
@@ -287,8 +293,6 @@ def relative_dept_rating_figure_json_generator(db, valid_uuid):
     # Reverse Instructors
     instructors = list(reversed(instructors))
     # Get the course ranking for the department from the uuid
-    # Start by finding the most recent appearance of the course
-    sem = most_recent_semester_ind(list(uuid_df['Term Code']))
 
     # Find all courses with given subject in ag_df
     subj_search = coll.find({'$and':[

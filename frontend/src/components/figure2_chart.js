@@ -112,7 +112,7 @@ class Fig2 extends React.Component {
       var bar_options = {
         title: {text:result['course name']+' Ratings compared for '+ result['most recent sem'],
                 display:true,
-                fontSize: 28},
+                fontSize: 24},
         legend: { display: false },
         scales: {
           xAxes: [
@@ -121,7 +121,7 @@ class Fig2 extends React.Component {
               scaleLabel: {
                 display: true,
                 labelString: 'Rating from 1 to 5 (range '+min_rating.toString() + '-'+max_rating.toString() + ' shown)',
-                fontSize: 18,
+                fontSize: 16,
               },
               ticks: {
                 beginAtZero: false,
@@ -146,7 +146,7 @@ class Fig2 extends React.Component {
       var donut_options={
         title: {display: true,
           text: 'Enrollment by Instructor',
-          fontSize:28
+          fontSize:24
         },
         cutoutPercentage: 40, //Here for innerRadius. It's already exists
         outerRadius: 300,//Here for outerRadius
@@ -159,7 +159,7 @@ class Fig2 extends React.Component {
 
       return (
         <div>
-        <h2 style={{ padding: '1em' }}>
+        <h2 style={{ padding: '0em' }}>
             {' '}
             This course is ranked {course_ranking} out of{' '}
             {result['dept']['courses in dept']} courses in the{' '}
@@ -167,7 +167,7 @@ class Fig2 extends React.Component {
             for the {result['most recent sem']} semester.
           </h2>
         <div className='row' style={{align:'left'}}>
-        <div className='col-md-8' style={{ padding: '2em'}}>
+        <div className='col-md-8' style={{ paddingTop: '0.5em',paddingBottom: '0.5em', padding: '2em'}}>
 
           <HorizontalBar type="horizontalBar" data={bar_data} options={bar_options} />
 
