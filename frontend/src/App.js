@@ -135,7 +135,7 @@ class Landing extends React.Component {
 
   render() {
     return (
-      <div className="App">
+      <div className="App" style={{padding:"2em"}}>
         <div className="Info">
           <p>
             {' '}
@@ -152,7 +152,7 @@ class Landing extends React.Component {
           href="https:\/\/www.ou.edu/provost/course-evaluation-data"
           target="_blank"
           rel="noopener noreferrer"
-        >
+          >
           Link to data
         </a>
       </div>
@@ -185,8 +185,8 @@ class App extends React.Component {
     // THIS DOESNT WORK. Need to figure out some way to get the data from Header -> SearchForm back up to the App level
     //so that I can send it to the Fig1 and Fig2 components. For now, I have a temp uuid I'll pass
 
-    // Heres some other options: "ame4442", "ame5720", "ame4970", "ame3523", "ame5903",
-    const temp_uuid = 'ame4970';
+    // Heres some other options: "ame4442", "ame5720", "ame4970", "ame3523", "ame5903","ame4822" # LAB = 'ame3112'
+    const temp_uuid = 'engr1411';
     if (!this.state.valid_search) {
       return (
         //<LandingController />
@@ -194,7 +194,8 @@ class App extends React.Component {
           <Header />
           <div className="graphical-content">
             <div className="table-fig1">
-              <Fig1 uuid={temp_uuid} />
+             {/*<Fig1 uuid={temp_uuid} /> */}
+             <Fig1 uuid={temp_uuid} /> 
             </div>
           </div>
           <Fig2 uuid={temp_uuid} />

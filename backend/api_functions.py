@@ -169,7 +169,7 @@ def course_instructor_ratings_api_generator(db, uuid):
             continue
 
     #########
-    
+
     # Get the large df with all of the instructors
     df_main = pd.DataFrame(list(coll.find({'$and':[
     {"Instructor ID":{'$in':instructor_list}},
@@ -180,7 +180,6 @@ def course_instructor_ratings_api_generator(db, uuid):
         # Do this by getting inst_id - all classes taught by this instructor
         # Necessary to cast int here since MongoDB cannot use Int64
         inst_id = int(df.at()[i, 'Instructor ID'])
-        print(df.at()[i, 'Instructor First Name'] +df.at()[i, "Instructor Last Name"])
 
         df_inst = df_main[(df_main['Instructor ID']==inst_id)] # Made df_inst once and then slice it for each instructor
 
@@ -363,7 +362,6 @@ def query_function(db, query, field_to_search):
     # Search through the list of valid collections to find the proper college for the course search
     # Create an index to relate uuid query results to the query
     query_match_results = {}
-    # print(query_list)
 
     for coll in COLLECTION_NAMES:
         for query in query_list:
