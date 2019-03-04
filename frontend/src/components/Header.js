@@ -13,7 +13,7 @@ class Header extends React.Component {
 <div>
 <nav id="main_nav" className="navbar navbar-light navbar-expand-lg">
     <div className="container">
-        <a className="navbar-brand" href="">OU Reviews</a>
+        <a className="navbar-brand" href="./">OU Reviews</a>
         <button className="custom-toggler navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
             <span className="navbar-toggler-icon"></span>
         </button>
@@ -52,7 +52,7 @@ class Header extends React.Component {
         else {
             return <nav id="main_nav" className="navbar navbar-light navbar-expand-lg">
     <div className="container">
-        <a className="navbar-brand" href="">OU Reviews</a>
+        <a className="navbar-brand" href="./">OU Reviews</a>
         <button className="custom-toggler navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
             <span className="navbar-toggler-icon"></span>
         </button>
