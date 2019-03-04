@@ -5,10 +5,10 @@ import Fig1 from './figure1_table.js';
 import Fig2 from './figure2_chart.js';
 import Fig3 from './figure3_timeseries.js';
 
-const DataView = (props) => {
-    const uuid = props.search_text;
-    console.log("HERE");
-    console.log(uuid);
+const DataView = props => {
+  const uuid = props.search_text;
+  console.log('HERE');
+  console.log(uuid);
   return (
     <div>
       <div className="graphical-content">
@@ -37,6 +37,4 @@ const mapStateToProps = state => {
   };
 };
 
-export default connect(
-  mapStateToProps,
-)(DataView);
+export default connect(mapStateToProps)(DataView);

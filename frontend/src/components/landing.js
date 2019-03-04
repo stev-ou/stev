@@ -4,9 +4,9 @@ import DataView from './DataView.js';
 import { connect } from 'react-redux';
 
 class LandingComponent extends React.Component {
-    render() {
-      const valid_search = this.props.valid_search === 'VALID';
-      if (!valid_search) {
+  render() {
+    const valid_search = this.props.valid_search === 'VALID';
+    if (!valid_search) {
       return (
         <div className="App">
           <div className="Info">
@@ -31,7 +31,7 @@ class LandingComponent extends React.Component {
         </div>
       );
     } else {
-        return <DataView />;
+      return <DataView />;
     }
   }
 }
@@ -42,6 +42,4 @@ const mapStateToProps = state => {
   };
 };
 
-export default connect(
-  mapStateToProps,
-)(LandingComponent);
+export default connect(mapStateToProps)(LandingComponent);

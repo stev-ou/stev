@@ -1,17 +1,17 @@
 // actions
 export const setSearchStatus = content => ({
   type: 'SET_SEARCH_STATUS',
-    status: content
+  status: content,
 });
 
 export const setSearchType = content => ({
   type: 'SET_SEARCH_TYPE',
-    search_type: content
+  search_type: content,
 });
 
 export const setSearchText = content => ({
   type: 'SET_SEARCH_TEXT',
-    text: content
+  text: content,
 });
 
 export const SearchStatus = {
@@ -23,4 +23,3 @@ export const SearchType = {
   COURSE: 'COURSE',
   INSTRUCTOR: 'INSTRUCTOR',
 };
-
