@@ -1,19 +1,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { setSearchStatus, SearchStatus, setSearchType, setSearchText} from '../actions';
-
-// API mapping, based on search type selected from the Header menu
-const api_map = {
-  course: 'courses/',
-  department: 'department/',
-  instructor: 'instructors/',
-};
-const api_arg_map = {
-  course: '?course=',
-  department: '?department=',
-  instructor: '?instructor=',
-};
-const api_endpoint = 'http://35.188.130.122/api/v0/';
+import { api_map, api_arg_map, api_endpoint } from '../constants.js';
 
 class SearchForm extends React.Component {
   constructor(props) {
@@ -22,7 +10,7 @@ class SearchForm extends React.Component {
       search_type: 'course',
       search_text: '',
       result: {},
-      valid_search: false,
+      valid_search: false
     };
 
     this.handleInputChange = this.handleInputChange.bind(this);
@@ -41,7 +29,6 @@ class SearchForm extends React.Component {
 
   handleSubmit(event) {
     // Add an api query based on the input
-
     // Fetch the object from the api endpoint
     fetch(
       api_endpoint +
@@ -49,16 +36,40 @@ class SearchForm extends React.Component {
         api_arg_map[this.state.search_type] +
         this.state.search_text
     )
-      .then(response => response.json())
-      .then(data => this.setState({ result: data.result, loadedAPI: true }));
-
-    //alert('You entered: ' + this.state.search_type + ' ' + this.state.search_text);
-
-      this.props.setSearchStatus(SearchStatus.VALID);
-      this.props.setSearchText(this.state.search_text);
-      this.props.setSearchType(this.state.search_type);
-
+          .then(response => {
+              console.log("resp:");
+              console.log(response);
+              return response.json();
+          })
+          .then(data => {
+              console.log(data);
+              console.log(data.result.length);
+              this.setState({ result: data.result }, () => {
+                  console.log(this.state);
+                  if (data.result.length === 1) {
+                      this.props.setSearchStatus(SearchStatus.VALID);
+                      this.props.setSearchText(this.state.search_text);
+                      this.props.setSearchType(this.state.search_type);
+                  return this.setState({ result: data.result, valid_search: true });
+              }
+              else {
+                  alert(this.state.search_type + ' ' + this.state.search_text + ' not found!');
+                  return this.setState({valid_search: false});;
+              }
+              });
+          });
+      
     event.preventDefault();
+  }
+
+  changeRadio(event) {
+      console.log(event.target.value);
+      if (event.target.value === "Course") {
+          //implement dispatch action to set type to course 
+      }
+      else if (event.target.value === "Instructor") {
+          // NYE
+      }
   }
 
   render() {
@@ -69,29 +80,30 @@ class SearchForm extends React.Component {
         <div className="input-group mb-3">
         <input
           className="form-control w-80 header-elem"
+          id="landing-input"
           name="search_text"
           type="text"
-          placeholder="Enter Search Here"
+          placeholder="Ex: ENGR1411"
           aria-label="Search"
           value={this.state.search_text}
           onChange={this.handleInputChange}
         />
         <div className="input-group-append">
-        <input  type="submit" value="Submit" />
+        <input  id="search-btn" type="submit" value="Search" />
         </div>
         </div>
 
-
+        <div onChange={this.changeRadio.bind(this)}>
         <div className="form-check form-check-inline">
-          <input className="form-check-input" type="radio" name="MMERGE5" id="mce-MMERGE5-0" value="Course" checked="X"/>
+          <input className="form-check-input" type="radio" name="search-type" defaultChecked value="Course"/>
           <label className="form-check-label">Course</label>
         </div>
 
         <div className="form-check form-check-inline">
-          <input className="form-check-input" type="radio" name="MMERGE5" id="mce-MMERGE5-0" value="Instructor" checked=""/>
+          <input className="form-check-input" type="radio" name="search-type" value="Instructor" />
           <label className="form-check-label">Instructor</label>
         </div>
-
+        </div>
       </form>
             </div>
           </div>

@@ -4,16 +4,9 @@ import DataView from './DataView.js';
 import { connect } from 'react-redux';
 
 class LandingComponent extends React.Component {
-  constructor(props) {
-    super(props);
-  }
-
-  render() {
+    render() {
       const valid_search = this.props.valid_search === 'VALID';
-      console.log("search");
-      console.log(this.props.valid_search);
-      console.log(valid_search);
-    if (!valid_search) {
+      if (!valid_search) {
       return (
         <div className="App">
           <div className="Info">

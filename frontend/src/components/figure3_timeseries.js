@@ -11,9 +11,10 @@ import {
   ResponsiveContainer,
 } from 'recharts';
 import * as Math from 'mathjs';
+import { api_endpoint } from '../constants.js';
 
 // Define API parameters
-const API = 'http://35.188.130.122/api/v0/courses/';
+const API = api_endpoint + 'courses/';
 
 class Fig3 extends React.Component {
   constructor(props) {

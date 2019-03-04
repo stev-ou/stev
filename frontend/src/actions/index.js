@@ -6,7 +6,7 @@ export const setSearchStatus = content => ({
 
 export const setSearchType = content => ({
   type: 'SET_SEARCH_TYPE',
-    type: content
+    search_type: content
 });
 
 export const setSearchText = content => ({

@@ -7,6 +7,7 @@ import TableCell from '@material-ui/core/TableCell';
 import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
 import Paper from '@material-ui/core/Paper';
+import { api_endpoint } from '../constants.js';
 
 const CustomTableCell = withStyles(theme => ({
   head: {
@@ -37,7 +38,7 @@ const styles = theme => ({
 });
 
 // This is the function that will fetch the desired data from the api
-const API = 'http://35.188.130.122/api/v0/courses/';
+const API = api_endpoint + 'courses/';
 // const API_Test = 'https://hn.algolia.com/api/v1/search?query=redux';
 
 class Fig1 extends React.Component {

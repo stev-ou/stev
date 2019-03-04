@@ -3,6 +3,7 @@ import { HorizontalBar, Doughnut } from 'react-chartjs-2';
 import { schemeSet3 } from 'd3-scale-chromatic'; // This is the colors for the bar chart
 import * as Math from 'mathjs';
 // import CanvasJS from 'canvasjs';
+import { api_endpoint } from '../constants.js';
 
 // This function will add the proper suffix, i.e 1st, 2nd, 3rd, given integer input
 function ordinal_suffix_of(i) {
@@ -21,7 +22,7 @@ function ordinal_suffix_of(i) {
 }
 
 // Define API input string
-const API = 'http://35.188.130.122/api/v0/courses/';
+const API = api_endpoint + 'courses/';
 
 class Fig2 extends React.Component {
   constructor(props) {

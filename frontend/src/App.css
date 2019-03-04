@@ -17,8 +17,12 @@
     margin-left: 15px;
 }
 
+#subtitle {
+    margin-bottom: 15px;
+}
+
 .App-header {
-    font-family: 'Nunito', sans-serif;
+  font-family: 'Nunito', sans-serif;
   flex-direction: column;
   align-items: center;
   justify-content: center;
@@ -36,6 +40,34 @@
     border: 1px solid #8757fb;
     border-radius: 100%;
     background: #fff;
+}
+
+.input-group {
+
+  font-family: 'Nunito', sans-serif;
+    padding: 10px;
+    box-shadow: 0 0 20px 4px rgba(0,0,0,.1);
+    border-radius: 5px;
+}
+
+.form-check {
+    margin-left: 10px;
+}
+
+#landing-input {
+    border: 0px;
+}
+
+#search-btn {
+    background: #badcf8;
+    color: #ffffff;
+    border: 0;
+    border-radius: 2px;
+    font-weight: 800;
+}
+
+#search-btn:hover {
+    background: #baeeff;
 }
 
 .App-link {

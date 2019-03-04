@@ -26,9 +26,12 @@ class Header extends React.Component {
           <nav className="navbar sticky-top">
             <div className="container">
               <div className="col-xl-6 col-lg-6 col-md-6 col-sm-6 align-self-center">
-                <h2 className="header_title">
-                University of Oklahoma Course & Instructor Reviews
-              </h2>
+                <h2 id="landing-title" className="header_title">
+                Course & Instructor Reviews
+                </h2>
+                <h6 id="subtitle">
+                Query large public datasets for your coursework and instructors.
+                </h6>
               <SearchForm />
             </div>
               <div className="col-xl-6 col-lg-6 col-md-6 col-sm-6 align-self-center">
