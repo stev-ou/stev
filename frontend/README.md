@@ -18,3 +18,10 @@ In the project directory, you can run: **use yarn**
 
 ## Prereq's
 - run `npm install` to install deps
+
+## Deploying
+```bash
+$ docker build . -t schuermannator/ou-reviews
+$ docker push schuermannator/ou-reviews:latest
+$ docker run -d -p 3000:80 schuermannator/ou-reviews:latest
+```

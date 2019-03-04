@@ -1,3 +1,7 @@
+.PHONY: image
+image:
+	docker build . -t schuermannator/ou-reviews-api
+
 .PHONY: test
 test:
 	python3 -m unittest discover -v -s tests/
