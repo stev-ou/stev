@@ -7,10 +7,9 @@ import Fig3 from './figure3_timeseries.js';
 
 const DataView = props => {
   const uuid = props.search_text;
-  console.log('HERE');
-  console.log(uuid);
+  //console.log(uuid);
   return (
-    <div>
+    <div className="container">
       <div className="graphical-content">
         <div className="table-fig1">
           <Fig1 uuid={uuid} />
