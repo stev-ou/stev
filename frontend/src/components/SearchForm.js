@@ -1,6 +1,6 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import { setSearchStatus, SearchStatus } from '../actions';
+import { setSearchStatus, SearchStatus, setSearchType, setSearchText} from '../actions';
 
 // API mapping, based on search type selected from the Header menu
 const api_map = {
@@ -52,43 +52,21 @@ class SearchForm extends React.Component {
       .then(response => response.json())
       .then(data => this.setState({ result: data.result, loadedAPI: true }));
 
-    alert('You entered: ' + this.state.search_type + ' ');
+    //alert('You entered: ' + this.state.search_type + ' ' + this.state.search_text);
 
       this.props.setSearchStatus(SearchStatus.VALID);
+      this.props.setSearchText(this.state.search_text);
+      this.props.setSearchType(this.state.search_type);
+
     event.preventDefault();
   }
 
   render() {
-    return (
-      <form className="SearchForm" onSubmit={this.handleSubmit}>
-        <label style={{ fontSize: '1em', fontStyle: 'bold' }}>
-          <h4>Search by:</h4>
-          <select
-            name="search_type"
-            id="search_type"
-            style={{
-              margin: '1em',
-              marginTop: '0.1em',
-              marginBottom: '0.1em',
-              fontSize: '1.5em',
-              textAlign: 'left',
-              padding: '1.5em',
-            }}
-            value={this.state.search_type}
-            onChange={this.handleInputChange}
-          >
-            <option className="search-option" value="instructor">
-              Instructor
-            </option>
-            <option className="search-option" value="department">
-              Department
-            </option>
-            <option className="search-option" value="course">
-              Course
-            </option>
-          </select>
-        </label>
-
+      return (
+          <div className="row">
+            <div className="col-lg-12">
+      <form className="validate" onSubmit={this.handleSubmit}>
+        <div className="input-group mb-3">
         <input
           className="form-control w-80 header-elem"
           name="search_text"
@@ -98,8 +76,25 @@ class SearchForm extends React.Component {
           value={this.state.search_text}
           onChange={this.handleInputChange}
         />
-        <input className="header-elem" type="submit" value="Submit" />
+        <div className="input-group-append">
+        <input  type="submit" value="Submit" />
+        </div>
+        </div>
+
+
+        <div className="form-check form-check-inline">
+          <input className="form-check-input" type="radio" name="MMERGE5" id="mce-MMERGE5-0" value="Course" checked="X"/>
+          <label className="form-check-label">Course</label>
+        </div>
+
+        <div className="form-check form-check-inline">
+          <input className="form-check-input" type="radio" name="MMERGE5" id="mce-MMERGE5-0" value="Instructor" checked=""/>
+          <label className="form-check-label">Instructor</label>
+        </div>
+
       </form>
+            </div>
+          </div>
     );
   }
 }
@@ -120,5 +115,5 @@ const mapStateToProps = state => {
 
 export default connect(
   mapStateToProps,
-    {setSearchStatus}
+    {setSearchStatus, setSearchText, setSearchType}
 )(SearchForm);

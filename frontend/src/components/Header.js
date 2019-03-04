@@ -1,26 +1,75 @@
 import React from 'react';
 import SearchForm from './SearchForm.js';
+import graph from '../img/graph.png';
+import { connect } from 'react-redux';
 
 class Header extends React.Component {
   //constructor(props) {
   //  super(props);
   //}
-  render() {
-    return (
-      <div className="App-header">
-        <nav className="navbar sticky-top bg-dark">
-          <div className="w-100 p-1 header_title">
-            <h1 className="header_title">
-              University of Oklahoma Course & Instructor Reviews
-            </h1>
+    render() {
+        if (this.props.valid_search === 'INVALID') {
+      return (
+<div>
+<nav id="main_nav" className="navbar navbar-light navbar-expand-lg">
+    <div className="container">
+        <a className="navbar-brand" href="">OU Reviews</a>
+        <button className="custom-toggler navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
+            <span className="navbar-toggler-icon"></span>
+        </button>
+        <div className="collapse navbar-collapse" id="navbarResponsive">
+        </div>
+    </div>
+</nav>
+
+  <div className="App-header">
+          <nav className="navbar sticky-top">
+            <div className="container">
+              <div className="col-xl-6 col-lg-6 col-md-6 col-sm-6 align-self-center">
+                <h2 className="header_title">
+                University of Oklahoma Course & Instructor Reviews
+              </h2>
+              <SearchForm />
+            </div>
+              <div className="col-xl-6 col-lg-6 col-md-6 col-sm-6 align-self-center">
+                <div id="graph-container">
+              <img id="graph" className="img-fluid mx-auto d-block" src={graph} alt="Cool Graph!" />
+                </div>
           </div>
-          <div className="header-container flex-md-nowrap w-80 p-1">
-            <SearchForm />
-          </div>
-        </nav>
-      </div>
-    );
+            </div>
+
+          </nav>
+        </div>
+
+
+</div>
+
+      );
+        }
+        else {
+            return <nav id="main_nav" className="navbar navbar-light navbar-expand-lg">
+    <div className="container">
+        <a className="navbar-brand" href="">OU Reviews</a>
+        <button className="custom-toggler navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
+            <span className="navbar-toggler-icon"></span>
+        </button>
+        <div className="collapse navbar-collapse" id="navbarResponsive">
+        </div>
+    </div>
+</nav>
+;
+        }
   }
 }
 
-export default Header;
+const mapStateToProps = state => {
+  return {
+    valid_search: state.valid_search,
+  };
+};
+
+export default connect(
+  mapStateToProps,
+)(Header);
+
+

@@ -1,0 +1,156 @@
+.App {
+  margin-top:5em;
+}
+
+.App-header {
+    font-family: 'Nunito', sans-serif;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  line-height: 2;
+  font-weight:100;
+}
+
+.App-link {
+  color: #62dafb;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.Info {
+    padding-left: 20%;
+    padding-right: 20%;
+}
+
+.SearchForm {
+    color:white;
+    padding:0em;
+    padding-bottom: 0em;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+body {
+  font-size: .875rem;
+  align-items: center;
+  text-align:center;
+}
+
+
+.bg-dark {
+    background-color: #841617!important;
+}
+
+.feather {
+  width: 16px;
+  height: 16px;
+  vertical-align: text-bottom;
+}
+
+
+.header_title {
+  padding-top: 0.4em;
+  padding-bottom:0.4em;
+  font-size: 1.8em;
+  color: white;
+  text-align: center;
+
+}
+
+
+.dropdown-content a:hover {
+  background-color: #ddd;
+}
+
+.search-type {
+  text-align: left;
+  padding:0.2em;
+  font-size: 40px;
+}
+
+.select {
+    cursor:pointer;
+    display:inline-block;
+    position:relative;
+    font:normal 11px/22px Arial, Sans-Serif;
+    color:black;
+    border:1px solid #ccc;
+}
+/*
+ * Navbar
+ */
+
+.navbar .form-control {
+  border-color: rgba(255, 255, 255, .25);
+  box-shadow: 0 0 0 3px rgba(255,255,255,.25);
+  /*background-color: rgba(255, 255, 255, .75);*/
+  align-items: center;
+  text-align:center;
+}
+
+.header-elem {
+  margin:1em;
+  font-size: 1.25em;
+  border-radius: 5px;
+  text-align: left !important;
+
+
+}
+search-option {
+  color:red;
+  width: auto;
+  padding:1.5em;
+}
+
+select {
+  width: 12em; 
+  overflow: hidden;
+  text-indent: 5px;
+}
+
+.header-container {
+  border-radius:2em;
+  margin-left:auto;
+  margin-right:auto;
+  background-color: rgba(255, 255, 255, .1);
+/*  align-items: top;*/
+  border-color: rgba(255, 255, 255, 1);
+
+  width:90%;
+
+}
+.graphical-content {
+  text-align: center!important;
+  width:100%;
+  padding-top: 1em;
+  padding-bottom: 1em;
+}
+/*
+* Figure 1
+*/
+
+.table-fig1 {
+  align-self: center;
+  display: inline-block;
+  width:80%;
+  align-items: center;
+}
+
+/*
+* Figure 3
+*/
+
+.recharts-wrapper {
+  margin:0;
+  margin-left: 8%;
+  margin-right:12%;
+}
+
+/*
+ * Utilities
+ */
+
+.border-top { border-top: 1px solid #e5e5e5; }
+.border-bottom { border-bottom: 1px solid #e5e5e5; }
