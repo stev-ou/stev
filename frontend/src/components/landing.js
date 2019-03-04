@@ -13,9 +13,7 @@ class LandingComponent extends React.Component {
             <p>
               {' '}
               Disclaimer: This website is not affiliated with nor approved by
-              the University of Oklahoma. Its sole purpose is to inform students
-              and prompt action against garbage-can professors whom require
-              removal. There is no warranty nor any guaranetee on the validity
+              the University of Oklahoma. There is no warranty nor any guarantee on the validity
               of the data. Data is publicly available and ingested from the
               University's public releases. Thank you and have a good time.
             </p>
