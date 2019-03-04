@@ -23,4 +23,5 @@ In the project directory, you can run: **use yarn**
 ```bash
 $ docker build . -t schuermannator/ou-reviews
 $ docker push schuermannator/ou-reviews:latest
+$ docker run -d -p 3000:80 schuermannator/ou-reviews:latest
 ```
