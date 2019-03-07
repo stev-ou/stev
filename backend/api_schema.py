@@ -56,6 +56,24 @@
 			}
 }
 
+
+# Figure4
+# AKA Information for Question Table and vertical bar chart
+
+{'result':{'avg_rating':4.15, # This is averaged across all the instructors we captured for and all semesters we captured it for them
+           'n_questions': 4,   # This is the number of questions in this course
+			'instructors':['INSTR1', 'INSTR2', 'INSTR3'], # It will be easier for the frontend if these are just indexed and correspond to the measurements in the backend
+			'questions':[{'question':'How did this class go?', 'ratings':[4.0, 4.45, 4.0] # It is very important that these are in the same order as the instructors and table
+			},
+			{'question':'Was the professor good?', 'ratings':[3.1, 3.4,4.6] # It is very important that these are in the same order as the instructors and table1
+			},
+			{'question':'Did you have a very good time?', 'ratings':[3.1, 3.4,4.6] # It is very important that these are in the same order as the instructors and table1
+			},
+			{'question':'Was it diverse?', 'ratings':[3.1, 3.4,4.6] # It is very important that these are in the same order as the instructors and table1
+			},
+			{'question':'Did joe lovoi teach your class?', 'ratings':[2.1, 1, 0.4] # It is very important that these are in the same order as the instructors and table1
+			}]}}
+
 # Basically, the response is organized by object, then the semester, value, and year are included in lists for each object
 #   This should leave us some extensibility for adding in other time series easily and parsing them in the same manner, even for
 # 		objects that only have data over a limited period.
