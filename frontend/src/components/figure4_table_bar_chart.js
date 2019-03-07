@@ -1,6 +1,6 @@
 import React from 'react';
 import { Bar} from 'react-chartjs-2';
-import { schemeAccent } from 'd3-scale-chromatic'; // This is the colors for the bar chart
+import { schemePaired } from 'd3-scale-chromatic'; // This is the colors for the bar chart
 import * as Math from 'mathjs';
 import { api_endpoint } from '../constants.js';
 import 'react-bootstrap-table-next/dist/react-bootstrap-table2.min.css';
@@ -21,6 +21,58 @@ class Fig4 extends React.Component {
     //   .then(response => response.json())
     //   .then(data => this.setState({ result: data.result, loadedAPI: true })); // Initial keying into result
     // this.render();
+
+          var result = {
+        labels: ['January', 'February', 'March', 'April', 'May', 'June', 'July'],
+        datasets: [
+          {
+            label: 'My First dataset',
+            id:1,
+            backgroundColor: schemePaired[0],
+            borderColor: 'rgba(255,255,255,1)',
+            borderWidth: 1,
+            hoverBackgroundColor: schemePaired[1],
+            hidden: false,
+            hoverBorderColor: 'rgba(255,255,255,1)',
+            data: [65, 20, 67, 40, 50, 90, 8]
+          },
+          {
+            label: 'My Second dataset',
+            id: 2,
+            backgroundColor: schemePaired[2],
+            borderColor: 'rgba(255,255,255,1)',
+            borderWidth: 1,
+            hidden: false,
+            hoverBackgroundColor: schemePaired[3],
+            hoverBorderColor: 'rgba(255,255,255,1)',
+            data: [65, 59, 80, 81, 56, 55, 40]
+          },
+                    {
+            label: 'My Third dataset',
+            id: 3,
+            hidden: false,
+            backgroundColor: schemePaired[4],
+            borderColor: 'rgba(255,255,255,1)',
+            borderWidth: 1,
+            hoverBackgroundColor: schemePaired[5],
+            hoverBorderColor: 'rgba(255,255,255,1)',
+            data: [21,56,78,90,41,47,71]
+          },
+           {
+            label: 'My Third dataset',
+            id: 3,
+            hidden: false,
+            backgroundColor: schemePaired[6],
+            borderColor: 'rgba(255,255,255,1)',
+            borderWidth: 1,
+            hoverBackgroundColor: schemePaired[7],
+            hoverBorderColor: 'rgba(255,255,255,1)',
+            data: [12,12,11,19,68,72,30]
+          }
+        ]
+      };
+      this.setState({result:result})
+
   }
 
   render() {
@@ -28,39 +80,6 @@ class Fig4 extends React.Component {
       return null;
     } else {
       var result = this.state.result;
-
-      const this_data = {
-        labels: ['January', 'February', 'March', 'April', 'May', 'June', 'July'],
-        datasets: [
-          {
-            label: 'My First dataset',
-            backgroundColor: schemeAccent[1],
-            borderColor: 'rgba(255,99,132,1)',
-            borderWidth: 1,
-            hoverBackgroundColor: 'rgba(255,99,132,0.4)',
-            hoverBorderColor: 'rgba(255,99,132,1)',
-            data: [65, 59, 80, 81, 56, 55, 40]
-          },
-          {
-            label: 'My Second dataset',
-            backgroundColor: schemeAccent[0],
-            borderColor: 'rgba(255,99,132,1)',
-            borderWidth: 1,
-            hoverBackgroundColor: 'rgba(255,99,132,0.4)',
-            hoverBorderColor: 'rgba(255,99,132,1)',
-            data: [65, 59, 80, 81, 56, 55, 40]
-          },
-                    {
-            label: 'My Third dataset',
-            backgroundColor: schemeCategory10[2],
-            borderColor: 'rgba(255,99,132,1)',
-            borderWidth: 1,
-            hoverBackgroundColor: 'rgba(255,99,132,0.4)',
-            hoverBorderColor: 'rgba(255,99,132,1)',
-            data: [65, 59, 80, 81, 56, 55, 40]
-          }
-        ]
-      };
 
       // // We'll modify the options for our chart here
       // var bar_options = {
@@ -102,37 +121,57 @@ class Fig4 extends React.Component {
       //     ],
       //   },
       // };
-      const products = [ {price: '20 dolla', name: 'sexual favors', id: 'bertha jorkins'},{price: '20 dolla', name: 'sexual favors', id: 'donald glover'},{price: '20 dolla', name: 'sexual favors', id: 'Donald trump'}];
+      const products = [{qNumber: 1, question: 'Boomer?', avgRating:4.2 }, {qNumber: 2, question: 'Hook Em?', avgRating:-98354}, {qNumber: 3, question: 'Sooner?', avgRating:2.1 }, {qNumber: 4, question: 'Roll Tide?', avgRating:1.0 }];
       const columns = [{
-        dataField: 'id',
-        text: 'Product ID'
+        dataField: 'qNumber',
+        text: 'Question Number'
       }, {
-        dataField: 'name',
-        text: 'Product Name'
+        dataField: 'question',
+        text: 'Question'
       }, {
-        dataField: 'price',
-        text: 'Product Price'
+        dataField: 'avgRating',
+        text:'Average Rating in Course (1-5)'
       }];
+
       const rowEvents = {
         onClick: (e, row, rowIndex) => {
           console.log(rowIndex.toString())
+          // We want to remove a dataset
+
         }
       };
+      // Get a list of selected rows
+      var selected = []
+      var indexes = result.datasets.map(function(obj, index) {
+            if(obj.hidden == false) {
+              console.log(index)
+                return selected.push(index+1);
+            }
+        })
+      console.log(selected);
+
       const selectRow = {mode: 'checkbox',
-      selected: [0,1,2], style: {background: "light gray"},
+      selected: selected, clickToSelect: true, style: (row, rowIndex) => { return schemePaired[0]},
             onSelect: (row, isSelect, rowIndex, e) => {
-              console.log(row)
-        }
-      };
-
-
+              console.log(rowIndex)
+              // Change the rows hidden status
+              if (result.datasets[rowIndex].hidden === false){
+                result.datasets[rowIndex].hidden = true
+              }
+              else {result.datasets[rowIndex].hidden=false}
+              // Update the state
+              this.setState({result:result})
+        },
+        bgColor: (row, rowIndex) => {
+            return schemePaired[parseInt(2*rowIndex)];  // returns the color code for this paired analysis
+          }
   
+      };
 
       return (
         <div>
-              <BootstrapTable keyField='id' data={ products } columns={ columns } selectRow={selectRow}/>
-
-              <Bar data={this_data} options={{
+              <BootstrapTable keyField='qNumber' data={ products } columns={ columns } selectRow={selectRow}/>
+              <Bar data={result} options={{
                   scales: {
                       xAxes: [{
                           stacked: false
@@ -140,7 +179,8 @@ class Fig4 extends React.Component {
                       yAxes: [{
                           stacked: false
                       }]
-                  }
+                  },
+                  legend:{display:false},
               }} />
         </div>
       );
