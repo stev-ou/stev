@@ -27,7 +27,6 @@ class Fig3 extends React.Component {
     fetch(API + this.state.uuid + '/figure3')
       .then(response => response.json())
       .then(data => this.setState({ result: data.result, loadedAPI: true })); // Initial keying into result
-    this.render();
   }
 
   render() {
@@ -35,6 +34,7 @@ class Fig3 extends React.Component {
       return null;
     } else {
       var result = this.state.result;
+      console.log(result)
 
       // Define a color pallete to use
       var colors = [

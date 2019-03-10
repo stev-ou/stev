@@ -61,7 +61,6 @@
 # AKA Information for Question Table and vertical bar chart
 
 {'result':{'avg_rating':4.15, # This is averaged across all the instructors we captured for and all semesters we captured it for them
-           'n_questions': 4,   # This is the number of questions in this course
 			'instructors':['INSTR1', 'INSTR2', 'INSTR3'], # It will be easier for the frontend if these are just indexed and correspond to the measurements in the backend
 			'questions':[{'question':'How did this class go?', 'ratings':[4.0, 4.45, 4.0] # It is very important that these are in the same order as the instructors and table
 			},

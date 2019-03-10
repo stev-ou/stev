@@ -12,74 +12,73 @@ const API = api_endpoint + 'courses/';
 class Fig4 extends React.Component {
   constructor(props) {
     super(props);
-    this.state = { result: {}, loadedAPI: true, uuid: props.uuid };
+    this.state = {result: {}, loadedAPI: false, uuid: props.uuid, display_questions:[] };
   }
 
-  componentWillMount() {
-    // // This will call the api when the component "Mounts", i.e. when the page is accessed
-    // fetch(API + this.state.uuid + '/figure2')
-    //   .then(response => response.json())
-    //   .then(data => this.setState({ result: data.result, loadedAPI: true })); // Initial keying into result
-    // this.render();
+  // componentWillMount() {
+  //   // This will call the api when the component "Mounts", i.e. when the page is accessed
+  //   console.log(API + this.state.uuid + '/figure3')
+  //   fetch(API + this.state.uuid + '/figure1')
+  //     .then(response => {console.log(response); response.json()})
+  //     .then(data => this.setState({result: data.result, loadedAPI: true, display_questions:[true,true,true,true]})); // Initial keying into result
+  //   this.render();
 
-          var result = {
-        labels: ['January', 'February', 'March', 'April', 'May', 'June', 'July'],
-        datasets: [
-          {
-            label: 'My First dataset',
-            id:1,
-            backgroundColor: schemePaired[0],
-            borderColor: 'rgba(255,255,255,1)',
-            borderWidth: 1,
-            hoverBackgroundColor: schemePaired[1],
-            hidden: false,
-            hoverBorderColor: 'rgba(255,255,255,1)',
-            data: [65, 20, 67, 40, 50, 90, 8]
-          },
-          {
-            label: 'My Second dataset',
-            id: 2,
-            backgroundColor: schemePaired[2],
-            borderColor: 'rgba(255,255,255,1)',
-            borderWidth: 1,
-            hidden: false,
-            hoverBackgroundColor: schemePaired[3],
-            hoverBorderColor: 'rgba(255,255,255,1)',
-            data: [65, 59, 80, 81, 56, 55, 40]
-          },
-                    {
-            label: 'My Third dataset',
-            id: 3,
-            hidden: false,
-            backgroundColor: schemePaired[4],
-            borderColor: 'rgba(255,255,255,1)',
-            borderWidth: 1,
-            hoverBackgroundColor: schemePaired[5],
-            hoverBorderColor: 'rgba(255,255,255,1)',
-            data: [21,56,78,90,41,47,71]
-          },
-           {
-            label: 'My Third dataset',
-            id: 3,
-            hidden: false,
-            backgroundColor: schemePaired[6],
-            borderColor: 'rgba(255,255,255,1)',
-            borderWidth: 1,
-            hoverBackgroundColor: schemePaired[7],
-            hoverBorderColor: 'rgba(255,255,255,1)',
-            data: [12,12,11,19,68,72,30]
-          }
-        ]
-      };
-      this.setState({result:result})
+  // }
 
+    componentWillMount() {
+    // This will call the api when the component "Mounts", i.e. when the page is accessed
+    fetch(API + this.state.uuid + '/figure4')
+      .then(response => response.json())
+      .then(data => {
+            this.setState({ result: data.result, loadedAPI: true, display_questions:Array(data.result.questions.length).fill(true)})}); // Initial keying into result
   }
+
 
   render() {
     if (!this.state.loadedAPI) {
       return null;
-    } else {
+    }
+     else {
       var result = this.state.result;
+      var display_questions = this.state.display_questions
+
+      // Lets build our plot results to take data from the api and turn them into the form usable by the bar chart
+      var plot_result ={}
+
+      plot_result['labels'] = result.instructors
+      plot_result.datasets = []
+
+      const products = [];
+      const columns = [{
+        dataField: 'question',
+        text: 'Question'
+      }, {
+        dataField: 'avgRating',
+        text:'Average Rating in Course (1-5)'
+      }];
+
+
+      for (var i=0; i<result.questions.length; i++){
+        // This modifies the data for the chart
+        plot_result.datasets.push({
+            label: 'Question '+(i+1).toString(),
+            id:i+1,
+            backgroundColor: schemePaired[2*i],
+            borderColor: 'rgba(255,255,255,1)',
+            borderWidth: 1,
+            hoverBackgroundColor: schemePaired[2*i+1],
+            hidden: !display_questions[i],
+            hoverBorderColor: 'rgba(255,255,255,1)',
+            data: result.questions[i].ratings
+          })
+
+        // This modifies the data for the table
+        products.push({
+          qNumber: i+1,
+          question: result.questions[i]['question'],
+          avgRating: (result.questions[i]['ratings'].reduce((a,b) => a + b, 0) / result.questions[i]['ratings'].length).toFixed(2)
+        })
+      }
 
       // // We'll modify the options for our chart here
       // var bar_options = {
@@ -121,33 +120,22 @@ class Fig4 extends React.Component {
       //     ],
       //   },
       // };
-      const products = [{qNumber: 1, question: 'Boomer?', avgRating:4.2 }, {qNumber: 2, question: 'Hook Em?', avgRating:-98354}, {qNumber: 3, question: 'Sooner?', avgRating:2.1 }, {qNumber: 4, question: 'Roll Tide?', avgRating:1.0 }];
-      const columns = [{
-        dataField: 'qNumber',
-        text: 'Question Number'
-      }, {
-        dataField: 'question',
-        text: 'Question'
-      }, {
-        dataField: 'avgRating',
-        text:'Average Rating in Course (1-5)'
-      }];
 
+      // These are the row events for clicking on the table
       const rowEvents = {
         onClick: (e, row, rowIndex) => {
           console.log(rowIndex.toString())
           // We want to remove a dataset
-
         }
       };
+
       // Get a list of selected rows
       var selected = []
-      var indexes = result.datasets.map(function(obj, index) {
-            if(obj.hidden == false) {
-              console.log(index)
-                return selected.push(index+1);
-            }
-        })
+      for (var i=0; i<display_questions.length; i++){
+        if (display_questions[i]) {
+          selected.push(i+1)
+        }
+      }
       console.log(selected);
 
       const selectRow = {mode: 'checkbox',
@@ -155,12 +143,9 @@ class Fig4 extends React.Component {
             onSelect: (row, isSelect, rowIndex, e) => {
               console.log(rowIndex)
               // Change the rows hidden status
-              if (result.datasets[rowIndex].hidden === false){
-                result.datasets[rowIndex].hidden = true
-              }
-              else {result.datasets[rowIndex].hidden=false}
+              display_questions[rowIndex] = !display_questions[rowIndex]
               // Update the state
-              this.setState({result:result})
+              this.setState({display_questions:display_questions})
         },
         bgColor: (row, rowIndex) => {
             return schemePaired[parseInt(2*rowIndex)];  // returns the color code for this paired analysis
@@ -171,7 +156,7 @@ class Fig4 extends React.Component {
       return (
         <div>
               <BootstrapTable keyField='qNumber' data={ products } columns={ columns } selectRow={selectRow}/>
-              <Bar data={result} options={{
+              <Bar data={plot_result} options={{
                   scales: {
                       xAxes: [{
                           stacked: false
