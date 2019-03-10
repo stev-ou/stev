@@ -371,7 +371,7 @@ def question_ratings_generator(db, valid_uuid):
             'instructors':['INSTR1', 'INSTR2', 'INSTR3'], # It will be easier for the frontend if these are just indexed and correspond to the measurements in the backend
             'questions':[{'question':'How did this class go?', 'ratings':[4.0, 4.45, 4.0] # It is very important that these are in the same order as the instructors and table
             },
-            {'question':'Was the professor good?', 'ratings':[3.1, 3.4,4.6] # It is very important that these are in the same order as the instructors and table1
+            {'question':'Was the professor good? But I also needed to test if the question was super long how that would be handled so i made this super long :) ', 'ratings':[3.1, 3.4,4.6] # It is very important that these are in the same order as the instructors and table1
             },
             {'question':'Did you have a very good time?', 'ratings':[3.1, 3.4,4.6] # It is very important that these are in the same order as the instructors and table1
             },

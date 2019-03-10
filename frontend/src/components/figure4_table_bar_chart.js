@@ -14,17 +14,6 @@ class Fig4 extends React.Component {
     super(props);
     this.state = {result: {}, loadedAPI: false, uuid: props.uuid, display_questions:[] };
   }
-
-  // componentWillMount() {
-  //   // This will call the api when the component "Mounts", i.e. when the page is accessed
-  //   console.log(API + this.state.uuid + '/figure3')
-  //   fetch(API + this.state.uuid + '/figure1')
-  //     .then(response => {console.log(response); response.json()})
-  //     .then(data => this.setState({result: data.result, loadedAPI: true, display_questions:[true,true,true,true]})); // Initial keying into result
-  //   this.render();
-
-  // }
-
     componentWillMount() {
     // This will call the api when the component "Mounts", i.e. when the page is accessed
     fetch(API + this.state.uuid + '/figure4')
@@ -51,10 +40,12 @@ class Fig4 extends React.Component {
       const products = [];
       const columns = [{
         dataField: 'question',
-        text: 'Question'
-      }, {
+        text: 'Question',
+        headerStyle: { width: '70%', textAlign: 'left' }}, 
+        {
         dataField: 'avgRating',
-        text:'Average Rating in Course (1-5)'
+        text:'Average Rating in Course (1-5)',
+        headerStyle:{ width: '30%', textAlign: 'left' }
       }];
 
 
@@ -79,17 +70,40 @@ class Fig4 extends React.Component {
           avgRating: (result.questions[i]['ratings'].reduce((a,b) => a + b, 0) / result.questions[i]['ratings'].length).toFixed(2)
         })
       }
+      // Chart options
+      var plot_options = {
+        scales: {
+                      yAxes: [{
+                          stacked: false,
+                          scaleLabel: {
+                          display: true,
+                          labelString:'Question Rating',
+                          fontSize: 20},
+                          ticks: {
+                          beginAtZero: true,
+                          min: 0,
+                          max: 5,
+                          stepSize: 1,
+                          fontSize: 16,
+                        },
+                      }],
+                      xAxes: [{
+                          stacked: false,
+                          ticks: {fontSize:16},
+                          scaleLabel: {
+                          display: true,
+                          labelString:'Instructors',
+                          fontSize: 20},
+                      }]
+                  },
+                  hover: {
+                      mode: 'dataset'
+                    },
+                  legend:{display:false},
+      }
 
       // // We'll modify the options for our chart here
       // var bar_options = {
-      //   title: {
-      //     text:
-      //       result['course name'] +
-      //       ' Ratings compared for ' +
-      //       result['most recent sem'],
-      //     display: true,
-      //     fontSize: 24,
-      //   },
       //   legend: { display: false },
       //   scales: {
       //     xAxes: [
@@ -154,19 +168,10 @@ class Fig4 extends React.Component {
       };
 
       return (
-        <div>
+        <div style={{'padding':'1em'}}>
+              <h2 style={{'padding':'0.5em'}}> Question responses by instructor over the last 3 years </h2>
               <BootstrapTable keyField='qNumber' data={ products } columns={ columns } selectRow={selectRow}/>
-              <Bar data={plot_result} options={{
-                  scales: {
-                      xAxes: [{
-                          stacked: false
-                      }],
-                      yAxes: [{
-                          stacked: false
-                      }]
-                  },
-                  legend:{display:false},
-              }} />
+              <Bar data={plot_result} options={plot_options} />
         </div>
       );
     }
