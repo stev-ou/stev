@@ -135,16 +135,12 @@ def course_instructor_ratings_api_generator(db, uuid):
         print('The course_uuid '+ uuid + ' was not found within the db collection ' + coll_name)
         raise Exception('The course_uuid '+ uuid + ' was not found within the db collection ' + coll_name)
 
-
-
-    # SAM - The goal is to remove discussion and the lab sections, because they mess with the enrollment numbers and aren't actually the course of interest
     # Get the list of the most popular Course Titles of this course, and trim any entries that arent the most popular course name
     most_frequent_course = df['Course Title'].value_counts().idxmax()
     df = df[(df['Course Title']==most_frequent_course)]
 
 
     # The following is a very crappy way to get a list of unique indices that are in the order of the semesters
-
     #######
     # Define the instructor list
     instructor_list = list(reversed(list(df.drop_duplicates('Instructor ID', inplace=False)['Instructor ID'])))
@@ -363,26 +359,104 @@ def timeseries_data_generator(db, valid_uuid):
     return response
 
 def question_ratings_generator(db, valid_uuid):
+
     """
-    Add description
+    This function will perform the following steps:
+    1. take a db connection and a uuid and then find the uuid in the aggregated db collection
+    2. Get lists of the course number, subject code, instructors, and term codes for the course appearances in the time period of interest
+    3. Search in the non-aggregated db for the same course number, subject code, and instructors
+    4. Aggregate the entries by professor and question number, if the professor doesnt have an entry giving them a '0' rating
+    5. Convert the dataframe into a json and serve
     
     """
-    response = {'result':{'avg_rating':4.15, # This is averaged across all the instructors we captured for and all semesters we captured it for them
-            'instructors':['INSTR1', 'INSTR2', 'INSTR3'], # It will be easier for the frontend if these are just indexed and correspond to the measurements in the backend
-            'questions':[{'question':'How did this class go?', 'ratings':[4.0, 4.45, 4.0] # It is very important that these are in the same order as the instructors and table
-            },
-            {'question':'Was the professor good? But I also needed to test if the question was super long how that would be handled so i made this super long :) ', 'ratings':[3.1, 3.4,4.6] # It is very important that these are in the same order as the instructors and table1
-            },
-            {'question':'Did you have a very good time?', 'ratings':[3.1, 3.4,4.6] # It is very important that these are in the same order as the instructors and table1
-            },
-            {'question':'Was it diverse?', 'ratings':[3.1, 3.4,4.6] # It is very important that these are in the same order as the instructors and table1
-            },
-            {'question':'Did joe lovoi teach your class?', 'ratings':[2.1, 1, 0.4] # It is very important that these are in the same order as the instructors and table1
-            }]}}
+        # Construct the json containing necessary data for figure 1 on course page
+    response = {"result": {"instructors": [], 'questions':[]}}
 
+    # filter that we use on the collection
+    coll_filter = {'$and':[
+            {"course_uuid":valid_uuid},
+            {"Term Code": {'$in': CURRENT_SEMESTERS}}]}
+
+    for coll_name in COLLECTION_NAMES:
+        coll = db.get_db_collection('reviews-db', coll_name)
+        # Use the database query to pull needed data
+        cursor = coll.find(coll_filter)
+        
+        # For whatever reason, generating a dataframe clears the cursor, so get population here
+        population = cursor.count()
+
+        # This assumes that there will be no same uuid's across the different collections, e.g. the same uuid in GCOE and JRCOE
+        if population > 0:
+            df = pd.DataFrame(list(cursor))
+            break
+            
+    # Add an error catching if the len(df) == 0
+    if population==0:
+        raise Exception('The course_uuid '+ uuid + ' was not found within the db collection ' + coll_name)
+
+    # Get the list of the most popular Course Titles of this course, and trim any entries that arent the most popular course name
+    most_frequent_course = df['Course Title'].value_counts().idxmax()
+    df = df[(df['Course Title']==most_frequent_course)]
+
+    # Now we need to drop the duplicates and only take columns of interest
+    df = df.drop_duplicates(['Term Code', 'Instructor ID'])[['Term Code','Instructor ID','Subject Code', 'Course Number', 'Course Title']]
+    df = df.rename(columns = {'Instructor ID':'Instructor 1 ID', 'Course Title':'Section Title'})
+
+    # Build a cursor to search the full db collection for these conditions
+    # Build it based on each row in the df
+    full_db_filter = {'$or':[]}
+    for i in range(len(df)):
+        # Create the row filter
+        row_filter = {'$and':[]}
+        for col in list(df.columns):
+            if col in ['Instructor 1 ID','Term Code','Course Number']:
+                row_filter['$and'].append({col : int(df.iloc[i][col])}) # Encode the query as utf-8
+            else:
+                row_filter['$and'].append({col : str(df.iloc[i][col])}) # Encode the query as utf-8
+
+        # Add row filter to full db filter
+        full_db_filter['$or'].append(row_filter)
+
+    # Use the filter to query the non-aggregated db
+    full_db_coll_name = coll_name[11:] # This takes 'aggregated_GCOE' => GCOE
+
+    coll = db.get_db_collection('reviews-db', full_db_coll_name)
+    # Use the database query to pull needed data
+    cursor = coll.find(full_db_filter)
+    # print(cursor)
+    df = pd.DataFrame(list(cursor))
+
+    # Get the list of unique instructors
+    instr_ids= list(df['Instructor 1 ID'].unique())
+    instrs = []
+    for i in instr_ids:
+        instrs.append(df[(df['Instructor 1 ID']==i)].iloc[0]['Instructor 1 First Name'] + ' ' + df[(df['Instructor 1 ID'] == i)].iloc[0]['Instructor 1 Last Name'])
+    print(instrs)
+    response['result']['instructors'] = instrs
+
+    # Get the list of unique question
+    questions = list(df['Question'].unique())
+    tot_responses = 0
+    tot_weighted_mean_responses = 0
+    for q in questions:
+        q_ratings = []
+        sub_df = df[(df['Question']==q)]
+        for iD in instr_ids:
+            sub_sub_df = sub_df[(sub_df['Instructor 1 ID']==iD)]
+            if len(sub_sub_df)==0:
+                q_ratings.append(0)
+            else:
+                weighted_means = sub_sub_df['Mean']*sub_sub_df['Responses']
+                wms = weighted_means.sum()
+                rs = sub_sub_df['Responses'].sum()
+                tot_weighted_mean_responses+=wms
+                tot_responses+=rs
+                q_ratings.append(wms/rs)
+                # Ya Yeet
+            del sub_sub_df
+        response['result']['questions'].append({'question':q, 'ratings':q_ratings})
+    response['result']['avg_rating'] = tot_weighted_mean_responses/tot_responses
     return response
-
-
 
 def query_function(db, query, field_to_search):
     '''
@@ -477,8 +551,9 @@ if __name__ == '__main__':
     # mergeSort(test)
     # print(test)
 
-    pprint.pprint(course_instructor_ratings_api_generator(mongo_driver(),"engr1411"))
+    # pprint.pprint(course_instructor_ratings_api_generator(mongo_driver(),"engr1411"))
     # pprint.pprint(relative_dept_rating_figure_json_generator(mongo_driver(),"engr1411"))
+    pprint.pprint(question_ratings_generator(mongo_driver(),"engr1411"))
     #pprint.pprint(relative_dept_rating_figure_json_generator("engr2002"))
     #print(query_function(db,'thermodynamics','Queryable Course String'))
 
