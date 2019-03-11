@@ -354,7 +354,7 @@ def timeseries_data_generator(db, valid_uuid):
 
     # Add an error catching if the len(df) == 0
     if population==0:
-        raise Exception('The course_uuid '+ uuid + ' was not found within the db collection ' + coll_name)
+        raise Exception('The course_uuid '+ valid_uuid + ' was not found within the db collection ' + coll_name)
 
     # Get the list of the most popular Course Titles of this course, and trim any entries that arent the most popular course name
     most_frequent_course = df['Course Title'].value_counts().idxmax()
@@ -452,7 +452,7 @@ def question_ratings_generator(db, valid_uuid):
 
     # Add an error catching if the len(df) == 0
     if population==0:
-        raise Exception('The course_uuid '+ uuid + ' was not found within the db collection ' + coll_name)
+        raise Exception('The course_uuid '+ valid_uuid + ' was not found within the db collection ' + coll_name)
 
     # Get the list of the most popular Course Titles of this course, and trim any entries that arent the most popular course name
     most_frequent_course = df['Course Title'].value_counts().idxmax()
