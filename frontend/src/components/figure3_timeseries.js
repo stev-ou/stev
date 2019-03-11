@@ -34,7 +34,7 @@ class Fig3 extends React.Component {
       return null;
     } else {
       var result = this.state.result;
-      console.log(result)
+      console.log(result);
 
       // Define a color pallete to use
       var colors = [
