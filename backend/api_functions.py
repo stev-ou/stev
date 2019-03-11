@@ -375,16 +375,20 @@ def timeseries_data_generator(db, valid_uuid):
     for tcode in term_codes:
         response['result']['course over time']['ratings'].append(list(df[(df['Term Code']==tcode)]['Avg Course Rating'])[0])
         response['result']['dept over time']['ratings'].append(list(df[(df['Term Code']==tcode)]['Avg Department Rating'])[0])
-    
-    return response
 
     # # Add in the instructors
-    # for i in df['Instructor ID'].unique():
-    #     instr_obj = {}
-    #     instr_obj['name'] = df[(df['Instructor ID']==i)]['Instructor First Name'][0] + ' ' + df[(df['Instructor ID']==i)]['Instructor Last Name'][0]
-    #     instr_obj['semesters'] = [SEMESTER_MAPPINGS[j] for j in df['Term Code'] ]
-
-
+    for i in df['Instructor ID'].unique():
+        sub_df = df[(df['Instructor ID']==i)]
+        instr_obj = {}
+        instr_obj['name'] = sub_df['Instructor First Name'].unique()[0] + ' ' + sub_df['Instructor Last Name'].unique()[0]
+        instr_obj['semesters']=[]
+        instr_obj['ratings'] = []
+        for j in sub_df['Term Code'].unique():
+            instr_obj['semesters'].append(SEMESTER_MAPPINGS[str(j)])
+            print(len(sub_df[(sub_df['Term Code']==j)]['Avg Instructor Rating In Section']))
+            instr_obj['ratings'].append(list(sub_df[(sub_df['Term Code']==j)]['Avg Instructor Rating In Section'])[0])
+        response['result']['instructors'].append(instr_obj)
+    return response
 
 
     response = {'result': {'course number': 1411,
