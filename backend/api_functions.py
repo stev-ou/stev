@@ -9,7 +9,6 @@ import yaml
 from data_aggregation import combine_means
 import pymongo
 import numpy as np
-import functools
 
 # Establish the DB Name 
 DB_NAME = "reviews-db"
