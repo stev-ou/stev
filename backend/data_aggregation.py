@@ -93,7 +93,7 @@ def aggregate_data(df):
         # use safe_load instead load
         mappings = yaml.safe_load(f)
         question_weighting = mappings['Instructor_question_weighting']
-    print(len(df))
+
 
     # Lets fill the average instructor rating in each section, i.e. the combined rating for each question per section per term
     for term in tqdm(df['Term Code'].unique()):
@@ -182,7 +182,6 @@ def aggregate_data(df):
             #### IMPORTANT #### Population Weighting used in calculation of department parameters
 
             department_mean, department_sd = combine_standard_deviations(subset['SD Course Rating'], subset['Avg Course Rating'], subset['Course Enrollment'], np.ones(len(subset['Avg Course Rating'])))
-            
             # Find the row of interest in the desired df
             ag_df_course_rows = ag_df[(ag_df['Subject Code']==subject)].index.tolist()
             
@@ -195,8 +194,6 @@ def aggregate_data(df):
 
     # Add in a uuid field for the course, based on subject code (lowercase) and course number
     ag_df['course_uuid'] = ag_df['Subject Code'].map(str).str.lower() + ag_df['Course Number'].map(str)# .str.lower()
-
-    print(len(df))
         
     return ag_df
 
