@@ -11,6 +11,7 @@ import pandas as pd
 import yaml
 import os
 import math
+from tqdm import tqdm
 
 # Get file location for mappings.yaml and reading data
 __location__ = os.path.realpath(os.path.join(os.getcwd(), os.path.dirname(__file__)))
@@ -93,8 +94,9 @@ def aggregate_data(df):
         mappings = yaml.safe_load(f)
         question_weighting = mappings['Instructor_question_weighting']
 
+
     # Lets fill the average instructor rating in each section, i.e. the combined rating for each question per section per term
-    for term in df['Term Code'].unique():
+    for term in tqdm(df['Term Code'].unique()):
         subset = df[(df['Term Code']==term)] # Subset the df based on the current term
         for subject in subset['Subject Code'].unique(): # Iterate over all subjects (test case - for subject in ['DSA']:)
             subset = df[(df['Term Code']==term) & (df['Subject Code']==subject)] # Subset the df based on the current subject
@@ -102,6 +104,14 @@ def aggregate_data(df):
                 subset = df[(df['Term Code']==term) & (df['Subject Code']==subject) & (df['Course Number']==course)]# Subset the df based on the current course
                 for instructor in subset['Instructor 1 ID'].unique(): # Iterate over instructors with desired subject and course number
                     subset = df[(df['Term Code']==term) & (df['Subject Code']==subject) & (df['Course Number']==course) & (df['Instructor 1 ID']==instructor)] # Modify the subset based on the current instructor 
+                    
+                    # Get the list of the most popular Course Titles of this course, and trim any entries that arent the most popular course name
+                    most_frequent_course = subset['Section Title'].value_counts().idxmax()
+                    df.drop(subset[(subset['Section Title']!=most_frequent_course)].index.values.tolist(), inplace=True)
+
+                    # Recompute the subset
+                    subset = df[(df['Term Code']==term) & (df['Subject Code']==subject) & (df['Course Number']==course) & (df['Instructor 1 ID']==instructor)] # Modify the subset based on the current instructor 
+
                     if len(subset)!=0: 
                         # Set the combined mean and combined sd value into the aggregated dataframe
                         # Find the row of interest in the aggregated df
@@ -136,7 +146,7 @@ def aggregate_data(df):
                             ag_df.at[ag_df_section_row[0], 'Instructor Enrollment'] = total_responses
 
                     else:
-                        print('Could not find the combination for subject: '+ str(subject)+ ', course: '+ str(course)+ ', and instructor: '+ str(instructor))
+                        print('Could not find the combination for subject: '+ str(subject) + ', course: '+ str(course)+ ', and instructor: '+ str(instructor))
                 # Back to Course level of tree, now that we've filled out the instructor level info
                 # Modify the dataframe subset that consists only of the entries with the desired course (see course index above)
                 # Note that now our subset consists of aggregated data from all instructors within the desired course
@@ -172,7 +182,6 @@ def aggregate_data(df):
             #### IMPORTANT #### Population Weighting used in calculation of department parameters
 
             department_mean, department_sd = combine_standard_deviations(subset['SD Course Rating'], subset['Avg Course Rating'], subset['Course Enrollment'], np.ones(len(subset['Avg Course Rating'])))
-            
             # Find the row of interest in the desired df
             ag_df_course_rows = ag_df[(ag_df['Subject Code']==subject)].index.tolist()
             

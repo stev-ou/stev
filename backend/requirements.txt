@@ -6,3 +6,4 @@ pylint
 pyyaml
 gunicorn
 flask-cors
+tqdm
