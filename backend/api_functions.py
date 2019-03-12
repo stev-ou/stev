@@ -496,10 +496,10 @@ if __name__ == '__main__':
 
     uuid_df, coll_name = query_df_from_mongo(mongo_driver(),cursor)
 
-    pprint.pprint(course_instructor_ratings_api_generator(mongo_driver(),"engr1411"))
-    pprint.pprint(relative_dept_rating_figure_json_generator(mongo_driver(),"engr1411"))
-    pprint.pprint(timeseries_data_generator(mongo_driver(), 'engr1411'))
-    pprint.pprint(question_ratings_generator(mongo_driver(),"engr1411"))
+    # pprint.pprint(course_instructor_ratings_api_generator(mongo_driver(),"engr1411"))
+    # pprint.pprint(relative_dept_rating_figure_json_generator(mongo_driver(),"engr1411"))
+    # pprint.pprint(timeseries_data_generator(mongo_driver(), 'engr1411'))
+    # pprint.pprint(question_ratings_generator(mongo_driver(),"engr1411"))
     #pprint.pprint(relative_dept_rating_figure_json_generator("engr2002"))
     #print(query_function(db,'thermodynamics','Queryable Course String'))
 

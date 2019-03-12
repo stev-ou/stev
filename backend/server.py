@@ -107,8 +107,8 @@ def department_api():
 #     return jsonify({'course': course_string})
 
 if __name__ == '__main__':
-    # print("Updating database...")
-    print('IN DEVELOPMENT MODE; NO DATABASE UPDATE PERFORMED')
+    print("Updating database...")
+    # print('IN DEVELOPMENT MODE; NO DATABASE UPDATE PERFORMED')
     update_database(force_update=True)
     print("Done.")
     print("Starting server...")
