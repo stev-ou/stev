@@ -9,6 +9,7 @@ import yaml
 from data_aggregation import combine_means
 import pymongo
 import numpy as np
+import functools
 
 # Establish the DB Name 
 DB_NAME = "reviews-db"
@@ -32,67 +33,61 @@ with open(file_path) as f:
     mappings = yaml.safe_load(f)
     SEMESTER_MAPPINGS = mappings['Term_code_dict']
 
-# Might be useful for multiple apis
-def most_recent_semester_ind(semester_int_list):
+# Sort by term code
+def sort_by_term_code(semester_int_list):
     """
     Input a list of term codes, it will return the most recent term code
     """
     year_list = [int(str(i)[0:4]) for i in semester_int_list]
-    # find the most recent year positions
-    max_year = max(year_list)
-    # Find the semesters of the most recent year
-    max_sems = [semester_int_list[i] for i, j in enumerate(year_list) if j == max_year]
+    year_list.sort(reverse=True)
+    final_order = []
+    for year in year_list:
+        print(year)
+        # Find the semesters of the year
+        sems = [sem for sem in semester_int_list if str(sem)[0:4] == str(year) ]
+        for ending in ['10', '30', '20']:
+            print(sems)
+            for sem in sems:
+                if str(sem)[-2:] == ending:
+                    final_order.append(sem)
+    if set(final_order)!=set(semester_int_list):
+        raise Exception('Sorting term codes didnt work for api generator')
+    return final_order # return the most recent sem as a term code
 
-    # Find the max semester in this index
-    semesters = [str(i)[-2:] for i in max_sems]
+# Get the collection of interest from the db, based on a filter
+def query_df_from_mongo(db,coll_filter, collections = COLLECTION_NAMES):
+    """
+    This function will use a coll_filter, AKA a cursor, to query the collections in COLLECTION_NAMES and will then return 
+    the db and the coll_name where the filter was found.
+    Inputs:
+    db - a connection to the mongodb, or more concretely a mongo_driver() object
+    coll_filter - a valid filter of the form required by mongodb
+    collections (optional) - a list of collections to search through for the cursor/filter
 
-    if '10' in semesters:
-        ind = '10'
-    elif '30' in semesters:
-        ind = '30'
-    elif '20' in semesters:
-        ind = '20'
-    else:
-        raise Exception('Unable to find most recent semester in api for figure 2')
+    Returns:
+    db - a pd DataFrame containing the results of the query
+    coll_name - the collection where the coll_filter was found
+    """
+    for coll_name in collections:
+        coll = db.get_db_collection('reviews-db', coll_name)
+        # Use the database query to pull needed data
+        cursor = coll.find(coll_filter)
+        
+        # For whatever reason, generating a dataframe clears the cursor, so get population here
+        population = cursor.count()
 
-    # Translate the ind to a semester
-    most_recent_sem = int(str(max_year)+ ind)
-    most_recent_ind = semester_int_list.index(most_recent_sem)
-    return most_recent_sem # return the most recent sem as a term code
+        # This assumes that there will be no same uuid's across the different collections, e.g. the same uuid in GCOE and JRCOE
+        if population > 0:
+            df = pd.DataFrame(list(cursor))
+            break
 
-# Python program for implementation of MergeSort 
-def mergeSort(arr): 
-    if len(arr) >1: 
-        mid = len(arr)//2 #Finding the mid of the array 
-        L = arr[:mid] # Dividing the array elements  
-        R = arr[mid:] # into 2 halves 
-  
-        mergeSort(L) # Sorting the first half 
-        mergeSort(R) # Sorting the second half 
-  
-        i = j = k = 0
-          
-        # Copy data to temp arrays L[] and R[] 
-        while i < len(L) and j < len(R): 
-            if most_recent_semester_ind([L[i],R[j]]) == L[i]: 
-                arr[k] = L[i] 
-                i+=1
-            else: 
-                arr[k] = R[j] 
-                j+=1
-            k+=1
-          
-        # Checking if any element was left 
-        while i < len(L): 
-            arr[k] = L[i] 
-            i+=1
-            k+=1
-          
-        while j < len(R): 
-            arr[k] = R[j] 
-            j+=1
-            k+=1
-    return
+    # Add an error catching if the len(df) == 0
+    if population==0:
+        print('The below filter was not found within any of the mongo collections in COLLECTION_NAMES')
+        pprint.pprint(coll_filter)
+        raise Exception('The filter was not found in the mongo collections in COLLECTION_NAMES')
+
+    return df, coll_name
 
 
 def course_instructor_ratings_api_generator(db, uuid):
@@ -146,8 +141,8 @@ def course_instructor_ratings_api_generator(db, uuid):
     instructor_list = list(reversed(list(df.drop_duplicates('Instructor ID', inplace=False)['Instructor ID'])))
     term_code_list = list(df.drop_duplicates(['Instructor ID','Term Code'], inplace=False)['Term Code'])
 
-    # Sort the term code list - mergeSort is modified to use the most_recent_term_code function to compare term codes
-    mergeSort(term_code_list)
+    # Sort the term code list using prebuilt function
+    sort_by_term_code(term_code_list)
 
     # Create the dict for this sorted term code list
     dict_term_list = {k: v for v, k in enumerate(term_code_list)}
@@ -234,36 +229,18 @@ def relative_dept_rating_figure_json_generator(db, valid_uuid):
         return {'name':str(last_name)+' '+str(first_name), 'instructor mean in course':float(mean_in_course), 
                 'semester':str(semester_taught), 'enrollment':int(enrollment)}
 
-    # Search through each of the collections 
-    for coll_name in COLLECTION_NAMES:
-        coll = db.get_db_collection('reviews-db', coll_name)
-        # Use the database query to pull needed data
-        # cursor = coll.find({"course_uuid": uuid})
-        cursor = coll.find({'$and':[
-            {"course_uuid":valid_uuid},
-            {"Term Code": {'$in': CURRENT_SEMESTERS}}
-            ]
-        })
-        uuid_df = pd.DataFrame(list(cursor))
+    # Define a cursor with which to query mongo
+    cursor = coll.find({'$and':[
+    {"course_uuid":valid_uuid},
+    {"Term Code": {'$in': CURRENT_SEMESTERS}}]})
 
-        if len(uuid_df)!=0:
-            # This means we found uuid results in this collection, so we can skip the rest of the collections
-            break
-    
-    # Add an error catching if the len(df) == 0
-    if len(uuid_df)==0:
-        print('The course_uuid '+ valid_uuid + ' was not found within the db collection ' + coll_name)
-        raise Exception('The course_uuid '+ valid_uuid + ' was not found within the db collection ' + coll_name)
-
-    # Get the list of the most popular Course Titles of this course, and trim any entries that arent the most popular course name
-    most_frequent_course = uuid_df['Course Title'].value_counts().idxmax()
-    uuid_df = uuid_df[(uuid_df['Course Title']==most_frequent_course)]
+    uuid_df, coll_name = get_df_from_mongo(cursor)
 
     # Make sure that the df is unique wrt Term Code and instructor
     uuid_df.drop_duplicates(subset=['Term Code', 'Instructor ID'], inplace=True)
 
     # Start by finding the most recent appearance of the course
-    sem = most_recent_semester_ind(list(uuid_df['Term Code']))
+    sem = sort_by_term_code(list(uuid_df['Term Code']))[0]
 
     # Drop any from uuid that arent from the most recent semester
     uuid_df = uuid_df[(uuid_df['Term Code']==sem)]
@@ -273,7 +250,6 @@ def relative_dept_rating_figure_json_generator(db, valid_uuid):
     cnum = uuid_df['Course Number'].unique()[0]
     cname = uuid_df['Course Title'].unique()[0]
     cmean = uuid_df['Avg Course Rating'].unique()[0]
-    
     dept_mean = uuid_df['Avg Department Rating'].unique()[0]
     dept_sd = uuid_df['SD Department Rating'].unique()[0]
     
@@ -366,7 +342,7 @@ def timeseries_data_generator(db, valid_uuid):
 
     # Fill in the semesters that the course was found, in order of term
     term_codes = list(df['Term Code'].unique())
-    mergeSort(term_codes)
+    sort_by_term_code(term_codes)
     terms = [SEMESTER_MAPPINGS[str(term)] for term in term_codes]
     response['result']['course over time']['semesters'] = terms
     response['result']['dept over time'] = {'ratings':[],'semesters': terms}
@@ -388,34 +364,6 @@ def timeseries_data_generator(db, valid_uuid):
             print(len(sub_df[(sub_df['Term Code']==j)]['Avg Instructor Rating In Section']))
             instr_obj['ratings'].append(list(sub_df[(sub_df['Term Code']==j)]['Avg Instructor Rating In Section'])[0])
         response['result']['instructors'].append(instr_obj)
-    return response
-
-
-    response = {'result': {'course number': 1411,
-            'course over time':{
-                'course name': 'This Course',
-                # IT is VERY important that this list is in the correct order. You can order the input list via the mergeSort function; I had to use in Fig1 API modifications
-                'semesters':['Fall 2015', 'Spring 2016', 'Summer 2017','Fall 2016', 'Spring 2017', 'Spring 2018'], # This determines number of data points
-                'ratings':[4.212, 4.354, 3.898, 2.98, 3.45, 3.69]},
-            'dept over time':{
-                'dept name': "AME",
-                'semesters':['Fall 2015', 'Spring 2016', 'Summer 2017','Fall 2016', 'Spring 2017', 'Spring 2018'],
-                'ratings':[4.6, 3.456732,4.168, 4.212, 4.354, 3.898]},
-            'instructors':[
-                {'name':'Instr1',
-                'semesters':['Fall 2015','Fall 2016', 'Spring 2017', 'Spring 2018'],
-                'ratings':[4.35, 4.2, 3.76, 2.6]},
-
-                {'name':'Instr2',
-                'semesters':['Fall 2015', 'Spring 2016', 'Summer 2017','Fall 2016'],
-                'ratings':[4.1, 3.1, 3.2, 3.45]},
-
-                {'name':'Instr3',
-                'semesters':['Summer 2017','Fall 2016', 'Spring 2017', 'Spring 2018'],
-                'ratings':[4.6, 4.7, 3.9, 4.4]}
-                ]
-            }}
-
     return response
 
 def question_ratings_generator(db, valid_uuid):
@@ -609,15 +557,18 @@ def query_function(db, query, field_to_search):
 if __name__ == '__main__':
     # Test the db search
     # test = [201410, 201420, 201530, 201620, 201230, 201810]
-    # mergeSort(test)
     # print(test)
+    # sort_by_term_code([201710, 201820, 201620, 201410, 201110, 201630, 201610])
+    cursor = {'$and':[
+    {"course_uuid":'engr1411'},
+    {"Term Code": {'$in': CURRENT_SEMESTERS}}]}
 
-    # pprint.pprint(course_instructor_ratings_api_generator(mongo_driver(),"engr1411"))
-    # pprint.pprint(relative_dept_rating_figure_json_generator(mongo_driver(),"engr1411"))
+    uuid_df, coll_name = get_df_from_mongo(cursor)
+
+    pprint.pprint(course_instructor_ratings_api_generator(mongo_driver(),"engr1411"))
+    pprint.pprint(relative_dept_rating_figure_json_generator(mongo_driver(),"engr1411"))
     pprint.pprint(timeseries_data_generator(mongo_driver(), 'engr1411'))
-    # pprint.pprint(question_ratings_generator(mongo_driver(),"engr1411"))
+    pprint.pprint(question_ratings_generator(mongo_driver(),"engr1411"))
     #pprint.pprint(relative_dept_rating_figure_json_generator("engr2002"))
     #print(query_function(db,'thermodynamics','Queryable Course String'))
-
-
 
