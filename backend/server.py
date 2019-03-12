@@ -40,7 +40,6 @@ def course_search_api():
 
     return jsonify({'result':result_list})
 
-
 # Figure 1 api 
 @app.route(base_api_route+'courses/<string:course_uuid>/figure1', methods=['GET'])
 def figure_1_data_api(course_uuid):

@@ -36,17 +36,16 @@ with open(file_path) as f:
 # Sort by term code
 def sort_by_term_code(semester_int_list):
     """
-    Input a list of term codes, it will return the most recent term code
+    Input a list of term codes, it will sort the term code list and return the same list with most recent term first.
+
     """
     year_list = [int(str(i)[0:4]) for i in semester_int_list]
     year_list.sort(reverse=True)
     final_order = []
     for year in year_list:
-        print(year)
         # Find the semesters of the year
         sems = [sem for sem in semester_int_list if str(sem)[0:4] == str(year) ]
         for ending in ['10', '30', '20']:
-            print(sems)
             for sem in sems:
                 if str(sem)[-2:] == ending:
                     final_order.append(sem)
@@ -54,7 +53,8 @@ def sort_by_term_code(semester_int_list):
         raise Exception('Sorting term codes didnt work for api generator')
     return final_order # return the most recent sem as a term code
 
-# Get the collection of interest from the db, based on a filter
+
+# Get the collection of interest from the db, based on a filter and potentially a known collection
 def query_df_from_mongo(db,coll_filter, collections = COLLECTION_NAMES):
     """
     This function will use a coll_filter, AKA a cursor, to query the collections in COLLECTION_NAMES and will then return 
@@ -66,16 +66,14 @@ def query_df_from_mongo(db,coll_filter, collections = COLLECTION_NAMES):
 
     Returns:
     db - a pd DataFrame containing the results of the query
-    coll_name - the collection where the coll_filter was found
+    coll_name - the collection name (str) where the coll_filter was found
     """
     for coll_name in collections:
         coll = db.get_db_collection('reviews-db', coll_name)
         # Use the database query to pull needed data
         cursor = coll.find(coll_filter)
-        
         # For whatever reason, generating a dataframe clears the cursor, so get population here
         population = cursor.count()
-
         # This assumes that there will be no same uuid's across the different collections, e.g. the same uuid in GCOE and JRCOE
         if population > 0:
             df = pd.DataFrame(list(cursor))
@@ -111,29 +109,7 @@ def course_instructor_ratings_api_generator(db, uuid):
             {"course_uuid":uuid},
             {"Term Code": {'$in': CURRENT_SEMESTERS}}]}
 
-    for coll_name in COLLECTION_NAMES:
-        coll = db.get_db_collection('reviews-db', coll_name)
-        # Use the database query to pull needed data
-        cursor = coll.find(coll_filter)
-        
-        # For whatever reason, generating a dataframe clears the cursor, so get population here
-        population = coll.count_documents(coll_filter)
-
-        # This assumes that there will be no same uuid's across the different collections, e.g. the same uuid in GCOE and JRCOE
-        if population > 0:
-            df = pd.DataFrame(list(cursor))
-            break
-
-
-    # Add an error catching if the len(df) == 0
-    if population==0:
-        print('The course_uuid '+ uuid + ' was not found within the db collection ' + coll_name)
-        raise Exception('The course_uuid '+ uuid + ' was not found within the db collection ' + coll_name)
-
-    # Get the list of the most popular Course Titles of this course, and trim any entries that arent the most popular course name
-    most_frequent_course = df['Course Title'].value_counts().idxmax()
-    df = df[(df['Course Title']==most_frequent_course)]
-
+    df, coll_name = query_df_from_mongo(db, coll_filter)
 
     # The following is a very crappy way to get a list of unique indices that are in the order of the semesters
     #######
@@ -159,13 +135,14 @@ def course_instructor_ratings_api_generator(db, uuid):
             instr_ind_list.append(p)
         else:
             continue
-
     #########
 
     # Get the large df with all of the instructors
-    df_main = pd.DataFrame(list(coll.find({'$and':[
+    coll_filter = {'$and':[
     {"Instructor ID":{'$in':instructor_list}},
-    {"Term Code": {'$in': CURRENT_SEMESTERS}}]}))) ## SAM - added term code here so that we only consider the instructor average over recent semesters
+    {"Term Code": {'$in': CURRENT_SEMESTERS}}]}
+
+    df_main, coll_name = query_df_from_mongo(db, coll_filter, collections = [coll_name])
 
     for i in instr_ind_list:
         # need to average all ratings across all classes taught by each instructor
@@ -230,11 +207,11 @@ def relative_dept_rating_figure_json_generator(db, valid_uuid):
                 'semester':str(semester_taught), 'enrollment':int(enrollment)}
 
     # Define a cursor with which to query mongo
-    cursor = coll.find({'$and':[
+    cursor = {'$and':[
     {"course_uuid":valid_uuid},
-    {"Term Code": {'$in': CURRENT_SEMESTERS}}]})
+    {"Term Code": {'$in': CURRENT_SEMESTERS}}]}
 
-    uuid_df, coll_name = get_df_from_mongo(cursor)
+    uuid_df, coll_name = query_df_from_mongo(db, cursor)
 
     # Make sure that the df is unique wrt Term Code and instructor
     uuid_df.drop_duplicates(subset=['Term Code', 'Instructor ID'], inplace=True)
@@ -265,14 +242,12 @@ def relative_dept_rating_figure_json_generator(db, valid_uuid):
     # Reverse Instructors
     instructors = list(reversed(instructors))
     # Get the course ranking for the department from the uuid
+    subj_filter = {'$and':[
+            {'Subject Code':subj},
+            {"Term Code":sem}]}
 
     # Find all courses with given subject in ag_df
-    subj_search = coll.find({'$and':[
-            {'Subject Code':subj},
-            {"Term Code":sem}
-            ]
-        })
-    subj_df = pd.DataFrame(list(subj_search))
+    subj_df, coll_name = query_df_from_mongo(db, subj_filter, collections = [coll_name])
 
     # Sort out the repeat courses such that we only get a single entry for course rating
     # Get the number of unique courses in a given department
@@ -315,26 +290,7 @@ def timeseries_data_generator(db, valid_uuid):
             {"course_uuid":valid_uuid},
             {"Term Code": {'$in': CURRENT_SEMESTERS}}]}
 
-    for coll_name in COLLECTION_NAMES:
-        coll = db.get_db_collection('reviews-db', coll_name)
-        # Use the database query to pull needed data
-        cursor = coll.find(coll_filter)
-        
-        # For whatever reason, generating a dataframe clears the cursor, so get population here
-        population = cursor.count()
-
-        # This assumes that there will be no same uuid's across the different collections, e.g. the same uuid in GCOE and JRCOE
-        if population > 0:
-            df = pd.DataFrame(list(cursor))
-            break
-
-    # Add an error catching if the len(df) == 0
-    if population==0:
-        raise Exception('The course_uuid '+ valid_uuid + ' was not found within the db collection ' + coll_name)
-
-    # Get the list of the most popular Course Titles of this course, and trim any entries that arent the most popular course name
-    most_frequent_course = df['Course Title'].value_counts().idxmax()
-    df = df[(df['Course Title']==most_frequent_course)]
+    df, coll_name = query_df_from_mongo(db, coll_filter)
 
     # Fill the course number and name in the response
     response['result']['course number']=df['Course Number'].unique()[0]
@@ -361,7 +317,6 @@ def timeseries_data_generator(db, valid_uuid):
         instr_obj['ratings'] = []
         for j in sub_df['Term Code'].unique():
             instr_obj['semesters'].append(SEMESTER_MAPPINGS[str(j)])
-            print(len(sub_df[(sub_df['Term Code']==j)]['Avg Instructor Rating In Section']))
             instr_obj['ratings'].append(list(sub_df[(sub_df['Term Code']==j)]['Avg Instructor Rating In Section'])[0])
         response['result']['instructors'].append(instr_obj)
     return response
@@ -385,26 +340,7 @@ def question_ratings_generator(db, valid_uuid):
             {"course_uuid":valid_uuid},
             {"Term Code": {'$in': CURRENT_SEMESTERS}}]}
 
-    for coll_name in COLLECTION_NAMES:
-        coll = db.get_db_collection('reviews-db', coll_name)
-        # Use the database query to pull needed data
-        cursor = coll.find(coll_filter)
-        
-        # For whatever reason, generating a dataframe clears the cursor, so get population here
-        population = cursor.count()
-
-        # This assumes that there will be no same uuid's across the different collections, e.g. the same uuid in GCOE and JRCOE
-        if population > 0:
-            df = pd.DataFrame(list(cursor))
-            break
-
-    # Add an error catching if the len(df) == 0
-    if population==0:
-        raise Exception('The course_uuid '+ valid_uuid + ' was not found within the db collection ' + coll_name)
-
-    # Get the list of the most popular Course Titles of this course, and trim any entries that arent the most popular course name
-    most_frequent_course = df['Course Title'].value_counts().idxmax()
-    df = df[(df['Course Title']==most_frequent_course)]
+    df, coll_name = query_df_from_mongo(db, coll_filter)
 
     # Now we need to drop the duplicates and only take columns of interest
     df = df.drop_duplicates(['Term Code', 'Instructor ID'])[['Term Code','Instructor ID','Subject Code', 'Course Number', 'Course Title']]
@@ -428,18 +364,14 @@ def question_ratings_generator(db, valid_uuid):
     # Use the filter to query the non-aggregated db
     full_db_coll_name = coll_name[11:] # This takes 'aggregated_GCOE' => GCOE
 
-    coll = db.get_db_collection('reviews-db', full_db_coll_name)
     # Use the database query to pull needed data
-    cursor = coll.find(full_db_filter)
-    # print(cursor)
-    df = pd.DataFrame(list(cursor))
+    df, coll_name = query_df_from_mongo(db, full_db_filter, collections=[full_db_coll_name])
 
     # Get the list of unique instructors
     instr_ids= list(df['Instructor 1 ID'].unique())
     instrs = []
     for i in instr_ids:
         instrs.append(df[(df['Instructor 1 ID']==i)].iloc[0]['Instructor 1 First Name'] + ' ' + df[(df['Instructor 1 ID'] == i)].iloc[0]['Instructor 1 Last Name'])
-    print(instrs)
     response['result']['instructors'] = instrs
 
     # Get the list of unique question
@@ -519,7 +451,6 @@ def query_function(db, query, field_to_search):
                 new_set = set(query_match_results[query] + list(set([item['course_uuid'] for item in list(test_data)])))
                 query_match_results[query] = list(new_set)
 
-    # pprint.pprint(query_match_results)
     # Compare the query_match_results to one another to find the optimal response
     # Combine all of the lists
     full_q_list = []
@@ -563,7 +494,7 @@ if __name__ == '__main__':
     {"course_uuid":'engr1411'},
     {"Term Code": {'$in': CURRENT_SEMESTERS}}]}
 
-    uuid_df, coll_name = get_df_from_mongo(cursor)
+    uuid_df, coll_name = query_df_from_mongo(mongo_driver(),cursor)
 
     pprint.pprint(course_instructor_ratings_api_generator(mongo_driver(),"engr1411"))
     pprint.pprint(relative_dept_rating_figure_json_generator(mongo_driver(),"engr1411"))
