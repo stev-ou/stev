@@ -2,6 +2,7 @@ import unittest
 from backend import mongo
 from backend import data_aggregation
 import pandas as pd
+import requests
 
 
 class basictest(unittest.TestCase):
@@ -72,7 +73,19 @@ class basictest(unittest.TestCase):
         '''
         This unit test will ping each of the currently created api endings with a variety of different courses to make sure they hit
         '''
-        return self.assertEqual(True, True)
+        api_list = ['figure1', 'figure2', 'figure3', 'figure4']
+        course_test_list = ['engr1411', 'ame3143', 'bme3233', 'ece5213', 'edss3553', 'edah5023', 'edel5213']
+        base_api_string = 'http://35.188.130.122/api/v0/courses'
+        api_list = ['figure1', 'figure2', 'figure3', 'figure4']
+        course_test_list = ['engr1411', 'ame3143', 'bme3233', 'ece5213', 'edss3553', 'edah5023', 'edel3243']
+        base_api_string = 'http://35.188.130.122/api/v0/courses'
+        status =True # Will turn to false if false
+        for course in course_test_list:
+            for api in api_list:
+                obj = requests.request('GET', base_api_string+'/'+course+'/'+api)
+                if not obj.ok:
+                    status=False
+        return self.assertEqual(True, status)
 
 
 

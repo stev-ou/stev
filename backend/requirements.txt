@@ -7,3 +7,4 @@ pyyaml
 gunicorn
 flask-cors
 tqdm
+requests
