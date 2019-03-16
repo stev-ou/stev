@@ -104,14 +104,6 @@ def aggregate_data(df):
                 subset = df[(df['Term Code']==term) & (df['Subject Code']==subject) & (df['Course Number']==course)]# Subset the df based on the current course
                 for instructor in subset['Instructor 1 ID'].unique(): # Iterate over instructors with desired subject and course number
                     subset = df[(df['Term Code']==term) & (df['Subject Code']==subject) & (df['Course Number']==course) & (df['Instructor 1 ID']==instructor)] # Modify the subset based on the current instructor 
-                    
-                    # Get the list of the most popular Course Titles of this course, and trim any entries that arent the most popular course name
-                    most_frequent_course = subset['Section Title'].value_counts().idxmax()
-                    df.drop(subset[(subset['Section Title']!=most_frequent_course)].index.values.tolist(), inplace=True)
-
-                    # Recompute the subset
-                    subset = df[(df['Term Code']==term) & (df['Subject Code']==subject) & (df['Course Number']==course) & (df['Instructor 1 ID']==instructor)] # Modify the subset based on the current instructor 
-
                     if len(subset)!=0: 
                         # Set the combined mean and combined sd value into the aggregated dataframe
                         # Find the row of interest in the aggregated df

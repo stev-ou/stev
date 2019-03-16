@@ -83,9 +83,17 @@ def query_df_from_mongo(db,coll_filter, collections = COLLECTION_NAMES):
         print('The below filter was not found within any of the mongo collections in COLLECTION_NAMES')
         pprint.pprint(coll_filter)
         raise Exception('The filter was not found in the mongo collections in COLLECTION_NAMES')
-
     return df, coll_name
 
+def drop_duplicate_courses(df):
+    # Get the list of the most popular Course Titles of this course, and trim any entries that arent the most popular course name
+    if 'Section Title' in df.columns:
+        most_frequent_course = df['Section Title'].value_counts().idxmax()
+        df.drop(df[(df['Section Title']!=most_frequent_course)].index, inplace=True)
+    elif 'Course Title' in df.columns:
+        most_frequent_course = df['Course Title'].value_counts().idxmax()
+        df.drop(df[(df['Course Title']!=most_frequent_course)].index, inplace=True)
+    return
 
 def course_instructor_ratings_api_generator(db, uuid):
     '''
@@ -109,6 +117,7 @@ def course_instructor_ratings_api_generator(db, uuid):
             {"Term Code": {'$in': CURRENT_SEMESTERS}}]}
 
     df, coll_name = query_df_from_mongo(db, coll_filter)
+    drop_duplicate_courses(df)
 
     # The following is a very crappy way to get a list of unique indices that are in the order of the semesters
     #######
@@ -211,6 +220,7 @@ def relative_dept_rating_figure_json_generator(db, valid_uuid):
     {"Term Code": {'$in': CURRENT_SEMESTERS}}]}
 
     uuid_df, coll_name = query_df_from_mongo(db, cursor)
+    drop_duplicate_courses(uuid_df)
 
     # Make sure that the df is unique wrt Term Code and instructor
     uuid_df.drop_duplicates(subset=['Term Code', 'Instructor ID'], inplace=True)
@@ -290,6 +300,7 @@ def timeseries_data_generator(db, valid_uuid):
             {"Term Code": {'$in': CURRENT_SEMESTERS}}]}
 
     df, coll_name = query_df_from_mongo(db, coll_filter)
+    drop_duplicate_courses(df)
 
     # Fill the course number and name in the response
     response['result']['course number']=int(df['Course Number'].unique()[0])
@@ -340,6 +351,7 @@ def question_ratings_generator(db, valid_uuid):
             {"Term Code": {'$in': CURRENT_SEMESTERS}}]}
 
     df, coll_name = query_df_from_mongo(db, coll_filter)
+    drop_duplicate_courses(df)
 
     # Now we need to drop the duplicates and only take columns of interest
     df = df.drop_duplicates(['Term Code', 'Instructor ID'])[['Term Code','Instructor ID','Subject Code', 'Course Number', 'Course Title']]
