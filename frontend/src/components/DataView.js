@@ -11,30 +11,30 @@ const DataView = props => {
   // var uuid = 'engr1411'
   //console.log(uuid);
   return (
-      <div className="container">
-        <div className="graphical-content">
-          <div className="table-fig1">
-            <Fig1 uuid={uuid} />
-          </div>
-          <hr style={{ height: 30 }} />
+    <div className="container">
+      <div className="graphical-content">
+        <div className="table-fig1">
+          <Fig1 uuid={uuid} />
         </div>
-
-        <div className="graphical-content">
-          <Fig2 uuid={uuid} />
-        </div>
-
         <hr style={{ height: 30 }} />
-
-        <div className="graphical-content">
-          <Fig3 uuid={uuid} />
-        </div> 
-
-        <hr style={{ height: 30 }} />
-
-        <div className="graphical-content">
-          <Fig4 uuid={uuid} />
-        </div>
       </div>
+
+      <div className="graphical-content">
+        <Fig2 uuid={uuid} />
+      </div>
+
+      <hr style={{ height: 30 }} />
+
+      <div className="graphical-content">
+        <Fig3 uuid={uuid} />
+      </div>
+
+      <hr style={{ height: 30 }} />
+
+      <div className="graphical-content">
+        <Fig4 uuid={uuid} />
+      </div>
+    </div>
   );
 };
 

@@ -69,9 +69,9 @@ class Fig4 extends React.Component {
           hoverBackgroundColor: schemePaired[2 * j + 1],
           hidden: !display_questions[j],
           hoverBorderColor: 'rgba(255,255,255,1)',
-          data: result.questions[j].ratings.map(function(each_element){
-              return Number(each_element.toFixed(2));
-          })
+          data: result.questions[j].ratings.map(function(each_element) {
+            return Number(each_element.toFixed(2));
+          }),
         });
 
         // This modifies the data for the table
