@@ -4,10 +4,12 @@ export const api_map = {
   department: 'department/',
   instructor: 'instructors/',
 };
+
 export const api_arg_map = {
   course: '?course=',
   department: '?department=',
   instructor: '?instructor=',
 };
+
 // export const api_endpoint = 'http://35.188.130.122/api/v0/';
 export const api_endpoint = 'http://127.0.0.1/api/v0/';

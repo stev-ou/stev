@@ -109,7 +109,7 @@ def department_api():
 if __name__ == '__main__':
     print("Updating database...")
     # print('IN DEVELOPMENT MODE; NO DATABASE UPDATE PERFORMED')
-    update_database(force_update=True)
+    update_database(force_update=False)
     print("Done.")
     print("Starting server...")
     app.run(host='0.0.0.0', port=80)

@@ -11,7 +11,6 @@ const DataView = props => {
   // var uuid = 'engr1411'
   //console.log(uuid);
   return (
-    <div className={['col-md-8', 'col align-self-center'].join(' ')}>
       <div className="container">
         <div className="graphical-content">
           <div className="table-fig1">
@@ -28,7 +27,7 @@ const DataView = props => {
 
         <div className="graphical-content">
           <Fig3 uuid={uuid} />
-        </div>
+        </div> 
 
         <hr style={{ height: 30 }} />
 
@@ -36,7 +35,6 @@ const DataView = props => {
           <Fig4 uuid={uuid} />
         </div>
       </div>
-    </div>
   );
 };
 

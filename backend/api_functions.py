@@ -292,7 +292,7 @@ def timeseries_data_generator(db, valid_uuid):
     df, coll_name = query_df_from_mongo(db, coll_filter)
 
     # Fill the course number and name in the response
-    response['result']['course number']=df['Course Number'].unique()[0]
+    response['result']['course number']=int(df['Course Number'].unique()[0])
     response['result']['course over time'] = {'ratings':[],'course name':df['Course Title'].unique()[0]}
 
     # Fill in the semesters that the course was found, in order of term
@@ -318,7 +318,7 @@ def timeseries_data_generator(db, valid_uuid):
             instr_obj['semesters'].append(SEMESTER_MAPPINGS[str(j)])
             instr_obj['ratings'].append(list(sub_df[(sub_df['Term Code']==j)]['Avg Instructor Rating In Section'])[0])
         response['result']['instructors'].append(instr_obj)
-    return response
+    return response # Added this bit to get rid of int64s, which are not JSON serializable
 
 def question_ratings_generator(db, valid_uuid):
 
@@ -493,12 +493,11 @@ if __name__ == '__main__':
     {"course_uuid":'engr1411'},
     {"Term Code": {'$in': CURRENT_SEMESTERS}}]}
 
-    uuid_df, coll_name = query_df_from_mongo(mongo_driver(),cursor)
+    # uuid_df, coll_name = query_df_from_mongo(mongo_driver(),cursor)
 
     # pprint.pprint(course_instructor_ratings_api_generator(mongo_driver(),"engr1411"))
     # pprint.pprint(relative_dept_rating_figure_json_generator(mongo_driver(),"engr1411"))
-    # pprint.pprint(timeseries_data_generator(mongo_driver(), 'engr1411'))
+    pprint.pprint(timeseries_data_generator(mongo_driver(), 'engr1411'))
     # pprint.pprint(question_ratings_generator(mongo_driver(),"engr1411"))
-    #pprint.pprint(relative_dept_rating_figure_json_generator("engr2002"))
-    #print(query_function(db,'thermodynamics','Queryable Course String'))
-
+    # pprint.pprint(relative_dept_rating_figure_json_generator("engr2002"))
+    # print(query_function(db,'thermodynamics','Queryable Course String'))

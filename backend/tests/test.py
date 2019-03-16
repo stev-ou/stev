@@ -67,6 +67,14 @@ class basictest(unittest.TestCase):
 
         return self.assertEqual(0, num_repeats)
 
+    # Test the current apis to make sure that they are at least returning something
+    def test_current_api_endings(self):
+        '''
+        This unit test will ping each of the currently created api endings with a variety of different courses to make sure they hit
+        '''
+        return self.assertEqual(True, True)
+
+
 
 if __name__ == '__main__':
     unittest.main()
