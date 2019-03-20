@@ -78,7 +78,8 @@ class basictest(unittest.TestCase):
         course_test_list = ['engr1411', 'ame3143', 'bme3233', 'ece5213', 'edss3553', 'edah5023', 'edel4980']
         base_api_string = 'http://35.188.130.122/api/v0/courses'
         api_list = ['figure1', 'figure2', 'figure3', 'figure4']
-        base_api_string = 'http://127.0.0.1/api/v0/courses'
+        # base_api_string = 'http://127.0.0.1/api/v0/courses'
+        base_api_string = 'http://35.188.130.122/api/v0/'
 
         status =True # Will turn to false if false
         for course in course_test_list:
