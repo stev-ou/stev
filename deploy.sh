@@ -24,7 +24,7 @@ gcloud --quiet config set compute/zone ${CLOUDSDK_COMPUTE_ZONE}
 
 # update
 gcloud compute instances update-container ou-reviews \
-       --container-image docker.io/schuermannator/ou-reviews:latest
+       --container-image docker.io/samjett/ou-reviews:latest
 
 gcloud compute instances update-container api-server \
-       --container-image docker.io/schuermannator/ou-reviews-api:latest
+       --container-image docker.io/samjett/ou-reviews-api:latest
