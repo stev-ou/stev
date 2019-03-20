@@ -10,8 +10,11 @@ make image
 cd ../backend
 make image
 
-docker push schuermannator/ou-reviews:latest
-docker push schuermannator/ou-reviews-api:latest
+echo $DOCKER_PW | base64 --decode -i > ${HOME}/password.txt
+cat ~/password.txt | docker login --username ${DOCKER_USERNAME} --password-stdin
+
+docker push samjett/ou-reviews:latest
+docker push samjett/ou-reviews-api:latest
 
 echo $GCLOUD_SERVICE_KEY | base64 --decode -i > ${HOME}/gcloud-service-key.json
 gcloud auth activate-service-account --key-file ${HOME}/gcloud-service-key.json
