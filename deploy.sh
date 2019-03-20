@@ -1,6 +1,8 @@
 #!/bin/bash
 
 set -e
+set -v
+set -x
 
 # docker build
 cd frontend
