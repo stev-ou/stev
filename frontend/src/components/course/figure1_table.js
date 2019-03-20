@@ -7,7 +7,7 @@ import TableCell from '@material-ui/core/TableCell';
 import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
 import Paper from '@material-ui/core/Paper';
-import { api_endpoint } from '../constants.js';
+import { api_endpoint } from '../../constants.js';
 
 const CustomTableCell = withStyles(theme => ({
   head: {

@@ -1,7 +1,7 @@
 import React from 'react';
 import { Bar } from 'react-chartjs-2';
 import { schemePaired } from 'd3-scale-chromatic'; // This is the colors for the bar chart
-import { api_endpoint } from '../constants.js';
+import { api_endpoint } from '../../constants.js';
 import 'react-bootstrap-table-next/dist/react-bootstrap-table2.min.css';
 import BootstrapTable from 'react-bootstrap-table-next';
 

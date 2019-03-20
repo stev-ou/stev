@@ -11,7 +11,7 @@ import {
   ResponsiveContainer,
 } from 'recharts';
 import * as Math from 'mathjs';
-import { api_endpoint } from '../constants.js';
+import { api_endpoint } from '../../constants.js';
 
 // Define API parameters
 const API = api_endpoint + 'courses/';
@@ -73,7 +73,6 @@ class Fig3 extends React.Component {
 
       // Capture all ratings for computing the ylim domain
       var all_ratings = [];
-      var temp_int = 0;
 
       // Loop through all semesters
       for (var i = 0; i < all_semesters.length; i++) {

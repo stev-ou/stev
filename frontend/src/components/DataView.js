@@ -1,10 +1,10 @@
 import React from 'react';
 import { connect } from 'react-redux';
 
-import Fig1 from './figure1_table.js';
-import Fig2 from './figure2_chart.js';
-import Fig3 from './figure3_timeseries.js';
-import Fig4 from './figure4_table_bar_chart.js';
+import Fig1 from './course/figure1_table.js';
+import Fig2 from './course/figure2_chart.js';
+import Fig3 from './course/figure3_timeseries.js';
+import Fig4 from './course/figure4_table_bar_chart.js';
 
 const DataView = props => {
   const uuid = props.search_text;
