@@ -51,23 +51,23 @@ class basictest(unittest.TestCase):
         return self.assertEqual(True, status)
 
     # # Test the dataframe aggregation for unique entries 
-    # def test_dataframe_aggregation(self):
+    def test_dataframe_aggregation(self):
 
-    #     '''
-    #     This unit test will examine the aggregated dataframe and ensure it has no course entry repeats with the same 
-    #     course title and instructor.
-    #     '''
-    #     # Test the data aggregation for unique entries
-    #     df = pd.read_csv('data/GCOE.csv')
+        '''
+        This unit test will examine the aggregated dataframe and ensure it has no course entry repeats with the same 
+        course title and instructor.
+        '''
+        # Test the data aggregation for unique entries
+        df = pd.read_csv('data/GCOE.csv')
 
-    #     ag_df = data_aggregation.aggregate_data(df)
+        ag_df = data_aggregation.aggregate_data(df)
 
-    #     # There should be no entries with the same course name, Instructor ID, and Term Code, so the below should be false
-    #     num_repeats = len(ag_df[ag_df[['course_uuid', 'Term Code','Instructor ID']].duplicated() == True])
+        # There should be no entries with the same course name, Instructor ID, and Term Code, so the below should be false
+        num_repeats = len(ag_df[ag_df[['course_uuid', 'Term Code','Instructor ID']].duplicated() == True])
 
-    #     return self.assertEqual(0, num_repeats)
+        return self.assertEqual(0, num_repeats)
 
-    # Test the current apis to make sure that they are at least returning something
+    # Test the current apis to make sure that they are at least returning a valid json
     def test_current_api_endings(self):
         '''
         This unit test will ping each of the currently created api endings with a variety of different courses to make sure they hit.
@@ -75,7 +75,7 @@ class basictest(unittest.TestCase):
         '''
         # These are for testing the currently active api
         api_list = ['figure1', 'figure2', 'figure3', 'figure4']
-        course_test_list = ['engr1411', 'ame3143', 'bme3233', 'ece5213', 'edss3553', 'edah5023', 'edel5213']
+        course_test_list = ['engr1411', 'ame3143', 'bme3233', 'ece5213', 'edss3553', 'edah5023', 'edel4980']
         base_api_string = 'http://35.188.130.122/api/v0/courses'
         api_list = ['figure1', 'figure2', 'figure3', 'figure4']
         base_api_string = 'http://127.0.0.1/api/v0/courses'
