@@ -11,6 +11,7 @@
     "mathjs": "^5.6.0",
     "normal-distribution": "0.0.7",
     "prettier": "^1.16.4",
+    "rcolor": "^1.0.1",
     "react": "^16.6.3",
     "react-bootstrap-table-next": "^3.0.0",
     "react-chartjs-2": "^2.7.4",

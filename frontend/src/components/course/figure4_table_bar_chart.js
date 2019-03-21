@@ -117,7 +117,8 @@ class Fig4 extends React.Component {
           ],
         },
         hover: {
-          mode: 'dataset',
+          mode: 'nearest',
+          intersect: true
         },
         legend: { display: false },
       };
@@ -143,6 +144,11 @@ class Fig4 extends React.Component {
           // Update the state
           this.setState({ display_questions: display_questions });
         },
+        onSelectAll: (isSelect, rows, e) => {
+          display_questions = Array(display_questions.length).fill(isSelect)
+          // Update the state
+          this.setState({ display_questions: display_questions });
+         },
         bgColor: (row, rowIndex) => {
           return schemePaired[parseInt(2 * rowIndex)]; // returns the color code for this paired analysis
         },
@@ -150,10 +156,10 @@ class Fig4 extends React.Component {
 
       return (
         <div style={{ padding: '1em' }}>
-          <h2 style={{ padding: '0.5em' }}>
+          <h3 style={{ padding: '0.5em' }}>
             {' '}
             Question responses by instructor over the last 3 years{' '}
-          </h2>
+          </h3>
           <BootstrapTable
             keyField="qNumber"
             data={products}

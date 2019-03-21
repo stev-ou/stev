@@ -311,7 +311,7 @@ def timeseries_data_generator(db, valid_uuid):
     sort_by_term_code(term_codes)
     terms = [SEMESTER_MAPPINGS[str(term)] for term in term_codes]
     response['result']['course over time']['semesters'] = terms
-    response['result']['dept over time'] = {'ratings':[],'semesters': terms}
+    response['result']['dept over time'] = {'dept name': df['Subject Code'].unique()[0],'ratings':[],'semesters': terms}
 
     # Add in the course rating and dept ratings
     for tcode in term_codes:

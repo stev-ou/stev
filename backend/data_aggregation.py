@@ -5,7 +5,6 @@ This script will contain functions used to aggregate the input data into more us
 
  '''
 
-
 import numpy as np
 import pandas as pd
 import yaml
@@ -168,14 +167,14 @@ def aggregate_data(df):
             # Back to Department level of tree, now that we've filled out the instructor and course level info
             # Modify the dataframe subset that consists only of the entries with the desired subject(see course index above)
             # Note that now our subset consists of aggregated data from all instructors and courses within the desired subject/department
-            subset = ag_df[(ag_df['Term Code']==term) & (ag_df['Subject Code']==subject)]
+            subset = ag_df[(ag_df['Subject Code']==subject)]
 
             # Compute the combined mean and standard deviation of all of the courses within the department
             #### IMPORTANT #### Population Weighting used in calculation of department parameters
 
             department_mean, department_sd = combine_standard_deviations(subset['SD Course Rating'], subset['Avg Course Rating'], subset['Course Enrollment'], np.ones(len(subset['Avg Course Rating'])))
             # Find the row of interest in the desired df
-            ag_df_course_rows = ag_df[(ag_df['Subject Code']==subject)].index.tolist()
+            ag_df_course_rows = ag_df[(ag_df['Subject Code']==subject) & (ag_df['Term Code']==term)].index.tolist()
             
             # Fill the Course ratings columns
             ag_df.at[ag_df_course_rows, 'Avg Department Rating'] = department_mean

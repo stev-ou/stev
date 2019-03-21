@@ -1,8 +1,10 @@
 import unittest
 import mongo
+import json
 import data_aggregation
 import pandas as pd
-import requests
+from api_functions import *
+
 
 class basictest(unittest.TestCase):
     """ Basic tests """
@@ -73,21 +75,18 @@ class basictest(unittest.TestCase):
         This unit test will ping each of the currently created api endings with a variety of different courses to make sure they hit.
 
         '''
-        # These are for testing the currently active api
-        api_list = ['figure1', 'figure2', 'figure3', 'figure4']
+        # Define the currently working courses
+        course_function_list = [course_instructor_ratings_api_generator, relative_dept_rating_figure_json_generator, timeseries_data_generator, question_ratings_generator] 
         course_test_list = ['engr1411', 'ame3143', 'bme3233', 'ece5213', 'edss3553', 'edah5023', 'edel4980']
-        base_api_string = 'http://35.188.130.122/api/v0/courses'
-        api_list = ['figure1', 'figure2', 'figure3', 'figure4']
-        # base_api_string = 'http://127.0.0.1/api/v0/courses'
-        base_api_string = 'http://35.188.130.122/api/v0/'
-
-        status =True # Will turn to false if false
+        # Create connection to the db
+        db = mongo.mongo_driver()
         for course in course_test_list:
-            for api in api_list:
-                # These are for testing the currently active api, running at the base_api_string
-                obj = requests.request('GET', base_api_string+'/'+course+'/'+api)
-                if not obj.ok:
-                    status=False
+            for function in api_list:
+                try:
+                    json.loads(jsonify(function(db, course)))
+                except:
+                    return self.assertEqual(True, False)
+
         return self.assertEqual(True, True)
 
 if __name__ == '__main__':

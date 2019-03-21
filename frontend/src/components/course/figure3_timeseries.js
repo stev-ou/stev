@@ -1,16 +1,6 @@
 import React from 'react';
-import {
-  LineChart,
-  Line,
-  Label,
-  XAxis,
-  YAxis,
-  CartesianGrid,
-  Tooltip,
-  Legend,
-  ResponsiveContainer,
-} from 'recharts';
-import * as Math from 'mathjs';
+import {Line} from 'react-chartjs-2';
+// import * as Math from 'mathjs';
 import { api_endpoint } from '../../constants.js';
 
 // Define API parameters
@@ -19,7 +9,7 @@ const API = api_endpoint + 'courses/';
 class Fig3 extends React.Component {
   constructor(props) {
     super(props);
-    this.state = { result: {}, loadedAPI: false, uuid: props.uuid };
+    this.state = {result: {}, loadedAPI: false, uuid:props.uuid}; //props.uuid 
   }
 
   componentWillMount() {
@@ -38,13 +28,13 @@ class Fig3 extends React.Component {
       // Define a color pallete to use
       var colors = [
         '#3f51b5',
-        '#2196f3',
-        '#03a9f4',
         '#ff5722',
         '#e91e63',
+        '#673ab7',
+        '#ffc107',
         '#9c27b0',
         '#00bcd4',
-        '#4caf50',
+        '#03a9b4',
         '#8bc34a',
         '#cddc39',
         '#ffeb3b',
@@ -52,168 +42,127 @@ class Fig3 extends React.Component {
         '#795548',
         '#607d8b',
         '#4caf50',
+        '#2196f3',
         '#8bc34a',
-        '#673ab7',
-        '#ffc107',
         '#ff9800',
-        '#009688',
       ];
-      colors.sort(function() {
-        return 0.5 - Math.random();
-      });
+      // colors.sort(function() {
+      //   return 0.5 - Math.random();
+      // });
       //Use this to randomize color order
       // Modify the data to get it into the form needed by the TimeSeriesChart function
-      var data = [];
 
       //Build the data object for each Semester in the course over time
       // Define some commonly accessed objs
       var all_semesters = result['course over time']['semesters'];
-      var all_course_ratings = result['course over time']['ratings'];
-      var all_dept_ratings = result['dept over time']['ratings'];
 
-      // Capture all ratings for computing the ylim domain
-      var all_ratings = [];
+      var data = {labels:[], datasets:[]};
+      data.labels =all_semesters
 
-      // Loop through all semesters
-      for (var i = 0; i < all_semesters.length; i++) {
-        var current_sem = {};
-        current_sem['sem'] = all_semesters[i];
-        current_sem[
-          result['course over time']['course name']
-        ] = all_course_ratings[i].toFixed(2);
-        all_ratings.push(all_course_ratings[i].toFixed(2));
-        current_sem[result['dept over time']['dept name']] = all_dept_ratings[
-          i
-        ].toFixed(2);
-        all_ratings.push(all_dept_ratings[i].toFixed(2));
-
-        // Loop through all instructors
-        for (var j = 0; j < result['instructors'].length; j++) {
+      // Loop through all instructors and add a dataset for each
+      for (var j = 0; j < result['instructors'].length; j++) {
           var instr = result['instructors'][j];
-
-          if (instr['semesters'].indexOf(all_semesters[i]) >= 0) {
-            current_sem[instr['name']] = instr['ratings'].map(function(
-              each_element
-            ) {
-              return Number(each_element.toFixed(2));
-            })[instr['semesters'].indexOf(all_semesters[i])];
-            all_ratings.push(current_sem[instr['name']].toFixed(2));
+          var instr_data =[]
+          var valid_semesters = result['instructors'][j]['semesters']
+          var counter = 0
+          // Check through each semester that this course existed, and add this instructors rating if e
+          for (var k = 0; k < all_semesters.length; k++) {
+            if (valid_semesters.includes(all_semesters[k])) {
+              instr_data.push(result['instructors'][j]['ratings'][counter].toFixed(2))
+              counter+=1
+            }
+            else {
+              instr_data.push(null)
+            }
           }
+          data.datasets.push({
+          label: instr['name'],
+          fill: false,
+          borderWidth: 2,
+          backgroundColor: colors[j+2],
+          borderColor: colors[j+2],
+          pointBorderColor: 'rgba(0,0,0,1)',
+          pointHoverBackgroundColor: colors[j+2],
+          pointHoverRadius: 12,
+          pointHoverBorderColor:'rgba(0,0,0,1)',
+          pointRadius: 8,
+          showLine: true,
+          strokeColor: 'rgba(0,0,0,1)',
+          data: instr_data
+          })}
+        data.datasets.push({
+      label: result['course over time']['course name'] + ' Course',
+      fill: false,
+      borderWidth: 3,
+      backgroundColor: colors[0],
+      borderColor: colors[0],
+      pointBorderColor: colors[0],
+      pointHoverBackgroundColor: colors[0],
+      pointHoverRadius: 2,
+      pointHoverBorderColor:colors[0],
+      pointRadius: 0,
+      pointHitRadius:5,
+      showLine: true,
+      spanGaps: true,
+      strokeColor: 'rgba(0,0,0,1)',
+      data: result['course over time']['ratings'].map(function(each_element){
+    return Number(each_element.toFixed(2))})
+      })
+      data.datasets.push({
+      label: result['dept over time']['dept name']+' Department',
+      fill: false,
+      borderWidth: 2,
+      backgroundColor: colors[1],
+      borderColor: colors[1],
+      pointBorderColor: colors[1],
+      pointHoverBackgroundColor: colors[1],
+      pointHoverRadius: 2,
+      pointHoverBorderColor:colors[1],
+      pointHitRadius:5,
+      pointRadius: 0,
+      showLine: true,
+      spanGaps: true,
+      strokeColor: 'rgba(0,0,0,1)',
+      data: result['dept over time']['ratings'].map(function(each_element){
+    return Number(each_element.toFixed(2))})
+      })
+        const options={
+          title: {display:true,
+            text:'Click a dataset in the legend below to toggle it on or off'},
+          scales: {
+            yAxes: [{
+              scaleLabel: {
+                display: true,
+                labelString: 'Course Rating (1-5)'
+              }
+            }],
+            xAxes:[{
+              scaleLabel: {
+                display: true,
+                labelString: 'Semester'
+              }
+            }]},
+            tooltips: {
+            mode: 'index',
+            // callbacks: {
+            //         label: function (tooltipItem, data) {
+            //             const tooltip = data.datasets[tooltipItem.datasetIndex];
+            //             const value = tooltip.data[tooltipItem.index];
+            //             return value === 0 ? null : tooltip.label + ': ' + value;
+            //         }
+            //     }
+           },
+           hover: {
+              mode: 'dataset'
+           }  
         }
-        // Add current sem to data
-        data.push(current_sem);
-      }
-
-      // Create the lines for each of our datapoints
-      var instructors = [];
-      for (var k = 0; k < result['instructors'].length; k++) {
-        instructors.push([k]);
-      }
-
-      // Define the domain
-      var domain = [
-        Math.floor(Math.min(all_ratings)),
-        Math.ceil(Math.max(all_ratings)),
-      ];
-
-      // Define the lines used to define the style to plot each instructor
-      var Lines = instructors.map(l => {
         return (
-          <Line
-            type="monotone"
-            dataKey={result['instructors'][l[0]]['name']}
-            strokeWidth={4}
-            stroke={colors[l[0] + 3]}
-          />
+          <div>
+          <h3> Course and instructor ratings over the previous 3 years</h3>
+          <Line data={data} options = {options}/>
+          </div>
         );
-      });
-
-      //   // Define tooltip function to tooltip based on line rather than column
-      //   function customTooltipOnYourLine(e) {
-      //   // if (e.active && e.payload!=null && e.payload[0]!=null) {
-      //   //       return (<div className="custom-tooltip">
-      //   //             <p>{e.payload[0].payload["Column Name"]}</p>
-      //   //           </div>);
-      //   //     }
-      //   // else {
-      //   //    return "";
-      //   //
-      //   return (<h1> Fuck </h1>);
-      // }
-
-      const myTimeSeries = TimeSeriesChart({
-        data: data,
-        cname: result['course over time']['course name'],
-        dname: result['dept over time']['dept name'],
-        colors: colors,
-        domain: domain,
-        lines: Lines,
-      });
-
-      return myTimeSeries;
     }
   }
 }
-
-const TimeSeriesChart = props => (
-  <div className="recharts-wrapper" style={{ padding: '0em', align: 'center' }}>
-    <ResponsiveContainer
-      width="90%"
-      height={600}
-      style={{ display: 'inline-block', align: 'center' }}
-    >
-      <LineChart
-        // width={800}
-        // height={400}
-        data={props.data}
-        margin={{ top: 30, right: 30, left: 30, bottom: 30 }}
-        style={{ display: 'inline-block' }}
-      >
-        <Legend verticalAlign="top" wrapperStyle={{ padding: '1.25em' }} />
-        <XAxis
-          verticalAlign="bottom"
-          dataKey="sem"
-          padding={{ left: 30, right: 30 }}
-        >
-          <Label
-            position="bottom"
-            style={{ textAnchor: 'middle', padding: '0em', fontSize: 20 }}
-          >
-            {'Semester of Interest'}
-          </Label>
-        </XAxis>
-        <YAxis domain={props.domain}>
-          <Label
-            angle={270}
-            position="left"
-            style={{ textAnchor: 'middle', fontSize: 20 }}
-          >
-            {'Rating (1 to 5, ' +
-              props.domain[0].toString() +
-              '-' +
-              props.domain[1].toString() +
-              ' shown)'}
-          </Label>
-        </YAxis>
-        <CartesianGrid strokeDasharray="3 3" />
-        <Tooltip />
-
-        <Line
-          type="monotone"
-          dataKey={props.cname}
-          strokeWidth={12}
-          stroke={props.colors[0]}
-        />
-        <Line
-          type="monotone"
-          dataKey={props.dname}
-          strokeWidth={9}
-          stroke={props.colors[1]}
-        />
-        {props.lines}
-      </LineChart>
-    </ResponsiveContainer>
-  </div>
-);
-
-export default Fig3;
+ export default Fig3;

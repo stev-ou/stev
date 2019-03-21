@@ -104,7 +104,7 @@ class Fig2 extends React.Component {
 
       // Determine what scale to plot the averages on
       var min_rating = Math.floor(
-        Math.min(bar_data.datasets[0].data.map(Number))
+        Math.min(bar_data.datasets[0].data.map(Number))-0.01
       );
       var max_rating = Math.ceil(Math.max(bar_data.datasets[0].data));
       if (max_rating === 6) {
