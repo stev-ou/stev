@@ -81,7 +81,7 @@ class basictest(unittest.TestCase):
         # Create connection to the db
         db = mongo.mongo_driver()
         for course in course_test_list:
-            for function in api_list:
+            for function in course_function_list:
                 try:
                     json.loads(jsonify(function(db, course)))
                 except:

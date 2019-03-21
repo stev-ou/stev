@@ -75,6 +75,7 @@ def aggregate_data(df):
     ag_df.insert(4,'SD Department Rating', 0.0)
     ag_df.insert(7,'Avg Course Rating', 0.0)
     ag_df.insert(8,'SD Course Rating', 0.0)
+    ag_df.insert(9,'Course Rank in Department in Semester', 0)
     ag_df.insert(12, 'Avg Instructor Rating In Section', 0.0)
     ag_df.insert(13, 'SD Instructor Rating In Section', 0.0)
     ag_df.insert(15, 'Course Enrollment', 0)
@@ -167,7 +168,7 @@ def aggregate_data(df):
             # Back to Department level of tree, now that we've filled out the instructor and course level info
             # Modify the dataframe subset that consists only of the entries with the desired subject(see course index above)
             # Note that now our subset consists of aggregated data from all instructors and courses within the desired subject/department
-            subset = ag_df[(ag_df['Subject Code']==subject)]
+            subset = ag_df[(ag_df['Subject Code']==subject) & (ag_df['Term Code']==term)]
 
             # Compute the combined mean and standard deviation of all of the courses within the department
             #### IMPORTANT #### Population Weighting used in calculation of department parameters
@@ -176,15 +177,21 @@ def aggregate_data(df):
             # Find the row of interest in the desired df
             ag_df_course_rows = ag_df[(ag_df['Subject Code']==subject) & (ag_df['Term Code']==term)].index.tolist()
             
-            # Fill the Course ratings columns
+            # Fill the Department ratings columns
             ag_df.at[ag_df_course_rows, 'Avg Department Rating'] = department_mean
             ag_df.at[ag_df_course_rows, 'SD Department Rating'] = department_sd
+
+            # Fill in the rankings within the department
+            ag_df.loc[((ag_df['Subject Code']==subject) & (ag_df['Term Code']==term)),'Course Rank in Department in Semester'] = ag_df.loc[((ag_df['Subject Code']==subject) & (ag_df['Term Code']==term)), :]['Avg Course Rating'].rank( method ='dense',na_option='top', ascending=False)
 
     # Add in a Queryable Course String for the search by course
     ag_df['Queryable Course String'] = ag_df['Subject Code'].map(str).str.lower() + ' ' + ag_df['Course Number'].map(str).str.lower() + ' ' + ag_df['Course Title'].map(str).str.lower()
 
     # Add in a uuid field for the course, based on subject code (lowercase) and course number
     ag_df['course_uuid'] = ag_df['Subject Code'].map(str).str.lower() + ag_df['Course Number'].map(str)# .str.lower()
+
+    # Convert rankings to int
+    ag_df['Course Rank in Department in Semester'] = ag_df['Course Rank in Department in Semester'].astype(int)
         
     return ag_df
 
@@ -193,6 +200,8 @@ if __name__ == '__main__':
     df = pd.read_csv("data/GCOE.csv") # Modify to correct data location
     
     ag_df = aggregate_data(df)
+    # Tests the dataframe department ranking
+    print(ag_df.loc[((ag_df['Term Code']==201810) & (ag_df['Subject Code']=='AME')), ['Course Number','Avg Course Rating','Course Rank in Department in Semester']].sort_values('Avg Course Rating'))
     
     if len(ag_df[ag_df[['Term Code','Course Title', 'Instructor Last Name']].duplicated() == True]) == 0:
         print("From basic tests, the data aggregation is working correctly.")
