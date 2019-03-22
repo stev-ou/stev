@@ -11,7 +11,7 @@ import { api_endpoint } from '../../constants.js';
 
 const CustomTableCell = withStyles(theme => ({
   head: {
-    backgroundColor: theme.palette.common.black,
+    backgroundColor: "#841617",
     color: theme.palette.common.white,
   },
   body: {
@@ -30,11 +30,15 @@ const styles = theme => ({
   table: {
     minWidth: 700,
   },
-  row: {
-    '&:nth-of-type(odd)': {
-      backgroundColor: theme.palette.background.default, // Might want to change this if desired
+  tableRow: {
+    "&:hover": {
+      backgroundColor: "#f3b7b7!important"
     },
-  },
+    '&:nth-of-type(odd)': {
+      backgroundColor: theme.palette.background.default // Might want to change this if desired
+    }},
+  tableBody: {
+  }
 });
 
 // This is the function that will fetch the desired data from the api
@@ -121,7 +125,7 @@ function CustomizedTable(props) {
       <Paper className={classes.root}>
         <Table className={classes.table}>
           <TableHead>
-            <TableRow>
+            <TableRow className={classes.tableRow}>
               <CustomTableCell
                 style={{ fontWeight: 'bold', fontSize: '1.2em' }}
               >
@@ -143,7 +147,7 @@ function CustomizedTable(props) {
           </TableHead>
           <TableBody>
             {rows.map(row => (
-              <TableRow className={classes.name} key={row.id}>
+              <TableRow className={classes.tableRow} key={row.id}>
                 <CustomTableCell component="th" scope="row">
                   {row['display name']}
                 </CustomTableCell>

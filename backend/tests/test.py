@@ -4,7 +4,7 @@ import json
 import data_aggregation
 import pandas as pd
 from api_functions import *
-
+from flask import jsonify
 
 class basictest(unittest.TestCase):
     """ Basic tests """

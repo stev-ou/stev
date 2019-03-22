@@ -13,6 +13,5 @@ install:
 # command to run tests
 script:
   - cd backend
-  - python server.py &
   - python3 -m unittest discover -v -s tests/
   - pylint --errors-only backend/
