@@ -122,5 +122,18 @@
 }
 
 # Figure 3
-# Individual question ratings
+# Individual question ratings for search by instructor
 
+{'result':{'avg_rating':4.15, # This is averaged across all the instructors we captured for and all semesters we captured it for them
+			'instructor_name': 'Sam Jett',
+			'courses':['Course1', 'Course2', 'Course3'], # It will be easier for the frontend if these are just indexed and correspond to the measurements in the backend
+			'questions':[{'question':'How did this class go?','ratings':[4.0, 4.45, 4.0] # It is very important that these are in the same order as the instructors and table
+			},
+			{'question':'Was the professor good?', 'ratings':[3.1, 3.4,4.6] # It is very important that these are in the same order as the instructors and table1
+			},
+			{'question':'Did you have a very good time?', 'ratings':[3.1, 3.4,4.6] # It is very important that these are in the same order as the instructors and table1
+			},
+			{'question':'Was it diverse?', 'ratings':[3.1, 3.4,4.6] # It is very important that these are in the same order as the instructors and table1
+			},
+			{'question':'Did joe lovoi teach your class?', 'ratings':[2.1, 1, 0.4] # It is very important that these are in the same order as the instructors and table1
+			}]}}

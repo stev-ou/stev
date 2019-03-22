@@ -101,6 +101,24 @@ class Fig2 extends React.Component {
       data: result['instructor over time']['ratings'].map(function(each_element){
     return Number(each_element.toFixed(2))})
       })
+      data.datasets.push({
+      label: result['dept over time']['dept name']+' Department',
+      fill: false,
+      borderWidth: 2,
+      backgroundColor: colors[1],
+      borderColor: colors[1],
+      pointBorderColor: colors[1],
+      pointHoverBackgroundColor: colors[1],
+      pointHoverRadius: 2,
+      pointHoverBorderColor:colors[1],
+      pointHitRadius:5,
+      pointRadius: 0,
+      showLine: true,
+      spanGaps: true,
+      strokeColor: 'rgba(0,0,0,1)',
+      data: result['dept over time']['ratings'].map(function(each_element){
+    return Number(each_element.toFixed(2))})
+      })
 
       // Loop through all instructors and add a dataset for each
       for (var j = 0; j < result['courses'].length; j++) {
@@ -130,32 +148,16 @@ class Fig2 extends React.Component {
           pointHoverBorderColor:'rgba(0,0,0,1)',
           pointRadius: 8,
           showLine: true,
+          hidden: true,
           strokeColor: 'rgba(0,0,0,1)',
           data: course_data
           })}
-      data.datasets.push({
-      label: result['dept over time']['dept name']+' Department',
-      fill: false,
-      borderWidth: 2,
-      backgroundColor: colors[1],
-      borderColor: colors[1],
-      pointBorderColor: colors[1],
-      pointHoverBackgroundColor: colors[1],
-      pointHoverRadius: 2,
-      pointHoverBorderColor:colors[1],
-      pointHitRadius:5,
-      pointRadius: 0,
-      showLine: true,
-      spanGaps: true,
-      strokeColor: 'rgba(0,0,0,1)',
-      data: result['dept over time']['ratings'].map(function(each_element){
-    return Number(each_element.toFixed(2))})
-      })
         const options={
           title: {display:true,
-            text:'Click a dataset in the legend below to toggle it on or off'},
+            text:'Click on a course in the legend below to toggle its ratings on or off'},
           scales: {
             yAxes: [{
+              ticks: { fontSize: 16 },
               scaleLabel: {
                 display: true,
                 labelString: 'Course Rating (1-5)',
@@ -163,6 +165,7 @@ class Fig2 extends React.Component {
               }
             }],
             xAxes:[{
+              ticks: { fontSize: 16 },
               scaleLabel: {
                 display: true,
                 labelString: 'Semester',
@@ -185,7 +188,7 @@ class Fig2 extends React.Component {
         }
         return (
           <div>
-          <h3> Recent ratings in courses this instructor has taught</h3>
+          <h3> Recent instructor ratings, sorted by course</h3>
           <Line data={data} options = {options}/>
           </div>
         );

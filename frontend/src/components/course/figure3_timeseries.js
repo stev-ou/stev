@@ -59,38 +59,8 @@ class Fig3 extends React.Component {
       var data = {labels:[], datasets:[]};
       data.labels =all_semesters
 
-      // Loop through all instructors and add a dataset for each
-      for (var j = 0; j < result['instructors'].length; j++) {
-          var instr = result['instructors'][j];
-          var instr_data =[]
-          var valid_semesters = result['instructors'][j]['semesters']
-          var counter = 0
-          // Check through each semester that this course existed, and add this instructors rating if e
-          for (var k = 0; k < all_semesters.length; k++) {
-            if (valid_semesters.includes(all_semesters[k])) {
-              instr_data.push(result['instructors'][j]['ratings'][counter].toFixed(2))
-              counter+=1
-            }
-            else {
-              instr_data.push(null)
-            }
-          }
-          data.datasets.push({
-          label: instr['name'],
-          fill: false,
-          borderWidth: 2,
-          backgroundColor: colors[j+2],
-          borderColor: colors[j+2],
-          pointBorderColor: 'rgba(0,0,0,1)',
-          pointHoverBackgroundColor: colors[j+2],
-          pointHoverRadius: 12,
-          pointHoverBorderColor:'rgba(0,0,0,1)',
-          pointRadius: 8,
-          showLine: true,
-          strokeColor: 'rgba(0,0,0,1)',
-          data: instr_data
-          })}
-        data.datasets.push({
+      // Add the average course and average department ratings
+      data.datasets.push({
       label: result['course over time']['course name'] + ' Course',
       fill: false,
       borderWidth: 3,
@@ -126,11 +96,46 @@ class Fig3 extends React.Component {
       data: result['dept over time']['ratings'].map(function(each_element){
     return Number(each_element.toFixed(2))})
       })
+
+      // Loop through all instructors and add a dataset for each
+      for (var j = 0; j < result['instructors'].length; j++) {
+          var instr = result['instructors'][j];
+          var instr_data =[]
+          var valid_semesters = result['instructors'][j]['semesters']
+          var counter = 0
+          // Check through each semester that this course existed, and add this instructors rating if e
+          for (var k = 0; k < all_semesters.length; k++) {
+            if (valid_semesters.includes(all_semesters[k])) {
+              instr_data.push(result['instructors'][j]['ratings'][counter].toFixed(2))
+              counter+=1
+            }
+            else {
+              instr_data.push(null)
+            }
+          }
+          data.datasets.push({
+          label: instr['name'],
+          fill: false,
+          borderWidth: 2,
+          backgroundColor: colors[j+2],
+          borderColor: colors[j+2],
+          pointBorderColor: 'rgba(0,0,0,1)',
+          pointHoverBackgroundColor: colors[j+2],
+          pointHoverRadius: 12,
+          pointHoverBorderColor:'rgba(0,0,0,1)',
+          pointRadius: 8,
+          showLine: true,
+          hidden:true,
+          strokeColor: 'rgba(0,0,0,1)',
+          data: instr_data
+          })}
+
         const options={
           title: {display:true,
-            text:'Click a dataset in the legend below to toggle it on or off'},
+            text:'Click an instructor in the legend below to toggle their ratings on or off'},
           scales: {
             yAxes: [{
+              ticks: { fontSize: 16 },
               scaleLabel: {
                 display: true,
                 labelString: 'Course Rating (1-5)',
@@ -138,6 +143,7 @@ class Fig3 extends React.Component {
               }
             }],
             xAxes:[{
+              ticks: { fontSize: 16 },
               scaleLabel: {
                 display: true,
                 labelString: 'Semester',
