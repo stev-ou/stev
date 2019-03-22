@@ -118,7 +118,7 @@ class Fig4 extends React.Component {
         },
         hover: {
           mode: 'nearest',
-          intersect: true
+          intersect: true,
         },
         legend: { display: false },
       };
@@ -145,10 +145,10 @@ class Fig4 extends React.Component {
           this.setState({ display_questions: display_questions });
         },
         onSelectAll: (isSelect, rows, e) => {
-          display_questions = Array(display_questions.length).fill(isSelect)
+          display_questions = Array(display_questions.length).fill(isSelect);
           // Update the state
           this.setState({ display_questions: display_questions });
-         },
+        },
         bgColor: (row, rowIndex) => {
           return schemePaired[parseInt(2 * rowIndex)]; // returns the color code for this paired analysis
         },

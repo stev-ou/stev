@@ -119,7 +119,7 @@ function CustomizedTable(props) {
               </CustomTableCell>
             </TableRow>
           </TableHead>
-          <TableBody>
+          <TableBody showRowHover={true} stripedRows={true}>
             {rows.map(row => (
               <TableRow className={classes.name} key={row.id}>
                 <CustomTableCell component="th" scope="row">

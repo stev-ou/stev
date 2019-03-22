@@ -43,7 +43,7 @@ const API = api_endpoint + 'instructors/';
 class Fig1 extends React.Component {
   constructor(props) {
     super(props);
-    this.state = { data: [], uuid: props.uuid};
+    this.state = { data: [], uuid: props.uuid };
   }
 
   componentDidMount() {
@@ -53,24 +53,48 @@ class Fig1 extends React.Component {
     //   .then(data =>
     //     this.setState({ data: data.result })
     //   );
-  // this.setState({ data: data.result })
+    // this.setState({ data: data.result })
   }
 
   render() {
     let MyTable = withStyles(styles)(CustomizedTable); // This is important
     // Get the data ready to pass to the table by rounding and adding ids
     var table_data = this.state.data;
-    var table_data = 
-  { "instructor name": 'Sam Jett teacher', 
-    "courses": 
-    [
-      {"dept name": "ENGR", "course number":1411, "course name": "long long long long long course name", "instr_rating_in_course":4.1234532523, "term": "Spring 2017, Fall 2016, Spring 2015"},
-      {"dept name": "AME", "course number":2121, "course name": "long course name", "instr_rating_in_course":4.12455454, "term": "Summer 2017"},
-      {"dept name": "BME", "course number":2873, "course name": "long course name", "instr_rating_in_course":4.120984, "term": "Fall 2017, Fall 2016, Spring 2016,"}]
-  }
+    var table_data = {
+      'instructor name': 'Sam Jett teacher',
+      courses: [
+        {
+          'dept name': 'ENGR',
+          'course number': 1411,
+          'course name': 'long long long long long course name',
+          instr_rating_in_course: 4.1234532523,
+          term: 'Spring 2017, Fall 2016, Spring 2015',
+        },
+        {
+          'dept name': 'AME',
+          'course number': 2121,
+          'course name': 'long course name',
+          instr_rating_in_course: 4.12455454,
+          term: 'Summer 2017',
+        },
+        {
+          'dept name': 'BME',
+          'course number': 2873,
+          'course name': 'long course name',
+          instr_rating_in_course: 4.120984,
+          term: 'Fall 2017, Fall 2016, Spring 2016,',
+        },
+      ],
+    };
     table_data.courses.forEach((item, i) => {
-      item['instr_rating_in_course'] = item['instr_rating_in_course'].toFixed(2); // Convert the long floats to 2 decimal places
-      item['display name'] = item['dept name']+ item['course number'].toString() + ': ' + item['course name']
+      item['instr_rating_in_course'] = item['instr_rating_in_course'].toFixed(
+        2
+      ); // Convert the long floats to 2 decimal places
+      item['display name'] =
+        item['dept name'] +
+        item['course number'].toString() +
+        ': ' +
+        item['course name'];
       item['id'] = i + 1;
     });
     return <MyTable data={table_data} />;
@@ -81,7 +105,7 @@ class Fig1 extends React.Component {
 function CustomizedTable(props) {
   const { classes } = props;
   const data = props.data;
-  var rows = data.courses
+  var rows = data.courses;
 
   return (
     <div>
@@ -91,8 +115,8 @@ function CustomizedTable(props) {
       </h1>
       <h2 style={{ padding: '0.5em', paddingTop: '0em' }}>
         {' '}
-        {data['instructor name']+ ' has taught these courses in the previous 3 years'}
-        {' '}
+        {data['instructor name'] +
+          ' has taught these courses in the previous 3 years'}{' '}
       </h2>
       <Paper className={classes.root}>
         <Table className={classes.table}>
@@ -126,9 +150,7 @@ function CustomizedTable(props) {
                 <CustomTableCell align="center">
                   {row['instr_rating_in_course']}
                 </CustomTableCell>
-                <CustomTableCell align="right">
-                  {row['term']}
-                </CustomTableCell>
+                <CustomTableCell align="right">{row['term']}</CustomTableCell>
               </TableRow>
             ))}
           </TableBody>
