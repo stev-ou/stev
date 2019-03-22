@@ -238,6 +238,7 @@ def relative_dept_rating_figure_json_generator(db, valid_uuid):
     cmean = uuid_df['Avg Course Rating'].unique()[0]
     dept_mean = uuid_df['Avg Department Rating'].unique()[0]
     dept_sd = uuid_df['SD Department Rating'].unique()[0]
+    crank = uuid_df['Course Rank in Department in Semester'].unique()[0]
     
     ## Get the instructor details
     # Build a dictionary based on the instructors that have taught the course  
@@ -261,25 +262,13 @@ def relative_dept_rating_figure_json_generator(db, valid_uuid):
     # Sort out the repeat courses such that we only get a single entry for course rating
     # Get the number of unique courses in a given department
     num_courses = subj_df['Course Number'].nunique()
-
-
-    # Drop all duplicates from subj_df
-    subj_df.drop_duplicates(subset = ['Course Number'], inplace=True)
-
-    # Sort the subj_df based on Avg Course Rating field
-    subj_df.sort_values(by = 'Avg Course Rating', ascending=False,inplace=True)
-
-    # Find placement within the sorted subj_df 
-    subj_df.reset_index(inplace=True)
-    crank = subj_df.index[subj_df['Course Number'] == cnum].tolist()[0] + 1
-    total_dept = len(subj_df)
     
     # Build the json response
     response = {'result':{'course name':str(cname),
             'most recent sem': SEMESTER_MAPPINGS[str(sem)],
             'course number': int(cnum),
             'course ranking': int(crank), 
-                          'dept':{'dept name': str(subj), 'courses in dept': int(total_dept) , 'dept mean': float(dept_mean), 'dept sd':float(dept_sd)}, 
+                          'dept':{'dept name': str(subj), 'courses in dept': int(num_courses) , 'dept mean': float(dept_mean), 'dept sd':float(dept_sd)}, 
                           'current course mean': float(cmean), 
                           'instructors':instructors}}
     return response
