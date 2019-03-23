@@ -11,12 +11,12 @@ import {
   ResponsiveContainer,
 } from 'recharts';
 import * as Math from 'mathjs';
-import { api_endpoint } from '../../constants.js';
+import { api_endpoint, colors } from '../../constants.js';
 
 // Define API parameters
 const API = api_endpoint + 'courses/';
 
-class Fig3 extends React.Component {
+class Course_Fig3 extends React.Component {
   constructor(props) {
     super(props);
     this.state = { result: {}, loadedAPI: false, uuid: props.uuid };
@@ -35,29 +35,6 @@ class Fig3 extends React.Component {
     } else {
       var result = this.state.result;
 
-      // Define a color pallete to use
-      var colors = [
-        '#3f51b5',
-        '#2196f3',
-        '#03a9f4',
-        '#ff5722',
-        '#e91e63',
-        '#9c27b0',
-        '#00bcd4',
-        '#4caf50',
-        '#8bc34a',
-        '#cddc39',
-        '#ffeb3b',
-        '#f44336',
-        '#795548',
-        '#607d8b',
-        '#4caf50',
-        '#8bc34a',
-        '#673ab7',
-        '#ffc107',
-        '#ff9800',
-        '#009688',
-      ];
       colors.sort(function() {
         return 0.5 - Math.random();
       });
@@ -216,4 +193,4 @@ const TimeSeriesChart = props => (
   </div>
 );
 
-export default Fig3;
+export default Course_Fig3;

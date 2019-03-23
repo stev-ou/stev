@@ -1,12 +1,12 @@
 import React from 'react';
 import { Line } from 'react-chartjs-2';
 // import * as Math from 'mathjs';
-import { api_endpoint } from '../../constants.js';
+import { api_endpoint, colors } from '../../constants.js';
 
 // Define API parameters
 const API = api_endpoint + 'instructors/';
 
-class Fig2 extends React.Component {
+class Instructor_Fig2 extends React.Component {
   constructor(props) {
     super(props);
     this.state = { result: {}, loadedAPI: false, uuid: props.uuid }; //props.uuid
@@ -76,27 +76,6 @@ class Fig2 extends React.Component {
         ],
       };
 
-      // Define a color pallete to use
-      var colors = [
-        '#3f51b5',
-        '#ff5722',
-        '#e91e63',
-        '#673ab7',
-        '#ffc107',
-        '#9c27b0',
-        '#00bcd4',
-        '#03a9b4',
-        '#8bc34a',
-        '#cddc39',
-        '#ffeb3b',
-        '#f44336',
-        '#795548',
-        '#607d8b',
-        '#4caf50',
-        '#2196f3',
-        '#8bc34a',
-        '#ff9800',
-      ];
       // colors.sort(function() {
       //   return 0.5 - Math.random();
       // });
@@ -235,4 +214,4 @@ class Fig2 extends React.Component {
     }
   }
 }
-export default Fig2;
+export default Instructor_Fig2;

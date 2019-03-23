@@ -24,3 +24,24 @@ if (!DEBUG) {
 }
 
 export { api_endpoint };
+
+export var colors = [
+  '#3f51b5',
+  '#ff5722',
+  '#e91e63',
+  '#673ab7',
+  '#ffc107',
+  '#9c27b0',
+  '#00bcd4',
+  '#03a9b4',
+  '#8bc34a',
+  '#cddc39',
+  '#ffeb3b',
+  '#f44336',
+  '#795548',
+  '#607d8b',
+  '#4caf50',
+  '#2196f3',
+  '#8bc34a',
+  '#ff9800',
+];

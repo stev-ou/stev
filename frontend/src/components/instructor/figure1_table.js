@@ -11,7 +11,7 @@ import { api_endpoint } from '../../constants.js';
 
 const CustomTableCell = withStyles(theme => ({
   head: {
-    backgroundColor: "#841617",
+    backgroundColor: '#841617',
     color: theme.palette.common.white,
   },
   body: {
@@ -31,20 +31,20 @@ const styles = theme => ({
     minWidth: 700,
   },
   tableRow: {
-    "&:hover": {
-      backgroundColor: "#f3b7b7!important"
+    '&:hover': {
+      backgroundColor: '#f3b7b7!important',
     },
     '&:nth-of-type(odd)': {
-      backgroundColor: theme.palette.background.default // Might want to change this if desired
-    }},
-  tableBody: {
-  }
+      backgroundColor: theme.palette.background.default, // Might want to change this if desired
+    },
+  },
+  tableBody: {},
 });
 
 // This is the function that will fetch the desired data from the api
 const API = api_endpoint + 'instructors/';
 
-class Fig1 extends React.Component {
+class Instructor_Fig1 extends React.Component {
   constructor(props) {
     super(props);
     this.state = { data: [], uuid: props.uuid };
@@ -168,4 +168,4 @@ CustomizedTable.propTypes = {
   classes: PropTypes.object.isRequired,
 };
 // export default withStyles(styles)(CustomizedTable);
-export default Fig1;
+export default Instructor_Fig1;
