@@ -4,7 +4,6 @@ import json
 import data_aggregation
 import pandas as pd
 from api_functions import *
-from flask import jsonify
 
 class basictest(unittest.TestCase):
     """ Basic tests """
@@ -52,22 +51,22 @@ class basictest(unittest.TestCase):
         # * Note that my formula uses n instead of n-1 for combining SDs, so expect some small differences in the final result
         return self.assertEqual(True, status)
 
-    # # Test the dataframe aggregation for unique entries 
-    def test_dataframe_aggregation(self):
+    # # # Test the dataframe aggregation for unique entries 
+    # def test_dataframe_aggregation(self):
 
-        '''
-        This unit test will examine the aggregated dataframe and ensure it has no course entry repeats with the same 
-        course title and instructor.
-        '''
-        # Test the data aggregation for unique entries
-        df = pd.read_csv('data/GCOE.csv')
+    #     '''
+    #     This unit test will examine the aggregated dataframe and ensure it has no course entry repeats with the same 
+    #     course title and instructor.
+    #     '''
+    #     # Test the data aggregation for unique entries
+    #     df = pd.read_csv('data/GCOE.csv')
 
-        ag_df = data_aggregation.aggregate_data(df)
+    #     ag_df = data_aggregation.aggregate_data(df)
 
-        # There should be no entries with the same course name, Instructor ID, and Term Code, so the below should be false
-        num_repeats = len(ag_df[ag_df[['course_uuid', 'Term Code','Instructor ID']].duplicated() == True])
+    #     # There should be no entries with the same course name, Instructor ID, and Term Code, so the below should be false
+    #     num_repeats = len(ag_df[ag_df[['course_uuid', 'Term Code','Instructor ID']].duplicated() == True])
 
-        return self.assertEqual(0, num_repeats)
+    #     return self.assertEqual(0, num_repeats)
 
     # Test the current apis to make sure that they are at least returning a valid json
     def test_current_api_endings(self):
@@ -80,10 +79,13 @@ class basictest(unittest.TestCase):
         course_test_list = ['engr1411', 'ame3143', 'bme3233', 'ece5213', 'edss3553', 'edah5023', 'edel4980']
         # Create connection to the db
         db = mongo.mongo_driver()
+        print('Testing the api functions for the following courses: ')
         for course in course_test_list:
-            for function in course_function_list:
+            print(course)
+            for func in course_function_list:
                 try:
-                    json.loads(jsonify(function(db, course)))
+                    response = func(db, course)
+                    json.loads(json.dumps(response))
                 except:
                     return self.assertEqual(True, False)
 
