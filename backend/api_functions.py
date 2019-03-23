@@ -95,7 +95,7 @@ def drop_duplicate_courses(df):
         df.drop(df[(df['Course Title']!=most_frequent_course)].index, inplace=True)
     return
 
-def course_instructor_ratings_api_generator(db, uuid):
+def CourseFig1Table(db, uuid):
     '''
     This function will take one validated course-based uuid in the aggregated database and will
     build a json response to present the values needed for figure 1. Briefly, this api response 
@@ -197,7 +197,7 @@ def course_instructor_ratings_api_generator(db, uuid):
                 
     return ret_json
 
-def relative_dept_rating_figure_json_generator(db, valid_uuid):
+def CourseFig2Chart(db, valid_uuid):
     '''
     This function will build the json for the response to build the relative department rating figure 
     (2nd from top on the left side). The json has structure given in schema.json, for this rating.
@@ -273,7 +273,7 @@ def relative_dept_rating_figure_json_generator(db, valid_uuid):
                           'instructors':instructors}}
     return response
 
-def timeseries_data_generator(db, valid_uuid):
+def CourseFig3Timeseries(db, valid_uuid):
 
     """
     This function will search for all courses that have occurred in the given timespan. It will then
@@ -320,7 +320,7 @@ def timeseries_data_generator(db, valid_uuid):
         response['result']['instructors'].append(instr_obj)
     return response # Added this bit to get rid of int64s, which are not JSON serializable
 
-def question_ratings_generator(db, valid_uuid):
+def CourseFig4TableBar(db, valid_uuid):
 
     """
     This function will perform the following steps:
@@ -487,7 +487,7 @@ def query_function(db, query, field_to_search):
 
 
 #Feel free to rename this, just keeping it explicit so its easy to find
-def instructor_fig1(db, instructor_id):
+def InstructorFig1Table(db, instructor_id):
     """
     This will take in the name of an instructor, and return a dictionary containing all
     of the courses taught by this instructor.
@@ -528,14 +528,7 @@ if __name__ == '__main__':
     # sort_by_term_code([201710, 201820, 201620, 201410, 201110, 201630, 201610])
 
     # uuid_df, coll_name = query_df_from_mongo(mongo_driver(),cursor)
-
-    #course_instructor_ratings_api_generator(mongo_driver(),"engr1411")
-    # pprint.pprint(relative_dept_rating_figure_json_generator(mongo_driver(),"engr1411"))
-    #pprint.pprint(timeseries_data_generator(mongo_driver(), 'engr1411'))
-    # pprint.pprint(question_ratings_generator(mongo_driver(),"engr1411"))
-    # pprint.pprint(relative_dept_rating_figure_json_generator("engr2002"))
-    # print(query_function(db,'thermodynamics','Queryable Course String'))
-    pprint.pprint(instructor_fig1(mongo_driver(), 112112705))
+    pprint.pprint(InstructorFig1Table(mongo_driver(), 112112705))
 
 
 

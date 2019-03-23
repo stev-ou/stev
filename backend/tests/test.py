@@ -68,14 +68,14 @@ class basictest(unittest.TestCase):
 
         return self.assertEqual(0, num_repeats)
 
-    # Test the current apis to make sure that they are at least returning a valid json
-    def test_current_api_endings(self):
+    # Test the current course apis to make sure that they are at least returning a valid json
+    def test_course_api_endings(self):
         '''
         This unit test will ping each of the currently created api endings with a variety of different courses to make sure they hit.
 
         '''
         # Define the currently working courses
-        course_function_list = [course_instructor_ratings_api_generator, relative_dept_rating_figure_json_generator, timeseries_data_generator, question_ratings_generator] 
+        course_function_list = [CourseFig1Table, CourseFig2Chart, CourseFig3Timeseries, CourseFig4TableBar] 
         course_test_list = ['engr1411', 'ame3143', 'bme3233', 'ece5213', 'edss3553', 'edah5023', 'edel4980']
         # Create connection to the db
         db = mongo.mongo_driver()
