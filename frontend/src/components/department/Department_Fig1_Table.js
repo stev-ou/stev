@@ -190,7 +190,7 @@ for (let i = 0; i < 200; i += 1) {
   rows.push(createData(...randomSelection));
 }
 
-class Department_Fig1 extends React.Component {
+class Department_Fig1_Table extends React.Component {
   constructor(props) {
     super(props);
   }
@@ -233,4 +233,4 @@ class Department_Fig1 extends React.Component {
   }
 }
 
-export default Department_Fig1;
+export default Department_Fig1_Table;

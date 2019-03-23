@@ -6,7 +6,7 @@ import { api_endpoint } from '../../constants.js';
 // Define API parameters
 const API = api_endpoint + 'courses/';
 
-class Course_Fig3 extends React.Component {
+class Course_Fig3_Timeseries extends React.Component {
   constructor(props) {
     super(props);
     this.state = { result: {}, loadedAPI: false, uuid: props.uuid }; //props.uuid
@@ -185,4 +185,4 @@ class Course_Fig3 extends React.Component {
     }
   }
 }
-export default Course_Fig3;
+export default Course_Fig3_Timeseries;

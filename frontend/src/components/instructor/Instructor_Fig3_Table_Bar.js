@@ -6,9 +6,9 @@ import 'react-bootstrap-table-next/dist/react-bootstrap-table2.min.css';
 import BootstrapTable from 'react-bootstrap-table-next';
 
 // Define API input string
-const API = api_endpoint + 'courses/';
+const API = api_endpoint + 'instructors/';
 
-class Course_Fig4 extends React.Component {
+class Instructor_Fig3_Table_Bar extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -20,15 +20,40 @@ class Course_Fig4 extends React.Component {
   }
   componentWillMount() {
     // This will call the api when the component "Mounts", i.e. when the page is accessed
-    fetch(API + this.state.uuid + '/figure4')
-      .then(response => response.json())
-      .then(data => {
-        this.setState({
-          result: data.result,
-          loadedAPI: true,
-          display_questions: Array(data.result.questions.length).fill(true),
-        });
-      }); // Initial keying into result
+    // fetch(API + this.state.uuid + '/figure4')
+    //   .then(response => response.json())
+    //   .then(data => {
+    //     this.setState({
+    //       result: data.result,
+    //       loadedAPI: true,
+    //       display_questions: Array(data.result.questions.length).fill(true),
+    //     });
+    //   }); // Initial keying into result
+    var data = {
+      result: {
+        avg_rating: 4.15,
+        instructor_name: 'Sam Jett',
+        courses: ['Course1', 'Course2', 'Course3'],
+        questions: [
+          { question: 'How did this class go?', ratings: [4.0, 4.45, 4.0] },
+          { question: 'Was the professor good?', ratings: [3.1, 3.4, 4.6] },
+          {
+            question: 'Did you have a very good time?',
+            ratings: [3.1, 3.4, 4.6],
+          },
+          { question: 'Was it diverse?', ratings: [3.1, 3.4, 4.6] },
+          {
+            question: 'Did joe lovoi teach your class?',
+            ratings: [2.1, 1, 0.4],
+          },
+        ],
+      },
+    };
+    this.setState({
+      result: data.result,
+      loadedAPI: true,
+      display_questions: Array(data.result.questions.length).fill(true),
+    });
   }
 
   render() {
@@ -41,7 +66,7 @@ class Course_Fig4 extends React.Component {
       // Lets build our plot results to take data from the api and turn them into the form usable by the bar chart
       var plot_result = {};
 
-      plot_result['labels'] = result.instructors;
+      plot_result['labels'] = result.courses;
       plot_result.datasets = [];
 
       const products = [];
@@ -53,7 +78,7 @@ class Course_Fig4 extends React.Component {
         },
         {
           dataField: 'avgRating',
-          text: 'Average Rating in Course (1-5)',
+          text: 'Instructor Average Rating (1-5)',
           headerStyle: { width: '30%', textAlign: 'left' },
         },
       ];
@@ -93,7 +118,7 @@ class Course_Fig4 extends React.Component {
               scaleLabel: {
                 display: true,
                 labelString: 'Question Rating',
-                fontSize: 20,
+                fontSize: 24,
               },
               ticks: {
                 beginAtZero: false,
@@ -111,7 +136,7 @@ class Course_Fig4 extends React.Component {
               scaleLabel: {
                 display: true,
                 labelString: 'Instructors',
-                fontSize: 20,
+                fontSize: 24,
               },
             },
           ],
@@ -158,7 +183,9 @@ class Course_Fig4 extends React.Component {
         <div style={{ padding: '1em' }}>
           <h3 style={{ padding: '0.5em' }}>
             {' '}
-            Question responses by instructor in this course{' '}
+            Question responses sorted by course for {
+              result['instructor_name']
+            }{' '}
           </h3>
           <BootstrapTable
             keyField="qNumber"
@@ -175,4 +202,4 @@ class Course_Fig4 extends React.Component {
 
 // <h1> {result['course name']} is ranked {ordinal_suffix_of(result['course rating'])} out of {result.dept['courses in dept']} courses in the {result['dept']['dept name']} department </h1>
 // , verticalAlign:'middle'
-export default Course_Fig4;
+export default Instructor_Fig3_Table_Bar;

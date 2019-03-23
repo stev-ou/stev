@@ -42,85 +42,57 @@ const styles = theme => ({
 });
 
 // This is the function that will fetch the desired data from the api
-const API = api_endpoint + 'instructors/';
+const API = api_endpoint + 'courses/';
+// const API_Test = 'https://hn.algolia.com/api/v1/search?query=redux';
 
-class Instructor_Fig1 extends React.Component {
+class Course_Fig1_Table extends React.Component {
   constructor(props) {
     super(props);
-    this.state = { data: [], uuid: props.uuid };
+    this.state = { data: [], uuid: props.uuid, info: {} };
   }
 
   componentDidMount() {
     // This will call the api when the component "Mounts", i.e. when the page is accessed
-    // fetch(API + this.state.uuid + '/figure1')
-    //   .then(response => response.json())
-    //   .then(data =>
-    //     this.setState({ data: data.result })
-    //   );
-    // this.setState({ data: data.result })
+    fetch(API + this.state.uuid + '/figure1')
+      .then(response => response.json())
+      .then(data =>
+        this.setState({ info: data.result, data: data.result.instructors })
+      );
   }
 
   render() {
     let MyTable = withStyles(styles)(CustomizedTable); // This is important
-    // Get the data ready to pass to the table by rounding and adding ids
+    // Get the data to pass to the table
     var table_data = this.state.data;
-    var table_data = {
-      'instructor name': 'Sam Jett teacher',
-      courses: [
-        {
-          'dept name': 'ENGR',
-          'course number': 1411,
-          'course name': 'long long long long long course name',
-          instr_rating_in_course: 4.1234532523,
-          term: 'Spring 2017, Fall 2016, Spring 2015',
-        },
-        {
-          'dept name': 'AME',
-          'course number': 2121,
-          'course name': 'long course name',
-          instr_rating_in_course: 4.12455454,
-          term: 'Summer 2017',
-        },
-        {
-          'dept name': 'BME',
-          'course number': 2873,
-          'course name': 'long course name',
-          instr_rating_in_course: 4.120984,
-          term: 'Fall 2017, Fall 2016, Spring 2016,',
-        },
-      ],
-    };
-    table_data.courses.forEach((item, i) => {
-      item['instr_rating_in_course'] = item['instr_rating_in_course'].toFixed(
-        2
-      ); // Convert the long floats to 2 decimal places
-      item['display name'] =
-        item['dept name'] +
-        item['course number'].toString() +
-        ': ' +
-        item['course name'];
+    table_data.forEach((item, i) => {
+      item['crs rating'] = item['crs rating'].toFixed(2); // Convert the long floats to 2 decimal places
+      item['avg rating'] = item['avg rating'].toFixed(2);
       item['id'] = i + 1;
     });
-    return <MyTable data={table_data} />;
+
+    // Get the info to pass to the table
+    const info = this.state.info;
+
+    return <MyTable rows={table_data} info={info} />;
   }
 }
 
 //This is the function to create the table for figure 1
 function CustomizedTable(props) {
   const { classes } = props;
-  const data = props.data;
-  var rows = data.courses;
+  const rows = props.rows;
+  const info = props.info;
 
   return (
     <div>
       <h1 style={{ fontWeight: 'bold', fontSize: '3.5em', padding: '0.75em' }}>
         {' '}
-        {data['instructor name']}{' '}
+        {info['dept name']}
+        {info['course number']}: {info['course name']}{' '}
       </h1>
       <h2 style={{ padding: '0.5em', paddingTop: '0em' }}>
         {' '}
-        {data['instructor name'] +
-          ' has taught these courses in the previous 3 years'}{' '}
+        These professors have taught the course recently{' '}
       </h2>
       <Paper className={classes.root}>
         <Table className={classes.table}>
@@ -129,13 +101,19 @@ function CustomizedTable(props) {
               <CustomTableCell
                 style={{ fontWeight: 'bold', fontSize: '1.2em' }}
               >
-                Course Name
+                Instructor Name
               </CustomTableCell>
               <CustomTableCell
                 style={{ fontWeight: 'bold', fontSize: '1.2em' }}
-                align="right"
+                align="center"
               >
-                {data['instructor name']} Average Rating in Course (1-5)
+                Average Instructor Rating (1-5)
+              </CustomTableCell>
+              <CustomTableCell
+                style={{ fontWeight: 'bold', fontSize: '1.2em' }}
+                align="center"
+              >
+                Instructor Rating in Course (1-5)
               </CustomTableCell>
               <CustomTableCell
                 style={{ fontWeight: 'bold', fontSize: '1.2em' }}
@@ -145,14 +123,17 @@ function CustomizedTable(props) {
               </CustomTableCell>
             </TableRow>
           </TableHead>
-          <TableBody>
+          <TableBody showRowHover={true} stripedRows>
             {rows.map(row => (
-              <TableRow className={classes.tableRow} key={row.id}>
+              <TableRow hover className={classes.tableRow} key={row.id}>
                 <CustomTableCell component="th" scope="row">
-                  {row['display name']}
+                  {row.name}
                 </CustomTableCell>
                 <CustomTableCell align="center">
-                  {row['instr_rating_in_course']}
+                  {row['avg rating']}
+                </CustomTableCell>
+                <CustomTableCell align="center">
+                  {row['crs rating']}
                 </CustomTableCell>
                 <CustomTableCell align="right">{row['term']}</CustomTableCell>
               </TableRow>
@@ -168,4 +149,4 @@ CustomizedTable.propTypes = {
   classes: PropTypes.object.isRequired,
 };
 // export default withStyles(styles)(CustomizedTable);
-export default Instructor_Fig1;
+export default Course_Fig1_Table;
