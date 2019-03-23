@@ -51,7 +51,7 @@ class MuiVirtualizedTable extends React.PureComponent {
         })}
         variant="body"
         style={{ height: rowHeight }}
-        align={(columnIndex != null && columns[columnIndex].numeric) || false ? 'right' : 'left'}
+        align='center'
       >
         {cellData}
       </TableCell>
@@ -80,7 +80,7 @@ class MuiVirtualizedTable extends React.PureComponent {
         className={classNames(classes.tableCell, classes.flexContainer, classes.noClick)}
         variant="head"
         style={{ height: headerHeight }}
-        align={columns[columnIndex].numeric || false ? 'right' : 'left'}
+        align='center'
       >
         {inner}
       </TableCell>
@@ -158,17 +158,17 @@ MuiVirtualizedTable.defaultProps = {
 const WrappedVirtualizedTable = withStyles(styles)(MuiVirtualizedTable);
 
 const data = [
-  ['Frozen yoghurt', 159, 6.0, 24, 4.0],
-  ['Ice cream sandwich', 237, 9.0, 37, 4.3],
-  ['Eclair', 262, 16.0, 24, 6.0],
-  ['Cupcake', 305, 3.7, 67, 4.3],
-  ['Gingerbread', 356, 16.0, 49, 3.9],
+  [1,'Frozen yoghurt', 4.6, 'Course 1,2,3'],
+  [2,'Ice cream sandwich', 4.4, 'Course 1,2,4'],
+  [3,'Eclair', 4.2, 'Course 3,4,2'],
+  [4,'Cupcake', 4.1, 'Course 1,3,5'],
+  [5,'Gingerbread', 3.7, 'Course 1,4,5,'],
 ];
 
 let id = 0;
-function createData(dessert, calories, fat, carbs, protein) {
+function createData(rank, name, rating, courses) {
   id += 1;
-  return { id, dessert, calories, fat, carbs, protein };
+  return { id, rank, name, rating, courses};
 }
 
 const rows = [];
@@ -178,7 +178,13 @@ for (let i = 0; i < 200; i += 1) {
   rows.push(createData(...randomSelection));
 }
 
-function Fig1() {
+class Fig1 extends React.Component {
+  constructor(props) {
+    super(props)
+  }
+
+  render(){
+
   return (
     <Paper style={{ height: 400, width: '100%' }}>
       <WrappedVirtualizedTable
@@ -187,39 +193,33 @@ function Fig1() {
         onRowClick={event => console.log(event)}
         columns={[
           {
+            width: 300,
+            label: 'Instructor Rank',
+            dataKey: 'rank',
+            numeric:true
+          },
+          {
+            width: 300,
+            label: 'Instructor Name',
+            dataKey: 'name',
+          },
+          {
+            width: 200,
+            label: 'Instructor Rating (1-5)',
+            dataKey: 'rating',
+            numeric: true,
+          },
+          {
             width: 200,
             flexGrow: 1.0,
-            label: 'Dessert',
-            dataKey: 'dessert',
+            label: 'Recent Course(s) Taught',
+            dataKey: 'courses',
           },
-          {
-            width: 120,
-            label: 'Calories (g)',
-            dataKey: 'calories',
-            numeric: true,
-          },
-          {
-            width: 120,
-            label: 'Fat (g)',
-            dataKey: 'fat',
-            numeric: true,
-          },
-          {
-            width: 120,
-            label: 'Carbs (g)',
-            dataKey: 'carbs',
-            numeric: true,
-          },
-          {
-            width: 120,
-            label: 'Protein (g)',
-            dataKey: 'protein',
-            numeric: true,
-          },
+
         ]}
       />
     </Paper>
   );
-}
+}}
 
 export default Fig1
