@@ -29,25 +29,32 @@ class Fig3 extends React.Component {
     //       display_questions: Array(data.result.questions.length).fill(true),
     //     });
     //   }); // Initial keying into result
-    var data = {'result':{'avg_rating':4.15, 
-    'instructor_name': 'Sam Jett',
-      'courses':['Course1', 'Course2', 'Course3'], 
-      'questions':[{'question':'How did this class go?','ratings':[4.0, 4.45, 4.0] 
+    var data = {
+      result: {
+        avg_rating: 4.15,
+        instructor_name: 'Sam Jett',
+        courses: ['Course1', 'Course2', 'Course3'],
+        questions: [
+          { question: 'How did this class go?', ratings: [4.0, 4.45, 4.0] },
+          { question: 'Was the professor good?', ratings: [3.1, 3.4, 4.6] },
+          {
+            question: 'Did you have a very good time?',
+            ratings: [3.1, 3.4, 4.6],
+          },
+          { question: 'Was it diverse?', ratings: [3.1, 3.4, 4.6] },
+          {
+            question: 'Did joe lovoi teach your class?',
+            ratings: [2.1, 1, 0.4],
+          },
+        ],
       },
-      {'question':'Was the professor good?', 'ratings':[3.1, 3.4,4.6] 
-      },
-      {'question':'Did you have a very good time?', 'ratings':[3.1, 3.4,4.6] 
-      },
-      {'question':'Was it diverse?', 'ratings':[3.1, 3.4,4.6]
-      },
-      {'question':'Did joe lovoi teach your class?', 'ratings':[2.1, 1, 0.4]
-      }]}}
+    };
     this.setState({
-          result: data.result,
-          loadedAPI: true,
-          display_questions: Array(data.result.questions.length).fill(true),
-
-  })}
+      result: data.result,
+      loadedAPI: true,
+      display_questions: Array(data.result.questions.length).fill(true),
+    });
+  }
 
   render() {
     if (!this.state.loadedAPI) {
@@ -136,7 +143,7 @@ class Fig3 extends React.Component {
         },
         hover: {
           mode: 'nearest',
-          intersect: true
+          intersect: true,
         },
         legend: { display: false },
       };
@@ -163,10 +170,10 @@ class Fig3 extends React.Component {
           this.setState({ display_questions: display_questions });
         },
         onSelectAll: (isSelect, rows, e) => {
-          display_questions = Array(display_questions.length).fill(isSelect)
+          display_questions = Array(display_questions.length).fill(isSelect);
           // Update the state
           this.setState({ display_questions: display_questions });
-         },
+        },
         bgColor: (row, rowIndex) => {
           return schemePaired[parseInt(2 * rowIndex)]; // returns the color code for this paired analysis
         },
@@ -176,7 +183,9 @@ class Fig3 extends React.Component {
         <div style={{ padding: '1em' }}>
           <h3 style={{ padding: '0.5em' }}>
             {' '}
-            Question responses sorted by course for {result['instructor_name']}{' '}
+            Question responses sorted by course for {
+              result['instructor_name']
+            }{' '}
           </h3>
           <BootstrapTable
             keyField="qNumber"

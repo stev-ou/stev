@@ -72,7 +72,7 @@ def query_df_from_mongo(db,coll_filter, collections = COLLECTION_NAMES):
         # Use the database query to pull needed data
         cursor = coll.find(coll_filter)
         # For whatever reason, generating a dataframe clears the cursor, so get population here
-        population = cursor.count()
+        population = coll.count_documents(coll_filter)
         # This assumes that there will be no same uuid's across the different collections, e.g. the same uuid in GCOE and JRCOE
         if population > 0:
             df = pd.DataFrame(list(cursor))

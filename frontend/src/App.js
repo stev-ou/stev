@@ -3,14 +3,15 @@ import './App.css';
 import Landing from './components/landing.js';
 import Header from './components/Header.js';
 import Footer from './components/Footer.js';
-import Fig3 from './components/instructor/figure3_questions.js'
+// import Fig1 from './components/department/figure1_best_instructors.js'
 
 const App = () => {
   return (
     <div>
-     {/* <Header />
+      {/* <Header />
       <Landing /> */}
-    <Fig3 />
+      <Header />
+      <Landing />
     </div>
   );
 };

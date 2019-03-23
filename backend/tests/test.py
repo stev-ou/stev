@@ -5,7 +5,6 @@ import data_aggregation
 import pandas as pd
 from api_functions import *
 
-
 class basictest(unittest.TestCase):
     """ Basic tests """
 
@@ -80,10 +79,13 @@ class basictest(unittest.TestCase):
         course_test_list = ['engr1411', 'ame3143', 'bme3233', 'ece5213', 'edss3553', 'edah5023', 'edel4980']
         # Create connection to the db
         db = mongo.mongo_driver()
+        print('Testing the api functions for the following courses: ')
         for course in course_test_list:
-            for function in course_function_list:
+            print(course)
+            for func in course_function_list:
                 try:
-                    json.loads(jsonify(function(db, course)))
+                    response = func(db, course)
+                    json.loads(json.dumps(response))
                 except:
                     return self.assertEqual(True, False)
 

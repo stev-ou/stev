@@ -14,7 +14,7 @@ class LandingComponent extends React.Component {
               {' '}
               Disclaimer: This website is not affiliated with nor approved by
               the University of Oklahoma. There is no warranty nor any guarantee
-              on the validity of the data. 
+              on the validity of the data.
             </p>
           </div>
           <a
