@@ -485,20 +485,57 @@ def query_function(db, query, field_to_search):
 
     return result_list
 
+
+#Feel free to rename this, just keeping it explicit so its easy to find
+def instructor_fig1(db, instructor_id):
+    """
+    This will take in the name of an instructor, and return a dictionary containing all
+    of the courses taught by this instructor.
+    The courses will be returned with the dept name, course number, course name, specific course rating, and term
+    """
+    # Construct the json containing necessary data for figure 1 on instructor page
+    ret_json = {"result": {
+        "instructor name": "",
+        "courses": []}}
+
+    # filter that we use on the collection
+    coll_filter = {'$and':[
+            {"Instructor ID":instructor_id},
+            {"Term Code": {'$in': CURRENT_SEMESTERS}}]}
+
+    df, coll_name = query_df_from_mongo(db, coll_filter)
+    #drop_duplicate_courses(df)
+
+    for index, row in sorted(df.iterrows(), reverse=True):
+        # just add the instructor's name upon first iteration
+        if index == 0:
+            ret_json["result"]["instructor name"] == row["Instructor First Name"] + " " + row["Instructor Last Name"]
+        course_inst = {}
+        course_inst["dept name"] = row["Subject Code"]
+        course_inst["course number"] = row["Course Number"]
+        course_inst["course name"] = row["Course Title"]
+        course_inst["instr_rating_in_course"] = row["Avg Instructor Rating In Section"]
+        course_inst["term"] = SEMESTER_MAPPINGS[str(row["Term Code"])]
+        ret_json["result"]["courses"].append(course_inst)
+
+    return ret_json
+
+
 if __name__ == '__main__':
     # Test the db search
     # test = [201410, 201420, 201530, 201620, 201230, 201810]
     # print(test)
     # sort_by_term_code([201710, 201820, 201620, 201410, 201110, 201630, 201610])
-    cursor = {'$and':[
-    {"course_uuid":'engr1411'},
-    {"Term Code": {'$in': CURRENT_SEMESTERS}}]}
 
     # uuid_df, coll_name = query_df_from_mongo(mongo_driver(),cursor)
 
-    # pprint.pprint(course_instructor_ratings_api_generator(mongo_driver(),"engr1411"))
+    #course_instructor_ratings_api_generator(mongo_driver(),"engr1411")
     # pprint.pprint(relative_dept_rating_figure_json_generator(mongo_driver(),"engr1411"))
-    pprint.pprint(timeseries_data_generator(mongo_driver(), 'engr1411'))
+    #pprint.pprint(timeseries_data_generator(mongo_driver(), 'engr1411'))
     # pprint.pprint(question_ratings_generator(mongo_driver(),"engr1411"))
     # pprint.pprint(relative_dept_rating_figure_json_generator("engr2002"))
     # print(query_function(db,'thermodynamics','Queryable Course String'))
+    pprint.pprint(instructor_fig1(mongo_driver(), 112112705))
+
+
+
