@@ -24,7 +24,7 @@ function ordinal_suffix_of(i) {
 // Define API input string
 const API = api_endpoint + 'courses/';
 
-class Course_Fig2_Chart extends React.Component {
+class CourseFig2Chart extends React.Component {
   constructor(props) {
     super(props);
     this.state = { result: {}, loadedAPI: false, uuid: props.uuid };
@@ -219,4 +219,4 @@ class Course_Fig2_Chart extends React.Component {
 }
 // <h1> {result['course name']} is ranked {ordinal_suffix_of(result['course rating'])} out of {result.dept['courses in dept']} courses in the {result['dept']['dept name']} department </h1>
 // , verticalAlign:'middle'
-export default Course_Fig2_Chart;
+export default CourseFig2Chart;
