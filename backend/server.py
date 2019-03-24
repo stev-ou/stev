@@ -5,7 +5,7 @@ from mongo import mongo_driver
 from bson.json_util import dumps
 import pandas as pd
 import json
-from api_functions import query_function, course_instructor_ratings_api_generator, relative_dept_rating_figure_json_generator, timeseries_data_generator, question_ratings_generator
+from api_functions import *
 
 # Establish a database connection
 DB_NAME = "reviews-db"
@@ -40,31 +40,32 @@ def course_search_api():
 
     return jsonify({'result':result_list})
 
+### APIs for course search
 # Figure 1 api 
 @app.route(base_api_route+'courses/<string:course_uuid>/figure1', methods=['GET'])
-def figure_1_data_api(course_uuid):
-    response = course_instructor_ratings_api_generator(db, course_uuid)
+def course_figure_1_data_api(course_uuid):
+    response = CourseFig1Table(db, course_uuid)
 
     return jsonify(response)
 
 # Figure 2 api 
 @app.route(base_api_route+'courses/<string:course_uuid>/figure2', methods=['GET'])
-def figure_2_data_api(course_uuid):
-    response = relative_dept_rating_figure_json_generator(db, course_uuid)
+def course_figure_2_data_api(course_uuid):
+    response = CourseFig2Chart(db, course_uuid)
 
     return jsonify(response)
 
 # Figure 3 api 
 @app.route(base_api_route+'courses/<string:course_uuid>/figure3', methods=['GET'])
-def figure_3_data_api(course_uuid):
-    response = timeseries_data_generator(db, course_uuid)
+def course_figure_3_data_api(course_uuid):
+    response = CourseFig3Timeseries(db, course_uuid)
 
     return jsonify(response)
 
 # Figure 4 api 
 @app.route(base_api_route+'courses/<string:course_uuid>/figure4', methods=['GET'])
-def figure_4_data_api(course_uuid):
-    response = question_ratings_generator(db, course_uuid)
+def course_figure_4_data_api(course_uuid):
+    response = CourseFig4TableBar(db, course_uuid)
 
     return jsonify(response)
 
@@ -100,16 +101,10 @@ def department_api():
 
     return jsonify(dumps(test_data))
 
-### deprecated
-# # courses
-# @app.route('/api/v0/course/<string:course_string>', methods=['GET'])
-# def get_course(course_string):
-#     return jsonify({'course': course_string})
-
 if __name__ == '__main__':
     print("Updating database...")
     # print('IN DEVELOPMENT MODE; NO DATABASE UPDATE PERFORMED')
-    update_database(force_update=True)
+    update_database(force_update=False)
     print("Done.")
     print("Starting server...")
     app.run(host='0.0.0.0', port=80)

@@ -11,12 +11,12 @@ import {
   ResponsiveContainer,
 } from 'recharts';
 import * as Math from 'mathjs';
-import { api_endpoint } from '../constants.js';
+import { api_endpoint, colors } from '../../constants.js';
 
 // Define API parameters
 const API = api_endpoint + 'courses/';
 
-class Fig3 extends React.Component {
+class Course_Fig3 extends React.Component {
   constructor(props) {
     super(props);
     this.state = { result: {}, loadedAPI: false, uuid: props.uuid };
@@ -34,35 +34,11 @@ class Fig3 extends React.Component {
       return null;
     } else {
       var result = this.state.result;
-      console.log(result);
 
-      // Define a color pallete to use
-      var colors = [
-        '#3f51b5',
-        '#2196f3',
-        '#03a9f4',
-        '#ff5722',
-        '#e91e63',
-        '#9c27b0',
-        '#00bcd4',
-        '#4caf50',
-        '#8bc34a',
-        '#cddc39',
-        '#ffeb3b',
-        '#f44336',
-        '#795548',
-        '#607d8b',
-        '#4caf50',
-        '#8bc34a',
-        '#673ab7',
-        '#ffc107',
-        '#ff9800',
-        '#009688',
-      ];
       colors.sort(function() {
         return 0.5 - Math.random();
-      }); //Use this to randomize color order
-      // console.log(colors)
+      });
+      //Use this to randomize color order
       // Modify the data to get it into the form needed by the TimeSeriesChart function
       var data = [];
 
@@ -79,20 +55,26 @@ class Fig3 extends React.Component {
       for (var i = 0; i < all_semesters.length; i++) {
         var current_sem = {};
         current_sem['sem'] = all_semesters[i];
-        current_sem[result['course over time']['course name']] =
-          all_course_ratings[i];
-        all_ratings.push(all_course_ratings[i]);
-        current_sem[result['dept over time']['dept name']] =
-          all_dept_ratings[i];
-        all_ratings.push(all_dept_ratings[i]);
+        current_sem[
+          result['course over time']['course name']
+        ] = all_course_ratings[i].toFixed(2);
+        all_ratings.push(all_course_ratings[i].toFixed(2));
+        current_sem[result['dept over time']['dept name']] = all_dept_ratings[
+          i
+        ].toFixed(2);
+        all_ratings.push(all_dept_ratings[i].toFixed(2));
+
         // Loop through all instructors
         for (var j = 0; j < result['instructors'].length; j++) {
           var instr = result['instructors'][j];
 
           if (instr['semesters'].indexOf(all_semesters[i]) >= 0) {
-            current_sem[instr['name']] =
-              instr['ratings'][instr['semesters'].indexOf(all_semesters[i])];
-            all_ratings.push(current_sem[instr['name']]);
+            current_sem[instr['name']] = instr['ratings'].map(function(
+              each_element
+            ) {
+              return Number(each_element.toFixed(2));
+            })[instr['semesters'].indexOf(all_semesters[i])];
+            all_ratings.push(current_sem[instr['name']].toFixed(2));
           }
         }
         // Add current sem to data
@@ -122,6 +104,19 @@ class Fig3 extends React.Component {
           />
         );
       });
+
+      //   // Define tooltip function to tooltip based on line rather than column
+      //   function customTooltipOnYourLine(e) {
+      //   // if (e.active && e.payload!=null && e.payload[0]!=null) {
+      //   //       return (<div className="custom-tooltip">
+      //   //             <p>{e.payload[0].payload["Column Name"]}</p>
+      //   //           </div>);
+      //   //     }
+      //   // else {
+      //   //    return "";
+      //   //
+      //   return (<h1> Fuck </h1>);
+      // }
 
       const myTimeSeries = TimeSeriesChart({
         data: data,
@@ -198,4 +193,4 @@ const TimeSeriesChart = props => (
   </div>
 );
 
-export default Fig3;
+export default Course_Fig3;

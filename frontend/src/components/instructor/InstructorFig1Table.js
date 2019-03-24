@@ -7,15 +7,15 @@ import TableCell from '@material-ui/core/TableCell';
 import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
 import Paper from '@material-ui/core/Paper';
-import { api_endpoint } from '../constants.js';
+import { api_endpoint } from '../../constants.js';
 
 const CustomTableCell = withStyles(theme => ({
   head: {
-    backgroundColor: theme.palette.common.black,
+    backgroundColor: '#841617',
     color: theme.palette.common.white,
   },
   body: {
-    fontSize: 14,
+    fontSize: 18,
   },
 }))(TableCell);
 
@@ -30,86 +30,112 @@ const styles = theme => ({
   table: {
     minWidth: 700,
   },
-  row: {
+  tableRow: {
+    '&:hover': {
+      backgroundColor: '#f3b7b7!important',
+    },
     '&:nth-of-type(odd)': {
       backgroundColor: theme.palette.background.default, // Might want to change this if desired
     },
   },
+  tableBody: {},
 });
 
 // This is the function that will fetch the desired data from the api
-const API = api_endpoint + 'courses/';
-// const API_Test = 'https://hn.algolia.com/api/v1/search?query=redux';
+const API = api_endpoint + 'instructors/';
 
-class Fig1 extends React.Component {
+class InstructorFig1Table extends React.Component {
   constructor(props) {
     super(props);
-    this.state = { data: [], uuid: props.uuid, info: {} };
+    this.state = { data: [], uuid: props.uuid };
   }
 
   componentDidMount() {
     // This will call the api when the component "Mounts", i.e. when the page is accessed
-    fetch(API + this.state.uuid + '/figure1')
-      .then(response => response.json())
-      .then(data =>
-        this.setState({ info: data.result, data: data.result.instructors })
-      );
+    // fetch(API + this.state.uuid + '/figure1')
+    //   .then(response => response.json())
+    //   .then(data =>
+    //     this.setState({ data: data.result })
+    //   );
+    // this.setState({ data: data.result })
   }
 
   render() {
     let MyTable = withStyles(styles)(CustomizedTable); // This is important
-    // Get the data to pass to the table
+    // Get the data ready to pass to the table by rounding and adding ids
     var table_data = this.state.data;
-    table_data.forEach((item, i) => {
-      item['crs rating'] = item['crs rating'].toFixed(2); // Convert the long floats to 2 decimal places
-      item['avg rating'] = item['avg rating'].toFixed(2);
+    var table_data = {
+      'instructor name': 'Sam Jett teacher',
+      courses: [
+        {
+          'dept name': 'ENGR',
+          'course number': 1411,
+          'course name': 'long long long long long course name',
+          instr_rating_in_course: 4.1234532523,
+          term: 'Spring 2017, Fall 2016, Spring 2015',
+        },
+        {
+          'dept name': 'AME',
+          'course number': 2121,
+          'course name': 'long course name',
+          instr_rating_in_course: 4.12455454,
+          term: 'Summer 2017',
+        },
+        {
+          'dept name': 'BME',
+          'course number': 2873,
+          'course name': 'long course name',
+          instr_rating_in_course: 4.120984,
+          term: 'Fall 2017, Fall 2016, Spring 2016,',
+        },
+      ],
+    };
+    table_data.courses.forEach((item, i) => {
+      item['instr_rating_in_course'] = item['instr_rating_in_course'].toFixed(
+        2
+      ); // Convert the long floats to 2 decimal places
+      item['display name'] =
+        item['dept name'] +
+        item['course number'].toString() +
+        ': ' +
+        item['course name'];
       item['id'] = i + 1;
     });
-
-    // Get the info to pass to the table
-    const info = this.state.info;
-
-    return <MyTable rows={table_data} info={info} />;
+    return <MyTable data={table_data} />;
   }
 }
 
 //This is the function to create the table for figure 1
 function CustomizedTable(props) {
   const { classes } = props;
-  const rows = props.rows;
-  const info = props.info;
+  const data = props.data;
+  var rows = data.courses;
 
   return (
     <div>
       <h1 style={{ fontWeight: 'bold', fontSize: '3.5em', padding: '0.75em' }}>
         {' '}
-        {info['dept name']}
-        {info['course number']}: {info['course name']}{' '}
+        {data['instructor name']}{' '}
       </h1>
       <h2 style={{ padding: '0.5em', paddingTop: '0em' }}>
         {' '}
-        These professors have taught the course in the past 3 years{' '}
+        {data['instructor name'] +
+          ' has taught these courses in the previous 3 years'}{' '}
       </h2>
       <Paper className={classes.root}>
         <Table className={classes.table}>
           <TableHead>
-            <TableRow>
+            <TableRow className={classes.tableRow}>
               <CustomTableCell
                 style={{ fontWeight: 'bold', fontSize: '1.2em' }}
               >
-                Instructor Name
+                Course Name
               </CustomTableCell>
               <CustomTableCell
                 style={{ fontWeight: 'bold', fontSize: '1.2em' }}
                 align="right"
               >
-                Average Instructor Rating (0-5)
-              </CustomTableCell>
-              <CustomTableCell
-                style={{ fontWeight: 'bold', fontSize: '1.2em' }}
-                align="right"
-              >
-                Instructor Rating in Course (0-5)
+                {data['instructor name']} Average Rating in Course (1-5)
               </CustomTableCell>
               <CustomTableCell
                 style={{ fontWeight: 'bold', fontSize: '1.2em' }}
@@ -121,15 +147,12 @@ function CustomizedTable(props) {
           </TableHead>
           <TableBody>
             {rows.map(row => (
-              <TableRow className={classes.name} key={row.id}>
+              <TableRow className={classes.tableRow} key={row.id}>
                 <CustomTableCell component="th" scope="row">
-                  {row.name}
+                  {row['display name']}
                 </CustomTableCell>
                 <CustomTableCell align="center">
-                  {row['avg rating']}
-                </CustomTableCell>
-                <CustomTableCell align="center">
-                  {row['crs rating']}
+                  {row['instr_rating_in_course']}
                 </CustomTableCell>
                 <CustomTableCell align="right">{row['term']}</CustomTableCell>
               </TableRow>
@@ -145,4 +168,4 @@ CustomizedTable.propTypes = {
   classes: PropTypes.object.isRequired,
 };
 // export default withStyles(styles)(CustomizedTable);
-export default Fig1;
+export default InstructorFig1Table;

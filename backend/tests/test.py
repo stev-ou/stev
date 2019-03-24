@@ -1,8 +1,9 @@
 import unittest
-from backend import mongo
-from backend import data_aggregation
+import mongo
+import json
+import data_aggregation
 import pandas as pd
-
+from api_functions import *
 
 class basictest(unittest.TestCase):
     """ Basic tests """
@@ -50,7 +51,7 @@ class basictest(unittest.TestCase):
         # * Note that my formula uses n instead of n-1 for combining SDs, so expect some small differences in the final result
         return self.assertEqual(True, status)
 
-    # Test the dataframe aggregation for unique entries 
+    # # Test the dataframe aggregation for unique entries 
     def test_dataframe_aggregation(self):
 
         '''
@@ -58,7 +59,7 @@ class basictest(unittest.TestCase):
         course title and instructor.
         '''
         # Test the data aggregation for unique entries
-        df = pd.read_csv('backend/data/GCOE.csv')
+        df = pd.read_csv('data/GCOE.csv')
 
         ag_df = data_aggregation.aggregate_data(df)
 
@@ -67,6 +68,29 @@ class basictest(unittest.TestCase):
 
         return self.assertEqual(0, num_repeats)
 
+    # Test the current course apis to make sure that they are at least returning a valid json
+    def test_course_api_endings(self):
+        '''
+        This unit test will ping each of the currently created api endings with a variety of different courses to make sure they hit.
+
+        '''
+        # Define the currently working courses
+        course_function_list = [CourseFig1Table, CourseFig2Chart, CourseFig3Timeseries, CourseFig4TableBar] 
+        course_test_list = ['engr1411', 'ame3143', 'bme3233', 'ece5213', 'edss3553', 'edah5023', 'edel4980']
+        # Create connection to the db
+        db = mongo.mongo_driver()
+        print('Testing the api functions for the following courses: ')
+        for course in course_test_list:
+            print(course)
+            for func in course_function_list:
+                try:
+                    response = func(db, course)
+                    json.loads(json.dumps(response))
+                except:
+                    return self.assertEqual(True, False)
+
+        return self.assertEqual(True, True)
 
 if __name__ == '__main__':
-    unittest.main()
+    test_current_api_endings()
+    # unittest.main()

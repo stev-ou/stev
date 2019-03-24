@@ -11,14 +11,14 @@
     "mathjs": "^5.6.0",
     "normal-distribution": "0.0.7",
     "prettier": "^1.16.4",
+    "rcolor": "^1.0.1",
     "react": "^16.6.3",
     "react-bootstrap-table-next": "^3.0.0",
     "react-chartjs-2": "^2.7.4",
-    "react-chartjs2": "^1.2.1",
     "react-dom": "^16.6.3",
     "react-redux": "^6.0.1",
     "react-scripts": "^2.1.5",
-    "recharts": "^1.4.1",
+    "react-virtualized": "^9.21.0",
     "redux": "^4.0.1"
   },
   "scripts": {

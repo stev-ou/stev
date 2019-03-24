@@ -72,7 +72,7 @@ def query_df_from_mongo(db,coll_filter, collections = COLLECTION_NAMES):
         # Use the database query to pull needed data
         cursor = coll.find(coll_filter)
         # For whatever reason, generating a dataframe clears the cursor, so get population here
-        population = cursor.count()
+        population = coll.count_documents(coll_filter)
         # This assumes that there will be no same uuid's across the different collections, e.g. the same uuid in GCOE and JRCOE
         if population > 0:
             df = pd.DataFrame(list(cursor))
@@ -83,11 +83,19 @@ def query_df_from_mongo(db,coll_filter, collections = COLLECTION_NAMES):
         print('The below filter was not found within any of the mongo collections in COLLECTION_NAMES')
         pprint.pprint(coll_filter)
         raise Exception('The filter was not found in the mongo collections in COLLECTION_NAMES')
-
     return df, coll_name
 
+def drop_duplicate_courses(df):
+    # Get the list of the most popular Course Titles of this course, and trim any entries that arent the most popular course name
+    if 'Section Title' in df.columns:
+        most_frequent_course = df['Section Title'].value_counts().idxmax()
+        df.drop(df[(df['Section Title']!=most_frequent_course)].index, inplace=True)
+    elif 'Course Title' in df.columns:
+        most_frequent_course = df['Course Title'].value_counts().idxmax()
+        df.drop(df[(df['Course Title']!=most_frequent_course)].index, inplace=True)
+    return
 
-def course_instructor_ratings_api_generator(db, uuid):
+def CourseFig1Table(db, uuid):
     '''
     This function will take one validated course-based uuid in the aggregated database and will
     build a json response to present the values needed for figure 1. Briefly, this api response 
@@ -109,6 +117,7 @@ def course_instructor_ratings_api_generator(db, uuid):
             {"Term Code": {'$in': CURRENT_SEMESTERS}}]}
 
     df, coll_name = query_df_from_mongo(db, coll_filter)
+    drop_duplicate_courses(df)
 
     # The following is a very crappy way to get a list of unique indices that are in the order of the semesters
     #######
@@ -188,7 +197,7 @@ def course_instructor_ratings_api_generator(db, uuid):
                 
     return ret_json
 
-def relative_dept_rating_figure_json_generator(db, valid_uuid):
+def CourseFig2Chart(db, valid_uuid):
     '''
     This function will build the json for the response to build the relative department rating figure 
     (2nd from top on the left side). The json has structure given in schema.json, for this rating.
@@ -211,6 +220,7 @@ def relative_dept_rating_figure_json_generator(db, valid_uuid):
     {"Term Code": {'$in': CURRENT_SEMESTERS}}]}
 
     uuid_df, coll_name = query_df_from_mongo(db, cursor)
+    drop_duplicate_courses(uuid_df)
 
     # Make sure that the df is unique wrt Term Code and instructor
     uuid_df.drop_duplicates(subset=['Term Code', 'Instructor ID'], inplace=True)
@@ -228,6 +238,7 @@ def relative_dept_rating_figure_json_generator(db, valid_uuid):
     cmean = uuid_df['Avg Course Rating'].unique()[0]
     dept_mean = uuid_df['Avg Department Rating'].unique()[0]
     dept_sd = uuid_df['SD Department Rating'].unique()[0]
+    crank = uuid_df['Course Rank in Department in Semester'].unique()[0]
     
     ## Get the instructor details
     # Build a dictionary based on the instructors that have taught the course  
@@ -251,30 +262,18 @@ def relative_dept_rating_figure_json_generator(db, valid_uuid):
     # Sort out the repeat courses such that we only get a single entry for course rating
     # Get the number of unique courses in a given department
     num_courses = subj_df['Course Number'].nunique()
-
-
-    # Drop all duplicates from subj_df
-    subj_df.drop_duplicates(subset = ['Course Number'], inplace=True)
-
-    # Sort the subj_df based on Avg Course Rating field
-    subj_df.sort_values(by = 'Avg Course Rating', ascending=False,inplace=True)
-
-    # Find placement within the sorted subj_df 
-    subj_df.reset_index(inplace=True)
-    crank = subj_df.index[subj_df['Course Number'] == cnum].tolist()[0] + 1
-    total_dept = len(subj_df)
     
     # Build the json response
     response = {'result':{'course name':str(cname),
             'most recent sem': SEMESTER_MAPPINGS[str(sem)],
             'course number': int(cnum),
             'course ranking': int(crank), 
-                          'dept':{'dept name': str(subj), 'courses in dept': int(total_dept) , 'dept mean': float(dept_mean), 'dept sd':float(dept_sd)}, 
+                          'dept':{'dept name': str(subj), 'courses in dept': int(num_courses) , 'dept mean': float(dept_mean), 'dept sd':float(dept_sd)}, 
                           'current course mean': float(cmean), 
                           'instructors':instructors}}
     return response
 
-def timeseries_data_generator(db, valid_uuid):
+def CourseFig3Timeseries(db, valid_uuid):
 
     """
     This function will search for all courses that have occurred in the given timespan. It will then
@@ -290,9 +289,10 @@ def timeseries_data_generator(db, valid_uuid):
             {"Term Code": {'$in': CURRENT_SEMESTERS}}]}
 
     df, coll_name = query_df_from_mongo(db, coll_filter)
+    drop_duplicate_courses(df)
 
     # Fill the course number and name in the response
-    response['result']['course number']=df['Course Number'].unique()[0]
+    response['result']['course number']=int(df['Course Number'].unique()[0])
     response['result']['course over time'] = {'ratings':[],'course name':df['Course Title'].unique()[0]}
 
     # Fill in the semesters that the course was found, in order of term
@@ -300,7 +300,7 @@ def timeseries_data_generator(db, valid_uuid):
     sort_by_term_code(term_codes)
     terms = [SEMESTER_MAPPINGS[str(term)] for term in term_codes]
     response['result']['course over time']['semesters'] = terms
-    response['result']['dept over time'] = {'ratings':[],'semesters': terms}
+    response['result']['dept over time'] = {'dept name': df['Subject Code'].unique()[0],'ratings':[],'semesters': terms}
 
     # Add in the course rating and dept ratings
     for tcode in term_codes:
@@ -318,9 +318,9 @@ def timeseries_data_generator(db, valid_uuid):
             instr_obj['semesters'].append(SEMESTER_MAPPINGS[str(j)])
             instr_obj['ratings'].append(list(sub_df[(sub_df['Term Code']==j)]['Avg Instructor Rating In Section'])[0])
         response['result']['instructors'].append(instr_obj)
-    return response
+    return response # Added this bit to get rid of int64s, which are not JSON serializable
 
-def question_ratings_generator(db, valid_uuid):
+def CourseFig4TableBar(db, valid_uuid):
 
     """
     This function will perform the following steps:
@@ -340,6 +340,7 @@ def question_ratings_generator(db, valid_uuid):
             {"Term Code": {'$in': CURRENT_SEMESTERS}}]}
 
     df, coll_name = query_df_from_mongo(db, coll_filter)
+    drop_duplicate_courses(df)
 
     # Now we need to drop the duplicates and only take columns of interest
     df = df.drop_duplicates(['Term Code', 'Instructor ID'])[['Term Code','Instructor ID','Subject Code', 'Course Number', 'Course Title']]
@@ -484,21 +485,50 @@ def query_function(db, query, field_to_search):
 
     return result_list
 
+
+#Feel free to rename this, just keeping it explicit so its easy to find
+def InstructorFig1Table(db, instructor_id):
+    """
+    This will take in the name of an instructor, and return a dictionary containing all
+    of the courses taught by this instructor.
+    The courses will be returned with the dept name, course number, course name, specific course rating, and term
+    """
+    # Construct the json containing necessary data for figure 1 on instructor page
+    ret_json = {"result": {
+        "instructor name": "",
+        "courses": []}}
+
+    # filter that we use on the collection
+    coll_filter = {'$and':[
+            {"Instructor ID":instructor_id},
+            {"Term Code": {'$in': CURRENT_SEMESTERS}}]}
+
+    df, coll_name = query_df_from_mongo(db, coll_filter)
+    #drop_duplicate_courses(df)
+
+    for index, row in sorted(df.iterrows(), reverse=True):
+        # just add the instructor's name upon first iteration
+        if index == 0:
+            ret_json["result"]["instructor name"] == row["Instructor First Name"] + " " + row["Instructor Last Name"]
+        course_inst = {}
+        course_inst["dept name"] = row["Subject Code"]
+        course_inst["course number"] = row["Course Number"]
+        course_inst["course name"] = row["Course Title"]
+        course_inst["instr_rating_in_course"] = row["Avg Instructor Rating In Section"]
+        course_inst["term"] = SEMESTER_MAPPINGS[str(row["Term Code"])]
+        ret_json["result"]["courses"].append(course_inst)
+
+    return ret_json
+
+
 if __name__ == '__main__':
     # Test the db search
     # test = [201410, 201420, 201530, 201620, 201230, 201810]
     # print(test)
     # sort_by_term_code([201710, 201820, 201620, 201410, 201110, 201630, 201610])
-    cursor = {'$and':[
-    {"course_uuid":'engr1411'},
-    {"Term Code": {'$in': CURRENT_SEMESTERS}}]}
 
-    uuid_df, coll_name = query_df_from_mongo(mongo_driver(),cursor)
+    # uuid_df, coll_name = query_df_from_mongo(mongo_driver(),cursor)
+    pprint.pprint(InstructorFig1Table(mongo_driver(), 112112705))
 
-    # pprint.pprint(course_instructor_ratings_api_generator(mongo_driver(),"engr1411"))
-    # pprint.pprint(relative_dept_rating_figure_json_generator(mongo_driver(),"engr1411"))
-    # pprint.pprint(timeseries_data_generator(mongo_driver(), 'engr1411'))
-    # pprint.pprint(question_ratings_generator(mongo_driver(),"engr1411"))
-    #pprint.pprint(relative_dept_rating_figure_json_generator("engr2002"))
-    #print(query_function(db,'thermodynamics','Queryable Course String'))
+
 

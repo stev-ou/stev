@@ -3,7 +3,7 @@ import { HorizontalBar, Doughnut } from 'react-chartjs-2';
 import { schemeSet3 } from 'd3-scale-chromatic'; // This is the colors for the bar chart
 import * as Math from 'mathjs';
 // import CanvasJS from 'canvasjs';
-import { api_endpoint } from '../constants.js';
+import { api_endpoint } from '../../constants.js';
 
 // This function will add the proper suffix, i.e 1st, 2nd, 3rd, given integer input
 function ordinal_suffix_of(i) {
@@ -24,7 +24,7 @@ function ordinal_suffix_of(i) {
 // Define API input string
 const API = api_endpoint + 'courses/';
 
-class Fig2 extends React.Component {
+class CourseFig2Chart extends React.Component {
   constructor(props) {
     super(props);
     this.state = { result: {}, loadedAPI: false, uuid: props.uuid };
@@ -104,7 +104,7 @@ class Fig2 extends React.Component {
 
       // Determine what scale to plot the averages on
       var min_rating = Math.floor(
-        Math.min(bar_data.datasets[0].data.map(Number))
+        Math.min(bar_data.datasets[0].data.map(Number)) - 0.01
       );
       var max_rating = Math.ceil(Math.max(bar_data.datasets[0].data));
       if (max_rating === 6) {
@@ -219,4 +219,4 @@ class Fig2 extends React.Component {
 }
 // <h1> {result['course name']} is ranked {ordinal_suffix_of(result['course rating'])} out of {result.dept['courses in dept']} courses in the {result['dept']['dept name']} department </h1>
 // , verticalAlign:'middle'
-export default Fig2;
+export default CourseFig2Chart;
