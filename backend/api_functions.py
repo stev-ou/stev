@@ -504,7 +504,6 @@ def InstructorFig1Table(db, instructor_id):
             {"Term Code": {'$in': CURRENT_SEMESTERS}}]}
 
     df, coll_name = query_df_from_mongo(db, coll_filter)
-    #drop_duplicate_courses(df)
 
     for index, row in sorted(df.iterrows(), reverse=True):
         # just add the instructor's name upon first iteration
@@ -521,7 +520,7 @@ def InstructorFig1Table(db, instructor_id):
     return ret_json
 
 
-def instructor_fig2(db, instuctor_id):
+def instructor_fig2(db, instructor_id):
     """
     This will take in the name of an instructor, and return a dictionary containing the following:
     Instructor Name - First and Last name
@@ -529,10 +528,19 @@ def instructor_fig2(db, instuctor_id):
     Dept over time - dept name, same semesters as above, dept avg rating for these semesters
     Courses - name of course, semesters taught, and respective avg ratings
     """
-    # Construct the json containing necessary data for figure 1 on instructor page
-    ret_json = {"result": {
-        "instructor name": "",
-        "courses": []}}
+    # Construct the json containing necessary data for figure 2 on instructor page
+    ret_json = {'result':
+                    {'instructor name': '',
+                        'instructor over time':{
+                            'semesters':[],
+                            'ratings':[]},
+                        'dept over time':{
+                            'dept name': "",
+                            'semesters':[],
+                            'ratings':[]},
+                        'courses':[]
+                    }
+                }
 
     # filter that we use on the collection
     coll_filter = {'$and':[
@@ -540,9 +548,88 @@ def instructor_fig2(db, instuctor_id):
             {"Term Code": {'$in': CURRENT_SEMESTERS}}]}
 
     df, coll_name = query_df_from_mongo(db, coll_filter)
-    #drop_duplicate_courses(df)
+
+    # get a dict containing all current semesters that have been taught by this dude as keys, values are gonna be total rating
+    semesters_taught = {}
+
+    # this is gonna have current semesters taught as keys, and value is gonna be the amount of courses taught in that semester
+    # I know this is mem-inefficient, will optimize later after demo
+    semester_totals = {}
+
+    # used to keep track of which courses have already been added to the return json
+    courses = []
+
+    # used to keep track of which departments this professor has taught in
+    departments = []
+
+    for index, row in sorted(df.iterrows(), reverse=True):
+        # set instructor name on first iteration
+        if index == 0:
+            ret_json["result"]["instructor name"] = row["Instructor First Name"] + " " + row["Instructor Last Name"]
+
+        # instructor over time block
+        if SEMESTER_MAPPINGS[str(row["Term Code"])] not in semesters_taught:
+            semesters_taught[SEMESTER_MAPPINGS[str(row["Term Code"])]] = row["Avg Instructor Rating In Section"]
+            semester_totals[SEMESTER_MAPPINGS[str(row["Term Code"])]] = 1
+        else:
+            semesters_taught[SEMESTER_MAPPINGS[str(row["Term Code"])]] += row["Avg Instructor Rating In Section"]
+            semester_totals[SEMESTER_MAPPINGS[str(row["Term Code"])]] += 1
+
+        # courses block
+        if row["Course Title"] not in courses:
+            courses.append(row["Course Title"])
+            ret_json["result"]["courses"].append({"name": row["Course Title"], 
+                                                    "semesters": [SEMESTER_MAPPINGS[str(row["Term Code"])]],
+                                                    "ratings": [row["Avg Instructor Rating In Section"]]})
+        else:
+            for i in range(0, len(ret_json["result"]["courses"])):
+                if ret_json["result"]["courses"][i]["name"] == row["Course Title"]:
+                    ret_json["result"]["courses"][i]["semesters"].append(SEMESTER_MAPPINGS[str(row["Term Code"])])
+                    ret_json["result"]["courses"][i]["ratings"].append(row["Avg Instructor Rating In Section"])
+
+        if row["Subject Code"] not in departments:
+            departments.append(row["Subject Code"])
 
 
+    # Now we use this complex averaging algorithm to get semesterly average ratings, add to ret_json
+    for key, value in semesters_taught.items():
+        semesters_taught[key] = value / semester_totals[key]
+        ret_json["result"]["instructor over time"]["semesters"].append(key)
+        ret_json["result"]["instructor over time"]["ratings"].append(semesters_taught[key])
+
+    # Now we need a new data frame for the entire department
+    coll_filter = {'$and':[
+            {"Subject Code": departments[0]},
+            {"Term Code": {'$in': CURRENT_SEMESTERS}}]}
+
+    df, coll_name = query_df_from_mongo(db, coll_filter)
+
+    # construct dictionaries where keys are current semesters in which professor taught, and value is total rating for all courses/course count
+    dept = {}
+    count = {}
+    for key in semesters_taught.keys():
+        dept[key] = 0
+        count[key] = 0
+
+    for index, row in sorted(df.iterrows(), reverse=True):
+        # set instructor name on first iteration
+        if index == 0:
+            ret_json["result"]["dept over time"]["dept name"] = row["Subject Code"]
+
+        # ratings block
+        if SEMESTER_MAPPINGS[str(row["Term Code"])] in dept.keys():
+            dept[SEMESTER_MAPPINGS[str(row["Term Code"])]] += row["Avg Instructor Rating In Section"]
+            count[SEMESTER_MAPPINGS[str(row["Term Code"])]] += 1
+
+    # average dept semesterly ratings and add to ret_json
+    for key, value in dept.items():
+        dept[key] = value / count[key]
+        ret_json["result"]["dept over time"]["semesters"].append(key)
+        ret_json["result"]["dept over time"]["ratings"].append(dept[key])
+
+    return ret_json
+
+    
 
 if __name__ == '__main__':
     # Test the db search
@@ -551,7 +638,7 @@ if __name__ == '__main__':
     # sort_by_term_code([201710, 201820, 201620, 201410, 201110, 201630, 201610])
 
     # uuid_df, coll_name = query_df_from_mongo(mongo_driver(),cursor)
-    pprint.pprint(InstructorFig1Table(mongo_driver(), 112112705))
+    pprint.pprint(instructor_fig2(mongo_driver(), 112112705))
 
 
 
