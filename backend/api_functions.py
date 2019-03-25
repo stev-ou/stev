@@ -521,6 +521,29 @@ def instructor_fig1(db, instructor_id):
     return ret_json
 
 
+def instructor_fig2(db, instuctor_id):
+    """
+    This will take in the name of an instructor, and return a dictionary containing the following:
+    Instructor Name - First and Last name
+    Instructor over time - Semesters taught, and their respective avg ratings
+    Dept over time - dept name, same semesters as above, dept avg rating for these semesters
+    Courses - name of course, semesters taught, and respective avg ratings
+    """
+    # Construct the json containing necessary data for figure 1 on instructor page
+    ret_json = {"result": {
+        "instructor name": "",
+        "courses": []}}
+
+    # filter that we use on the collection
+    coll_filter = {'$and':[
+            {"Instructor ID":instructor_id},
+            {"Term Code": {'$in': CURRENT_SEMESTERS}}]}
+
+    df, coll_name = query_df_from_mongo(db, coll_filter)
+    #drop_duplicate_courses(df)
+
+
+
 if __name__ == '__main__':
     # Test the db search
     # test = [201410, 201420, 201530, 201620, 201230, 201810]
