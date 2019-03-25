@@ -6,7 +6,7 @@ import { api_endpoint, colors } from '../../constants.js';
 // Define API parameters
 const API = api_endpoint + 'instructors/';
 
-class Instructor_Fig2_Timeseries extends React.Component {
+class InstructorFig2Timeseries extends React.Component {
   constructor(props) {
     super(props);
     this.state = { result: {}, loadedAPI: false, uuid: props.uuid }; //props.uuid
@@ -214,4 +214,4 @@ class Instructor_Fig2_Timeseries extends React.Component {
     }
   }
 }
-export default Instructor_Fig2_Timeseries;
+export default InstructorFig2Timeseries;

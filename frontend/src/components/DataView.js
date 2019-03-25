@@ -1,9 +1,9 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import Course_Fig1_Table from './course/Course_Fig1_Table.js';
-import Course_Fig2_Chart from './course/Course_Fig2_Chart.js';
-import Course_Fig3_Timeseries from './course/Course_Fig3_Timeseries.js';
-import Course_Fig4_Table_Bar from './course/Course_Fig4_Table_Bar.js';
+import CourseFig1Table from './course/CourseFig1Table.js';
+import CourseFig2Chart from './course/CourseFig2Chart.js';
+import CourseFig3Timeseries from './course/CourseFig3Timeseries.js';
+import CourseFig4TableBar from './course/CourseFig4TableBar.js';
 
 const DataView = props => {
   const uuid = props.search_text;
@@ -13,25 +13,25 @@ const DataView = props => {
     <div className="container">
       <div className="graphical-content">
         <div className="table-fig1">
-          <Course_Fig1_Table uuid={uuid} />
+          <CourseFig1Table uuid={uuid} />
         </div>
         <hr style={{ height: 30 }} />
       </div>
 
       <div className="graphical-content">
-        <Course_Fig2_Chart uuid={uuid} />
+        <CourseFig2Chart uuid={uuid} />
       </div>
 
       <hr style={{ height: 30 }} />
 
       <div className="graphical-content">
-        <Course_Fig3_Timeseries uuid={uuid} />
+        <CourseFig3Timeseries uuid={uuid} />
       </div>
 
       <hr style={{ height: 30 }} />
 
       <div className="graphical-content">
-        <Course_Fig4_Table_Bar uuid={uuid} />
+        <CourseFig4TableBar uuid={uuid} />
       </div>
     </div>
   );

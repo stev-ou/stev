@@ -8,7 +8,7 @@ import BootstrapTable from 'react-bootstrap-table-next';
 // Define API input string
 const API = api_endpoint + 'instructors/';
 
-class Instructor_Fig3_Table_Bar extends React.Component {
+class InstructorFig3TableBar extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -202,4 +202,4 @@ class Instructor_Fig3_Table_Bar extends React.Component {
 
 // <h1> {result['course name']} is ranked {ordinal_suffix_of(result['course rating'])} out of {result.dept['courses in dept']} courses in the {result['dept']['dept name']} department </h1>
 // , verticalAlign:'middle'
-export default Instructor_Fig3_Table_Bar;
+export default InstructorFig3TableBar;
