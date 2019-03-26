@@ -127,7 +127,7 @@
 {'result':{'avg rating':4.15, # This is averaged across all the instructors we captured for and all semesters we captured it for them
 			'instructor name': 'Sam Jett',
 			'courses':{'ENGR1411': 
-							{'questions':{
+							{'questions': {
 								'How did this class go?': {'ratings':[4.0, 4.45, 4.0], "semesters": ["Spring 2016", "Fall 2017", "Summer 2018"]},
 								'Was the professor good?': {'ratings':[4.0, 4.45, 4.0], "semesters": ["Spring 2016", "Fall 2017", "Summer 2018"]},
 								'Did you have a very good time?': {'ratings':[4.0, 4.45, 4.0], "semesters": ["Spring 2016", "Fall 2017", "Summer 2018"]},
@@ -135,8 +135,8 @@
 								'Did joe lovoi teach your class?': {'ratings':[4.0, 4.45, 4.0], "semesters": ["Spring 2016", "Fall 2017", "Summer 2018"]}
 							}
 						}
-					}
-					'ENGR1411': 
+					},
+					'ENGR420': 
 						{'questions':{
 								'How did this class go?': {'ratings':[4.0, 4.45, 4.0], "semesters": ["Spring 2016", "Fall 2017", "Summer 2018"]},
 								'Was the professor good?': {'ratings':[4.0, 4.45, 4.0], "semesters": ["Spring 2016", "Fall 2017", "Summer 2018"]},
