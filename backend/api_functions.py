@@ -633,27 +633,56 @@ def instructor_fig2(db, instructor_id):
 def instructor_fig3(db, instructor_id):
     # Construct the json dictionary containing the necessary information for figure 3
     ret_json = {'result':{'avg_rating': 0,
-                            'instructor_name': '',
-                            'courses':[],
-                            'questions':[]}}
+                            'instructor name': '',
+                            'courses':{}
+                        }
+                }
 
     # filter that we use on the collection
     coll_filter = {'$and':[
-            {"Instructor ID":instructor_id},
+            {"Instructor 1 ID":instructor_id},
             {"Term Code": {'$in': CURRENT_SEMESTERS}}]}
 
     df, coll_name = query_df_from_mongo(db, coll_filter, collections=["GCOE", "JRCOE"])
 
-    # total rating to be used for avg_rating
+    # total rating and count to be used for avg_rating
     total_rating = 0
+    count = 0
 
     for index, row in sorted(df.iterrows(), reverse=True):
         # set instructor name on first iteration
         if index == 0:
-            ret_json["result"]["instructor name"] = row["Instructor First Name"] + " " + row["Instructor Last Name"]
+            ret_json["result"]["instructor name"] = row["Instructor 1 First Name"] + " " + row["Instructor 1 Last Name"]
 
-        total_rating += row
+        # info for avg_rating
+        total_rating += row["Mean"]
+        count += 1
 
+        # if this course hasnt already been added, then construct a course dict and add it to return json
+        if (row["Subject Code"] + str(row["Course Number"])) not in ret_json["result"]["courses"].keys():
+            q_inst =  {"questions": {
+                            row["Question"]: {"ratings": [row["Mean"]], "semesters": [SEMESTER_MAPPINGS[str(row["Term Code"])]]}
+                            }
+                        }
+
+            #now add q_inst to ret_json
+            ret_json["result"]["courses"][row["Subject Code"] + str(row["Course Number"])] = q_inst
+
+        # if this course has already been added, but this specific question hasnt, then create a question dict and add it
+        elif row["Question"] not in ret_json["result"]["courses"][row["Subject Code"] + str(row["Course Number"])]["questions"].keys():
+            q_inst = {"ratings": [row["Mean"]], "semesters": [SEMESTER_MAPPINGS[str(row["Term Code"])]]}
+
+            # now add to questions for this course
+            ret_json["result"]["courses"][row["Subject Code"] + str(row["Course Number"])]["questions"][row["Question"]] = q_inst
+
+        # if this course and specific question have already been added, just add its rating and semester to the question dict
+        else:
+            ret_json["result"]["courses"][row["Subject Code"] + str(row["Course Number"])]["questions"][row["Question"]]["ratings"].append(row["Mean"])
+            ret_json["result"]["courses"][row["Subject Code"] + str(row["Course Number"])]["questions"][row["Question"]]["semesters"].append(SEMESTER_MAPPINGS[str(row["Term Code"])])
+
+
+
+    return ret_json
 
     
 
