@@ -612,7 +612,7 @@ def instructor_fig2(db, instructor_id):
         count[key] = 0
 
     for index, row in sorted(df.iterrows(), reverse=True):
-        # set instructor name on first iteration
+        # set dept name on first iteration
         if index == 0:
             ret_json["result"]["dept over time"]["dept name"] = row["Subject Code"]
 
@@ -629,6 +629,32 @@ def instructor_fig2(db, instructor_id):
 
     return ret_json
 
+
+def instructor_fig3(db, instructor_id):
+    # Construct the json dictionary containing the necessary information for figure 3
+    ret_json = {'result':{'avg_rating': 0,
+                            'instructor_name': '',
+                            'courses':[],
+                            'questions':[]}}
+
+    # filter that we use on the collection
+    coll_filter = {'$and':[
+            {"Instructor ID":instructor_id},
+            {"Term Code": {'$in': CURRENT_SEMESTERS}}]}
+
+    df, coll_name = query_df_from_mongo(db, coll_filter, collections=["GCOE", "JRCOE"])
+
+    # total rating to be used for avg_rating
+    total_rating = 0
+
+    for index, row in sorted(df.iterrows(), reverse=True):
+        # set instructor name on first iteration
+        if index == 0:
+            ret_json["result"]["instructor name"] = row["Instructor First Name"] + " " + row["Instructor Last Name"]
+
+        total_rating += row
+
+
     
 
 if __name__ == '__main__':
@@ -638,7 +664,7 @@ if __name__ == '__main__':
     # sort_by_term_code([201710, 201820, 201620, 201410, 201110, 201630, 201610])
 
     # uuid_df, coll_name = query_df_from_mongo(mongo_driver(),cursor)
-    pprint.pprint(instructor_fig2(mongo_driver(), 112112705))
+    pprint.pprint(instructor_fig3(mongo_driver(), 112112705))
 
 
 
