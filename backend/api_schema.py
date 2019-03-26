@@ -124,7 +124,7 @@
 # Figure 3
 # Individual question ratings for search by instructor
 
-{'result':{'avg_rating':4.15, # This is averaged across all the instructors we captured for and all semesters we captured it for them
+{'result':{'avg rating':4.15, # This is averaged across all the instructors we captured for and all semesters we captured it for them
 			'instructor name': 'Sam Jett',
 			'courses':{'ENGR1411': 
 							{'questions':{

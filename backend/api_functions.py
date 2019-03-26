@@ -632,7 +632,7 @@ def instructor_fig2(db, instructor_id):
 
 def instructor_fig3(db, instructor_id):
     # Construct the json dictionary containing the necessary information for figure 3
-    ret_json = {'result':{'avg_rating': 0,
+    ret_json = {'result':{'avg rating': 0,
                             'instructor name': '',
                             'courses':{}
                         }
@@ -680,6 +680,8 @@ def instructor_fig3(db, instructor_id):
             ret_json["result"]["courses"][row["Subject Code"] + str(row["Course Number"])]["questions"][row["Question"]]["ratings"].append(row["Mean"])
             ret_json["result"]["courses"][row["Subject Code"] + str(row["Course Number"])]["questions"][row["Question"]]["semesters"].append(SEMESTER_MAPPINGS[str(row["Term Code"])])
 
+    # NASA Grade average algorithm
+    ret_json["result"]["avg rating"] = total_rating / count
 
 
     return ret_json
