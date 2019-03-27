@@ -724,7 +724,6 @@ def SearchAutocomplete(db, search_type='course'):
             df = pd.concat([df, df_coll], ignore_index=True)
     df.drop_duplicates(search_key, inplace=True)
 
-
     # Now, we just need to convert the dataframe to a dictionary with needed form for search autocomplete
     if search_type == 'course':
         # Create the label column
