@@ -5,6 +5,7 @@ import {
   SearchStatus,
   setSearchType,
   setSearchText,
+  SearchType
 } from '../actions';
 import { api_map, api_arg_map, api_endpoint } from '../constants.js';
 
@@ -12,7 +13,7 @@ class SearchForm extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      search_type: 'course',
+      search_type: 'instructor',
       search_text: '',
       result: {},
       valid_search: false,
@@ -75,12 +76,23 @@ class SearchForm extends React.Component {
     console.log(event.target.value);
     if (event.target.value === 'Course') {
       //implement dispatch action to set type to course
+      //TEMPORARY -  Sam is inserting some code debt
+      this.setState({ search_type:'course'})
     } else if (event.target.value === 'Instructor') {
       // NYE
+      //TEMPORARY -  Sam is inserting some code debt
+      this.setState({ search_type:'instructor'})
     }
   }
 
   render() {
+
+      if (this.state.search_type === 'course') {
+    var prompt = "Ex: ENGR1411"
+  }
+  else {
+    var prompt = "EX: 112112705"
+  }
     return (
       <div className="row">
         <div className="col-lg-12">
@@ -91,7 +103,7 @@ class SearchForm extends React.Component {
                 id="landing-input"
                 name="search_text"
                 type="text"
-                placeholder="Ex: ENGR1411"
+                placeholder={prompt}
                 aria-label="Search"
                 value={this.state.search_text}
                 onChange={this.handleInputChange}
