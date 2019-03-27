@@ -47,61 +47,38 @@ const API = api_endpoint + 'instructors/';
 class InstructorFig1Table extends React.Component {
   constructor(props) {
     super(props);
-    this.state = { data: [], uuid: props.uuid };
+    this.state = { loadedAPI: false, data: [], uuid: props.uuid };
   }
 
   componentDidMount() {
     // This will call the api when the component "Mounts", i.e. when the page is accessed
-    // fetch(API + this.state.uuid + '/figure1')
-    //   .then(response => response.json())
-    //   .then(data =>
-    //     this.setState({ data: data.result })
-    //   );
-    // this.setState({ data: data.result })
+    console.log(API + this.state.uuid.toString() + '/figure1');
+    fetch(API + this.state.uuid.toString() + '/figure1')
+      .then(response => response.json())
+      .then(data => this.setState({ data: data.result, loadedAPI: true }));
   }
 
   render() {
-    let MyTable = withStyles(styles)(CustomizedTable); // This is important
-    // Get the data ready to pass to the table by rounding and adding ids
-    var table_data = this.state.data;
-    var table_data = {
-      'instructor name': 'Sam Jett teacher',
-      courses: [
-        {
-          'dept name': 'ENGR',
-          'course number': 1411,
-          'course name': 'long long long long long course name',
-          instr_rating_in_course: 4.1234532523,
-          term: 'Spring 2017, Fall 2016, Spring 2015',
-        },
-        {
-          'dept name': 'AME',
-          'course number': 2121,
-          'course name': 'long course name',
-          instr_rating_in_course: 4.12455454,
-          term: 'Summer 2017',
-        },
-        {
-          'dept name': 'BME',
-          'course number': 2873,
-          'course name': 'long course name',
-          instr_rating_in_course: 4.120984,
-          term: 'Fall 2017, Fall 2016, Spring 2016,',
-        },
-      ],
-    };
-    table_data.courses.forEach((item, i) => {
-      item['instr_rating_in_course'] = item['instr_rating_in_course'].toFixed(
-        2
-      ); // Convert the long floats to 2 decimal places
-      item['display name'] =
-        item['dept name'] +
-        item['course number'].toString() +
-        ': ' +
-        item['course name'];
-      item['id'] = i + 1;
-    });
-    return <MyTable data={table_data} />;
+    if (!this.state.loadedAPI) {
+      return null;
+    } else {
+      let MyTable = withStyles(styles)(CustomizedTable); // This is important
+      // Get the data ready to pass to the table by rounding and adding ids
+      var table_data = this.state.data;
+      console.log(table_data);
+      table_data.courses.forEach((item, i) => {
+        item['instr_rating_in_course'] = item['instr_rating_in_course'].toFixed(
+          2
+        ); // Convert the long floats to 2 decimal places
+        item['display name'] =
+          item['dept name'] +
+          item['course number'].toString() +
+          ': ' +
+          item['course name'];
+        item['id'] = i + 1;
+      });
+      return <MyTable data={table_data} />;
+    }
   }
 }
 

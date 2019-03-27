@@ -5,6 +5,7 @@ import { connect } from 'react-redux'
   SearchStatus,
   setSearchType,
   setSearchText,
+  SearchType,
 } from '../actions';
 import { api_map, api_arg_map, api_endpoint } from '../constants.js';
 
@@ -53,8 +54,8 @@ class SearchForm extends React.Component {
           console.log(this.state);
           if (data.result.length === 1) {
             this.props.setSearchStatus(SearchStatus.VALID);
-            this.props.setSearchText(this.state.search_text);
-            this.props.setSearchType(this.state.search_type);
+              this.props.setSearchText(this.state.search_text.toLowerCase());
+            //this.props.setSearchType(this.state.search_type);
             return this.setState({ result: data.result, valid_search: true });
           } else {
             alert(
@@ -74,13 +75,23 @@ class SearchForm extends React.Component {
   changeRadio(event) {
     console.log(event.target.value);
     if (event.target.value === 'Course') {
-      //implement dispatch action to set type to course
+        //this.setState({ search_type: SearchType.COURSE});
+        this.props.setSearchType(SearchType.COURSE);
     } else if (event.target.value === 'Instructor') {
-      // NYE
+        this.props.setSearchType(SearchType.INSTRUCTOR);
+        //this.setState({ search_type: SearchType.INSTRUCTOR});
     }
   }
 
   render() {
+      var prompt = "";
+      if (this.props.search_type === SearchType.COURSE) {
+          prompt = "Ex: ENGR1411";
+  }
+  else {
+      prompt = "Ex: 112112705";
+  }
+
     return (
       <div className="row">
         <div className="col-lg-12">
@@ -91,7 +102,7 @@ class SearchForm extends React.Component {
                 id="landing-input"
                 name="search_text"
                 type="text"
-                placeholder="Ex: ENGR1411"
+                placeholder={prompt}
                 aria-label="Search"
                 value={this.state.search_text}
                 onChange={this.handleInputChange}
@@ -140,7 +151,8 @@ class SearchForm extends React.Component {
 
 const mapStateToProps = state => {
   return {
-    valid_search: state.valid_search,
+      valid_search: state.valid_search,
+      search_type: state.search_type
   };
 };
 
