@@ -10,20 +10,16 @@ import InstructorFig3TableBar from './instructor/InstructorFig3TableBar.js';
 
 const DataView = props => {
   const uuid = props.search_text;
-  console.log(uuid);
-  // var uuid = 'engr1411'
-  //console.log(uuid);
-  //This is where Redux will be implemented
-  var search_type = 'instructor'; //or instructor
+    const search_type = props.search_type;
+    console.log(search_type);
 
-  if (search_type === 'course') {
-    return (
-      <div className="container">
-        <div className="graphical-content">
-          <div className="table-fig1">
-            <CourseFig1Table uuid={uuid} />
-          </div>
-          <hr style={{ height: 30 }} />
+  if (search_type==='COURSE') {
+  return (
+    <div className="container">
+      <div className="graphical-content">
+        <div className="table-fig1">
+          <CourseFig1Table uuid={uuid} />
+
         </div>
 
         <div className="graphical-content">
@@ -69,7 +65,8 @@ const DataView = props => {
 
 const mapStateToProps = state => {
   return {
-    search_text: state.search_text,
+      search_text: state.search_text,
+      search_type: state.search_type
   };
 };
 
