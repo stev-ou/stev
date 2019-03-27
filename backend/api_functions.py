@@ -506,9 +506,6 @@ def InstructorFig1Table(db, instructor_id):
     df, coll_name = query_df_from_mongo(db, coll_filter)
 
     for index, row in sorted(df.iterrows(), reverse=True):
-        # just add the instructor's name upon first iteration
-        if index == 0:
-            ret_json["result"]["instructor name"] == row["Instructor First Name"] + " " + row["Instructor Last Name"]
         course_inst = {}
         course_inst["dept name"] = row["Subject Code"]
         course_inst["course number"] = row["Course Number"]
@@ -516,11 +513,12 @@ def InstructorFig1Table(db, instructor_id):
         course_inst["instr_rating_in_course"] = row["Avg Instructor Rating In Section"]
         course_inst["term"] = SEMESTER_MAPPINGS[str(row["Term Code"])]
         ret_json["result"]["courses"].append(course_inst)
+    ret_json["result"]["instructor name"] = row["Instructor First Name"] + " " + row["Instructor Last Name"]
 
     return ret_json
 
 
-def instructor_fig2(db, instructor_id):
+def InstructorFig2Timeseries(db, instructor_id):
     """
     This will take in the name of an instructor, and return a dictionary containing the following:
     Instructor Name - First and Last name
@@ -630,7 +628,7 @@ def instructor_fig2(db, instructor_id):
     return ret_json
 
 
-def instructor_fig3(db, instructor_id):
+def InstructorFig3TableBar(db, instructor_id):
     # Construct the json dictionary containing the necessary information for figure 3
     ret_json = {'result':{'avg rating': 0,
                             'instructor name': '',
@@ -695,7 +693,10 @@ if __name__ == '__main__':
     # sort_by_term_code([201710, 201820, 201620, 201410, 201110, 201630, 201610])
 
     # uuid_df, coll_name = query_df_from_mongo(mongo_driver(),cursor)
-    pprint.pprint(instructor_fig3(mongo_driver(), 112112705))
+    # pprint.pprint(InstructorFig1Table(mongo_driver(), 112112705))
+    # pprint.pprint(InstructorFig2Timeseries(mongo_driver(), 112112705))
+    pprint.pprint(InstructorFig3TableBar(mongo_driver(), 112112705))
+
 
 
 
