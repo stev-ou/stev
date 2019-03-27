@@ -8,9 +8,8 @@ import InstructorFig3TableBar from './components/instructor/InstructorFig3TableB
 const App = () => {
   return (
     <div>
-     {/* <Header />
-      <Landing /> */}
-   <InstructorFig3TableBar uuid={112112705} /> 
+      <Header />
+      <Landing />
     </div>
   );
 };

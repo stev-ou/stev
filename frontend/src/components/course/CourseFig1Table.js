@@ -123,7 +123,7 @@ function CustomizedTable(props) {
               </CustomTableCell>
             </TableRow>
           </TableHead>
-          <TableBody >
+          <TableBody>
             {rows.map(row => (
               <TableRow hover className={classes.tableRow} key={row.id}>
                 <CustomTableCell component="th" scope="row">

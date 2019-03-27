@@ -91,6 +91,29 @@ class basictest(unittest.TestCase):
 
         return self.assertEqual(True, True)
 
+    # Test the current instructor apis to make sure that they are at least returning a valid json
+    def test_instructor_api_endings(self):
+        '''
+        This unit test will ping each of the currently created api endings with a variety of different instructors to make sure they hit.
+
+        '''
+        # Define the currently working courses
+        instructor_function_list = [InstructorFig1Table, InstructorFig2Timeseries, InstructorFig3TableBar] 
+        instructor_test_list = [113007898, 112131147, 113316966, 112114393, 112111442, 113841484, 113320095]
+        # Create connection to the db
+        db = mongo.mongo_driver()
+        print('Testing the api functions for the following instructors: ')
+        for instr in instructor_test_list:
+            print(instr)
+            for func in instructor_function_list:
+                try:
+                    response = func(db, instr)
+                    json.loads(json.dumps(response))
+                except:
+                    return self.assertEqual(True, False)
+
+        return self.assertEqual(True, True)
+
 if __name__ == '__main__':
     test_current_api_endings()
     # unittest.main()

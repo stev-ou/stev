@@ -621,7 +621,10 @@ def InstructorFig2Timeseries(db, instructor_id):
 
     # average dept semesterly ratings and add to ret_json
     for key, value in dept.items():
-        dept[key] = value / count[key]
+        if count[key]!=0:
+            dept[key] = value / count[key]
+        else:
+            dept[key] = 0
         ret_json["result"]["dept over time"]["semesters"].append(key)
         ret_json["result"]["dept over time"]["ratings"].append(dept[key])
 
@@ -630,9 +633,10 @@ def InstructorFig2Timeseries(db, instructor_id):
 
 def InstructorFig3TableBar(db, instructor_id):
     # Construct the json dictionary containing the necessary information for figure 3
-    ret_json = {'result':{'avg rating': 0,
+    ret_json = {'result':{
                             'instructor name': '',
-                            'courses':{}
+                            'courses':[],
+                            'questions':[]
                         }
                 }
 
@@ -647,44 +651,38 @@ def InstructorFig3TableBar(db, instructor_id):
     total_rating = 0
     count = 0
 
-    for index, row in sorted(df.iterrows(), reverse=True):
-        # set instructor name on first iteration
-        if index == 0:
-            ret_json["result"]["instructor name"] = row["Instructor 1 First Name"] + " " + row["Instructor 1 Last Name"]
+    # Create a list of Courses
+    df['course'] = df['Subject Code']+df['Course Number'].astype(str)+': '+df['Section Title']
 
-        # info for avg_rating
-        total_rating += row["Mean"]
-        count += 1
+    # Get list of unique courses and add to ret_json
+    unique_courses = list(df['course'].unique())
+    ret_json['result']['courses']=unique_courses
 
-        # if this course hasnt already been added, then construct a course dict and add it to return json
-        if (row["Subject Code"] + str(row["Course Number"])) not in ret_json["result"]["courses"].keys():
-            q_inst =  {"questions": {
-                            row["Question"]: {"ratings": [row["Mean"]], "semesters": [SEMESTER_MAPPINGS[str(row["Term Code"])]]}
-                            }
-                        }
+    # Get list of unique questions and add to ret_json
+    unique_questions = df['Question'].unique()
+    for i in unique_questions:
+        ret_json['result']['questions'].append({'question':i, 'ratings':[]})
 
-            #now add q_inst to ret_json
-            ret_json["result"]["courses"][row["Subject Code"] + str(row["Course Number"])] = q_inst
+    # Look through each course for each question. If found, add avg rating to list. If not found, add 'none'
+    for crs in unique_courses:
+        subset = df[(df['course']==crs)]
+        for j in range(len(ret_json['result']['questions'])):
+            question = ret_json['result']['questions'][j]['question']
+            if question in list(subset['Question']):
+                ss = subset[(subset['Question']==question)]
+                if np.sum(ss['Responses'])!= 0:
+                    rating = np.sum(ss['Mean']*ss['Responses'])/np.sum(ss['Responses'])
+                elif len(ss['Mean']) != 0:
+                    rating = np.sum(ss['Mean'])/len(ss['Mean'])
+                else:
+                    rating = 'none'
+            else:
+                rating = 'none'
+            ret_json['result']['questions'][j]['ratings'].append(rating)
 
-        # if this course has already been added, but this specific question hasnt, then create a question dict and add it
-        elif row["Question"] not in ret_json["result"]["courses"][row["Subject Code"] + str(row["Course Number"])]["questions"].keys():
-            q_inst = {"ratings": [row["Mean"]], "semesters": [SEMESTER_MAPPINGS[str(row["Term Code"])]]}
-
-            # now add to questions for this course
-            ret_json["result"]["courses"][row["Subject Code"] + str(row["Course Number"])]["questions"][row["Question"]] = q_inst
-
-        # if this course and specific question have already been added, just add its rating and semester to the question dict
-        else:
-            ret_json["result"]["courses"][row["Subject Code"] + str(row["Course Number"])]["questions"][row["Question"]]["ratings"].append(row["Mean"])
-            ret_json["result"]["courses"][row["Subject Code"] + str(row["Course Number"])]["questions"][row["Question"]]["semesters"].append(SEMESTER_MAPPINGS[str(row["Term Code"])])
-
-    # NASA Grade average algorithm
-    ret_json["result"]["avg rating"] = total_rating / count
-
+    ret_json['result']['instructor name'] = df['Instructor 1 First Name'][0]+' '+ df['Instructor 1 Last Name'][0]
 
     return ret_json
-
-    
 
 if __name__ == '__main__':
     # Test the db search
@@ -693,9 +691,9 @@ if __name__ == '__main__':
     # sort_by_term_code([201710, 201820, 201620, 201410, 201110, 201630, 201610])
 
     # uuid_df, coll_name = query_df_from_mongo(mongo_driver(),cursor)
-    # pprint.pprint(InstructorFig1Table(mongo_driver(), 112112705))
-    # pprint.pprint(InstructorFig2Timeseries(mongo_driver(), 112112705))
-    pprint.pprint(InstructorFig3TableBar(mongo_driver(), 112112705))
+    pprint.pprint(InstructorFig1Table(mongo_driver(), 112131147))
+    pprint.pprint(InstructorFig2Timeseries(mongo_driver(), 112131147))
+    pprint.pprint(InstructorFig3TableBar(mongo_driver(), 112131147))
 
 
 

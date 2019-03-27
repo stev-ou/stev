@@ -20,40 +20,15 @@ class InstructorFig3TableBar extends React.Component {
   }
   componentWillMount() {
     // This will call the api when the component "Mounts", i.e. when the page is accessed
-    // fetch(API + this.state.uuid + '/figure4')
-    //   .then(response => response.json())
-    //   .then(data => {
-    //     this.setState({
-    //       result: data.result,
-    //       loadedAPI: true,
-    //       display_questions: Array(data.result.questions.length).fill(true),
-    //     });
-    //   }); // Initial keying into result
-    var data = {
-      result: {
-        avg_rating: 4.15,
-        instructor_name: 'Sam Jett',
-        courses: ['Course1', 'Course2', 'Course3'],
-        questions: [
-          { question: 'How did this class go?', ratings: [4.0, 4.45, 4.0] },
-          { question: 'Was the professor good?', ratings: [3.1, 3.4, 4.6] },
-          {
-            question: 'Did you have a very good time?',
-            ratings: [3.1, 3.4, 4.6],
-          },
-          { question: 'Was it diverse?', ratings: [3.1, 3.4, 4.6] },
-          {
-            question: 'Did joe lovoi teach your class?',
-            ratings: [2.1, 1, 0.4],
-          },
-        ],
-      },
-    };
-    this.setState({
-      result: data.result,
-      loadedAPI: true,
-      display_questions: Array(data.result.questions.length).fill(true),
-    });
+    fetch(API + this.state.uuid + '/figure3')
+      .then(response => response.json())
+      .then(data => {
+        this.setState({
+          result: data.result,
+          loadedAPI: true,
+          display_questions: Array(data.result.questions.length).fill(true),
+        });
+      }); // Initial keying into result
   }
 
   render() {
@@ -61,6 +36,7 @@ class InstructorFig3TableBar extends React.Component {
       return null;
     } else {
       var result = this.state.result;
+      console.log(result);
       var display_questions = this.state.display_questions;
 
       // Lets build our plot results to take data from the api and turn them into the form usable by the bar chart
@@ -95,7 +71,11 @@ class InstructorFig3TableBar extends React.Component {
           hidden: !display_questions[j],
           hoverBorderColor: 'rgba(255,255,255,1)',
           data: result.questions[j].ratings.map(function(each_element) {
-            return Number(each_element.toFixed(2));
+            if (each_element === 'none') {
+              return null;
+            } else {
+              return Number(each_element.toFixed(2));
+            }
           }),
         });
 
@@ -135,7 +115,7 @@ class InstructorFig3TableBar extends React.Component {
               ticks: { fontSize: 16 },
               scaleLabel: {
                 display: true,
-                labelString: 'Instructors',
+                labelString: 'Courses',
                 fontSize: 24,
               },
             },
@@ -184,7 +164,7 @@ class InstructorFig3TableBar extends React.Component {
           <h3 style={{ padding: '0.5em' }}>
             {' '}
             Question responses sorted by course for {
-              result['instructor_name']
+              result['instructor name']
             }{' '}
           </h3>
           <BootstrapTable

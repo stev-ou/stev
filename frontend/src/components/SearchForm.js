@@ -5,7 +5,7 @@ import {
   SearchStatus,
   setSearchType,
   setSearchText,
-  SearchType
+  SearchType,
 } from '../actions';
 import { api_map, api_arg_map, api_endpoint } from '../constants.js';
 
@@ -77,22 +77,20 @@ class SearchForm extends React.Component {
     if (event.target.value === 'Course') {
       //implement dispatch action to set type to course
       //TEMPORARY -  Sam is inserting some code debt
-      this.setState({ search_type:'course'})
+      this.setState({ search_type: 'course' });
     } else if (event.target.value === 'Instructor') {
       // NYE
       //TEMPORARY -  Sam is inserting some code debt
-      this.setState({ search_type:'instructor'})
+      this.setState({ search_type: 'instructor' });
     }
   }
 
   render() {
-
-      if (this.state.search_type === 'course') {
-    var prompt = "Ex: ENGR1411"
-  }
-  else {
-    var prompt = "EX: 112112705"
-  }
+    if (this.state.search_type === 'course') {
+      var prompt = 'Ex: ENGR1411';
+    } else {
+      var prompt = 'EX: 112112705';
+    }
     return (
       <div className="row">
         <div className="col-lg-12">
