@@ -11,7 +11,7 @@ const App = () => {
     <div>
       {/*<Header />
       <Landing />*/}
-      <SearchForm />
+      <SearchInput />
 
     </div>
   );

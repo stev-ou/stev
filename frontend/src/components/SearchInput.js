@@ -14,7 +14,7 @@ import MenuItem from '@material-ui/core/MenuItem';
 import CancelIcon from '@material-ui/icons/Cancel';
 import { emphasize } from '@material-ui/core/styles/colorManipulator';
 
-const suggestions = [
+const choices = [
   { label: 'Afghanistan' },
   { label: 'Aland Islands' },
   { label: 'Albania' },
@@ -50,7 +50,7 @@ const suggestions = [
   { label: 'British Indian Ocean Territory' },
   { label: 'Brunei Darussalam' },
 ].map(suggestion => ({
-  value: suggestion.label,
+  value: suggestion.label+' bbbbb',
   label: suggestion.label,
 }));
 
@@ -201,7 +201,6 @@ function Menu(props) {
 const components = {
   Control,
   Menu,
-  MultiValue,
   NoOptionsMessage,
   Option,
   Placeholder,
@@ -212,8 +211,14 @@ const components = {
 class IntegrationReactSelect extends React.Component {
   state = {
     single: null,
-    multi: null,
   };
+
+    componentWillMount() {
+    // This will call the api when the component "Mounts", i.e. when the page is accessed
+    fetch(API + this.state.search_type+ 's/all')
+      .then(response => response.json())
+      .then(data => this.setState({ result: data.result, loadedAPI: true })); // Initial keying into result
+  }
 
   handleChange = name => value => {
     this.setState({
@@ -233,6 +238,7 @@ class IntegrationReactSelect extends React.Component {
         },
       }),
     };
+    console.log(this.state)
 
     return (
       <div className={classes.root}>
@@ -240,7 +246,7 @@ class IntegrationReactSelect extends React.Component {
           <Select
             classes={classes}
             styles={selectStyles}
-            options={suggestions}
+            options={choices}
             components={components}
             value={this.state.single}
             onChange={this.handleChange('single')}
@@ -248,22 +254,6 @@ class IntegrationReactSelect extends React.Component {
             isClearable
           />
           <div className={classes.divider} />
-          <Select
-            classes={classes}
-            styles={selectStyles}
-            textFieldProps={{
-              label: 'Label',
-              InputLabelProps: {
-                shrink: true,
-              },
-            }}
-            options={suggestions}
-            components={components}
-            value={this.state.multi}
-            onChange={this.handleChange('multi')}
-            placeholder="Select multiple countries"
-            isMulti
-          />
         </NoSsr>
       </div>
     );
