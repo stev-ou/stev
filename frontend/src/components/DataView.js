@@ -10,32 +10,32 @@ import InstructorFig3TableBar from './instructor/InstructorFig3TableBar.js';
 
 const DataView = props => {
   const uuid = props.search_text;
-    const search_type = props.search_type;
-    console.log(search_type);
+  const search_type = props.search_type;
+  console.log(search_type);
 
-  if (search_type==='COURSE') {
-  return (
-    <div className="container">
-      <div className="graphical-content">
-        <div className="table-fig1">
-          <CourseFig1Table uuid={uuid} />
-
-        </div>
-
+  if (search_type === 'COURSE') {
+    return (
+      <div className="container">
         <div className="graphical-content">
-          <CourseFig2Chart uuid={uuid} />
-        </div>
+          <div className="table-fig1">
+            <CourseFig1Table uuid={uuid} />
+          </div>
 
-        <hr style={{ height: 30 }} />
+          <div className="graphical-content">
+            <CourseFig2Chart uuid={uuid} />
+          </div>
 
-        <div className="graphical-content">
-          <CourseFig3Timeseries uuid={uuid} />
-        </div>
+          <hr style={{ height: 30 }} />
 
-        <hr style={{ height: 30 }} />
+          <div className="graphical-content">
+            <CourseFig3Timeseries uuid={uuid} />
+          </div>
 
-        <div className="graphical-content">
-          <CourseFig4TableBar uuid={uuid} />
+          <hr style={{ height: 30 }} />
+
+          <div className="graphical-content">
+            <CourseFig4TableBar uuid={uuid} />
+          </div>
         </div>
       </div>
     );
@@ -65,8 +65,8 @@ const DataView = props => {
 
 const mapStateToProps = state => {
   return {
-      search_text: state.search_text,
-      search_type: state.search_type
+    search_text: state.search_text,
+    search_type: state.search_type,
   };
 };
 
