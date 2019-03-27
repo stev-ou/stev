@@ -22,6 +22,8 @@ const DataView = props => {
 
         </div>
 
+        <hr style={{ height: 30 }} />
+
         <div className="graphical-content">
           <CourseFig2Chart uuid={uuid} />
         </div>
@@ -38,6 +40,7 @@ const DataView = props => {
           <CourseFig4TableBar uuid={uuid} />
         </div>
       </div>
+    </div>
     );
   } else {
     return (

@@ -8,6 +8,7 @@ import { connect } from 'react-redux'
   SearchType,
 } from '../actions';
 import { api_map, api_arg_map, api_endpoint } from '../constants.js';
+import SearchAutocomplete from './SearchAutocomplete.js'
 
 class SearchForm extends React.Component {
   constructor(props) {
@@ -24,6 +25,7 @@ class SearchForm extends React.Component {
   }
 
   handleInputChange(event) {
+    console.log(event)
     const target = event.target;
     const value = target.value;
     const name = target.name;
@@ -91,21 +93,18 @@ class SearchForm extends React.Component {
   else {
       prompt = "Ex: 112112705";
   }
+  console.log(this.state.search_text)
 
     return (
       <div className="row">
         <div className="col-lg-12">
           <form className="validate" onSubmit={this.handleSubmit}>
             <div className="input-group mb-3">
-              <input
-                className="form-control w-80 header-elem"
-                id="landing-input"
-                name="search_text"
-                type="text"
-                placeholder={prompt}
-                aria-label="Search"
+              <SearchAutocomplete
+                className="w-80"
                 value={this.state.search_text}
                 onChange={this.handleInputChange}
+                search_type= {this.props.search_type}
               />
               <div className="input-group-append">
                 <input id="search-btn" type="submit" value="Search" />

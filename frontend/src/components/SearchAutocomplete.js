@@ -2,62 +2,19 @@
 
 import React from 'react';
 import PropTypes from 'prop-types';
-import classNames from 'classnames';
 import Select from 'react-select';
 import { withStyles } from '@material-ui/core/styles';
 import Typography from '@material-ui/core/Typography';
-import NoSsr from '@material-ui/core/NoSsr';
 import TextField from '@material-ui/core/TextField';
 import Paper from '@material-ui/core/Paper';
-import Chip from '@material-ui/core/Chip';
 import MenuItem from '@material-ui/core/MenuItem';
-import CancelIcon from '@material-ui/icons/Cancel';
 import { emphasize } from '@material-ui/core/styles/colorManipulator';
-
-const choices = [
-  { label: 'Afghanistan' },
-  { label: 'Aland Islands' },
-  { label: 'Albania' },
-  { label: 'Algeria' },
-  { label: 'American Samoa' },
-  { label: 'Andorra' },
-  { label: 'Angola' },
-  { label: 'Anguilla' },
-  { label: 'Antarctica' },
-  { label: 'Antigua and Barbuda' },
-  { label: 'Argentina' },
-  { label: 'Armenia' },
-  { label: 'Aruba' },
-  { label: 'Australia' },
-  { label: 'Austria' },
-  { label: 'Azerbaijan' },
-  { label: 'Bahamas' },
-  { label: 'Bahrain' },
-  { label: 'Bangladesh' },
-  { label: 'Barbados' },
-  { label: 'Belarus' },
-  { label: 'Belgium' },
-  { label: 'Belize' },
-  { label: 'Benin' },
-  { label: 'Bermuda' },
-  { label: 'Bhutan' },
-  { label: 'Bolivia, Plurinational State of' },
-  { label: 'Bonaire, Sint Eustatius and Saba' },
-  { label: 'Bosnia and Herzegovina' },
-  { label: 'Botswana' },
-  { label: 'Bouvet Island' },
-  { label: 'Brazil' },
-  { label: 'British Indian Ocean Territory' },
-  { label: 'Brunei Darussalam' },
-].map(suggestion => ({
-  value: suggestion.label+' bbbbb',
-  label: suggestion.label,
-}));
+import { api_endpoint } from '../constants.js';
 
 const styles = theme => ({
   root: {
-    flexGrow: 1,
-    height: 250,
+    flexGrow: 0,
+    height: 100,
   },
   input: {
     display: 'flex',
@@ -80,7 +37,7 @@ const styles = theme => ({
     ),
   },
   noOptionsMessage: {
-    padding: `${theme.spacing.unit}px ${theme.spacing.unit * 2}px`,
+    padding: '0px'//`${theme.spacing.unit}px ${theme.spacing.unit * 2}px`,
   },
   singleValue: {
     fontSize: 16,
@@ -97,9 +54,7 @@ const styles = theme => ({
     left: 0,
     right: 0,
   },
-  divider: {
-    height: theme.spacing.unit * 2,
-  },
+
 });
 
 function NoOptionsMessage(props) {
@@ -176,19 +131,6 @@ function ValueContainer(props) {
   return <div className={props.selectProps.classes.valueContainer}>{props.children}</div>;
 }
 
-function MultiValue(props) {
-  return (
-    <Chip
-      tabIndex={-1}
-      label={props.children}
-      className={classNames(props.selectProps.classes.chip, {
-        [props.selectProps.classes.chipFocused]: props.isFocused,
-      })}
-      onDelete={props.removeProps.onClick}
-      deleteIcon={<CancelIcon {...props.removeProps} />}
-    />
-  );
-}
 
 function Menu(props) {
   return (
@@ -209,15 +151,19 @@ const components = {
 };
 
 class SearchAutocomplete extends React.Component {
-  state = {
-    single: null,
-  };
+  constructor(props) {
+    super(props)
+  this.state = {
+    single: null,search_type:props.search_type, choices:[]
+  };}
 
     componentWillMount() {
+    // Define API input string
+    const API = api_endpoint + this.state.search_type.toLowerCase() + 's/all';
     // This will call the api when the component "Mounts", i.e. when the page is accessed
-    fetch(API + this.state.search_type+ 's/all')
+    fetch(API)
       .then(response => response.json())
-      .then(data => this.setState({ result: data.result, loadedAPI: true })); // Initial keying into result
+      .then(data => this.setState({ choices: data.result})); // Initial keying into result
   }
 
   handleChange = name => value => {
@@ -227,6 +173,7 @@ class SearchAutocomplete extends React.Component {
   };
 
   render() {
+    var choices = this.state.choices
     const { classes, theme } = this.props;
 
     const selectStyles = {
@@ -238,29 +185,37 @@ class SearchAutocomplete extends React.Component {
         },
       }),
     };
-    console.log(this.state)
+
+    // Build a placeholder based on the search type
+    var placeholder = ""
+    if (this.props.search_type === 'COURSE') {
+      placeholder = 'Enter the name of a course'
+    }
+    else {
+      placeholder = 'Enter the name of an instructor'
+    }
+
+    // onChange={this.handleChange('single')}
+
 
     return (
-      <div className={classes.root}>
-        <NoSsr>
+      <div className="form-control w-80 header-elem" style={{'padding':'0em', 'paddingLeft':'0.1em'}}>
           <Select
             classes={classes}
             styles={selectStyles}
             options={choices}
             components={components}
-            value={this.state.single}
-            onChange={this.handleChange('single')}
-            placeholder="Search a country (start with a)"
+            placeholder={placeholder}
+            value={this.props.value}
+            onChange = {this.props.onChange}
             isClearable
           />
-          <div className={classes.divider} />
-        </NoSsr>
       </div>
     );
   }
 }
 
-IntegrationReactSelect.propTypes = {
+SearchAutocomplete.propTypes = {
   classes: PropTypes.object.isRequired,
   theme: PropTypes.object.isRequired,
 };
