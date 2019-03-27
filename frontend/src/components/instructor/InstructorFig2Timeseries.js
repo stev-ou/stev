@@ -24,7 +24,7 @@ class InstructorFig2Timeseries extends React.Component {
       return null;
     } else {
       var result = this.state.result;
-      
+
       //Use this to randomize color order
       // colors.sort(function() {
       //   return 0.5 - Math.random();

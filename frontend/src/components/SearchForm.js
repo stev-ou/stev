@@ -5,7 +5,7 @@ import {
   SearchStatus,
   setSearchType,
   setSearchText,
-  SearchType
+  SearchType,
 } from '../actions';
 import { api_map, api_arg_map, api_endpoint } from '../constants.js';
 
@@ -91,6 +91,7 @@ class SearchForm extends React.Component {
   else {
       prompt = "Ex: 112112705";
   }
+
     return (
       <div className="row">
         <div className="col-lg-12">

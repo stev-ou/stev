@@ -19,48 +19,47 @@ const DataView = props => {
       <div className="graphical-content">
         <div className="table-fig1">
           <CourseFig1Table uuid={uuid} />
+
         </div>
+
+        <div className="graphical-content">
+          <CourseFig2Chart uuid={uuid} />
+        </div>
+
         <hr style={{ height: 30 }} />
+
+        <div className="graphical-content">
+          <CourseFig3Timeseries uuid={uuid} />
+        </div>
+
+        <hr style={{ height: 30 }} />
+
+        <div className="graphical-content">
+          <CourseFig4TableBar uuid={uuid} />
+        </div>
       </div>
-
-      <div className="graphical-content">
-        <CourseFig2Chart uuid={uuid} />
-      </div>
-
-      <hr style={{ height: 30 }} />
-
-      <div className="graphical-content">
-        <CourseFig3Timeseries uuid={uuid} />
-      </div>
-
-      <hr style={{ height: 30 }} />
-
-      <div className="graphical-content">
-        <CourseFig4TableBar uuid={uuid} />
-      </div>
-    </div>
-  );}
-  else {
+    );
+  } else {
     return (
-    <div className="container">
-      <div className="graphical-content">
-        <div className="table-fig1">
-          <InstructorFig1Table uuid={uuid.toString()} />
+      <div className="container">
+        <div className="graphical-content">
+          <div className="table-fig1">
+            <InstructorFig1Table uuid={uuid.toString()} />
+          </div>
+          <hr style={{ height: 30 }} />
         </div>
+
+        <div className="graphical-content">
+          <InstructorFig2Timeseries uuid={uuid.toString()} />
+        </div>
+
         <hr style={{ height: 30 }} />
+
+        <div className="graphical-content">
+          <InstructorFig3TableBar uuid={uuid.toString()} />
+        </div>
       </div>
-
-      <div className="graphical-content">
-        <InstructorFig2Timeseries uuid={uuid.toString()} />
-      </div>
-
-      <hr style={{ height: 30 }} />
-
-      {/*<div className="graphical-content">
-        <InstructorFig3TableBar uuid={uuid.toString()} />
-      </div>*/}
-    </div>
-  );
+    );
   }
 };
 
