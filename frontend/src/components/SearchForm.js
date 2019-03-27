@@ -55,7 +55,7 @@ class SearchForm extends React.Component {
           if (data.result.length === 1) {
             this.props.setSearchStatus(SearchStatus.VALID);
             this.props.setSearchText(this.state.search_text);
-            this.props.setSearchType(this.state.search_type);
+            //this.props.setSearchType(this.state.search_type);
             return this.setState({ result: data.result, valid_search: true });
           } else {
             alert(
@@ -75,23 +75,21 @@ class SearchForm extends React.Component {
   changeRadio(event) {
     console.log(event.target.value);
     if (event.target.value === 'Course') {
-      //implement dispatch action to set type to course
-      //TEMPORARY -  Sam is inserting some code debt
-      this.setState({ search_type:'course'})
+        //this.setState({ search_type: SearchType.COURSE});
+        this.props.setSearchType(SearchType.COURSE);
     } else if (event.target.value === 'Instructor') {
-      // NYE
-      //TEMPORARY -  Sam is inserting some code debt
-      this.setState({ search_type:'instructor'})
+        this.props.setSearchType(SearchType.INSTRUCTOR);
+        //this.setState({ search_type: SearchType.INSTRUCTOR});
     }
   }
 
   render() {
 
-      if (this.state.search_type === 'course') {
-    var prompt = "Ex: ENGR1411"
+      if (this.props.search_type === SearchType.COURSE) {
+          var prompt = "Ex: ENGR1411";
   }
   else {
-    var prompt = "EX: 112112705"
+      var prompt = "Ex: 112112705";
   }
     return (
       <div className="row">
@@ -152,7 +150,8 @@ class SearchForm extends React.Component {
 
 const mapStateToProps = state => {
   return {
-    valid_search: state.valid_search,
+      valid_search: state.valid_search,
+      search_type: state.search_type
   };
 };
 

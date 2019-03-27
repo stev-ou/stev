@@ -4,19 +4,16 @@ import CourseFig1Table from './course/CourseFig1Table.js';
 import CourseFig2Chart from './course/CourseFig2Chart.js';
 import CourseFig3Timeseries from './course/CourseFig3Timeseries.js';
 import CourseFig4TableBar from './course/CourseFig4TableBar.js';
-import InstructorFig1Table from './instructor/InstructorFig1Table.js'
-import InstructorFig2Timeseries from './instructor/InstructorFig2Timeseries.js'
-import InstructorFig3TableBar from './instructor/InstructorFig3TableBar.js'
+import InstructorFig1Table from './instructor/InstructorFig1Table.js';
+import InstructorFig2Timeseries from './instructor/InstructorFig2Timeseries.js';
+import InstructorFig3TableBar from './instructor/InstructorFig3TableBar.js';
 
 const DataView = props => {
   const uuid = props.search_text;
-  console.log(uuid)
-  // var uuid = 'engr1411'
-  //console.log(uuid);
-  //This is where Redux will be implemented
-  var search_type = 'course' //or instructor
+    const search_type = props.search_type;
+    console.log(search_type);
 
-  if (search_type==='course') {
+  if (search_type==='COURSE') {
   return (
     <div className="container">
       <div className="graphical-content">
@@ -69,7 +66,8 @@ const DataView = props => {
 
 const mapStateToProps = state => {
   return {
-    search_text: state.search_text,
+      search_text: state.search_text,
+      search_type: state.search_type
   };
 };
 

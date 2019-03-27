@@ -1,8 +1,8 @@
-import { SearchStatus } from '../actions';
+import { SearchStatus, SearchType } from '../actions';
 
 const initial_state = {
   valid_search: SearchStatus.INVALID,
-  search_type: 'course',
+  search_type: SearchType.COURSE,
   search_text: '',
 };
 
@@ -13,7 +13,7 @@ const valid_search = (state = initial_state, action) => {
     case 'SET_SEARCH_TEXT':
       return { ...state, search_text: action.text };
     case 'SET_SEARCH_TYPE':
-      return { ...state, search_type: action.type };
+      return { ...state, search_type: action.search_type };
     default:
       return state;
   }
