@@ -84,12 +84,12 @@ class SearchForm extends React.Component {
   }
 
   render() {
-
+      var prompt = "";
       if (this.props.search_type === SearchType.COURSE) {
-          var prompt = "Ex: ENGR1411";
+          prompt = "Ex: ENGR1411";
   }
   else {
-      var prompt = "Ex: 112112705";
+      prompt = "Ex: 112112705";
   }
     return (
       <div className="row">
