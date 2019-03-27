@@ -1,13 +1,13 @@
 import React from 'react';
-import { connect } from 'react-redux'
-;import {
+import { connect } from 'react-redux';
+import {
   setSearchStatus,
   SearchStatus,
   setSearchType,
   setSearchText,
   SearchType,
 } from '../actions';
-import SearchAutocomplete from './SearchAutocomplete.js'
+import SearchAutocomplete from './SearchAutocomplete.js';
 
 class SearchForm extends React.Component {
   constructor(props) {
@@ -24,31 +24,34 @@ class SearchForm extends React.Component {
   }
 
   handleSubmit(event) {
-        this.props.setSearchStatus(SearchStatus.VALID);
+    this.props.setSearchStatus(SearchStatus.VALID);
     //This is because we are using string for course uuid and int for instructor ID
-    if (typeof event.value === 'string'){
+    if (typeof event.value === 'string') {
       this.props.setSearchText(event.value.toLowerCase());
-      return this.setState({ result: event.value.toLowerCase(), valid_search: true });
+      return this.setState({
+        result: event.value.toLowerCase(),
+        valid_search: true,
+      });
     }
     //this.props.setSearchType(this.state.search_type);
-    this.props.setSearchText(event.value)
+    this.props.setSearchText(event.value);
     return this.setState({ result: event.value, valid_search: true });
   }
 
   handleInputChange(event) {
     this.setState({
-      'search_text': event.value,
+      search_text: event.value,
     });
-    this.handleSubmit(event)
+    this.handleSubmit(event);
   }
 
   changeRadio(event) {
     if (event.target.value === 'Course') {
-        this.props.setSearchType(SearchType.COURSE);
-        this.setState({search_type: 'course'})
+      this.props.setSearchType(SearchType.COURSE);
+      this.setState({ search_type: 'course' });
     } else if (event.target.value === 'Instructor') {
-        this.props.setSearchType(SearchType.INSTRUCTOR);
-        this.setState({search_type: 'instructor'})
+      this.props.setSearchType(SearchType.INSTRUCTOR);
+      this.setState({ search_type: 'instructor' });
     }
   }
 
@@ -64,7 +67,7 @@ class SearchForm extends React.Component {
                 className="w-100"
                 value={this.state.search_text}
                 onChange={this.handleInputChange}
-                search_type= {this.props.search_type}
+                search_type={this.props.search_type}
               />
             </div>
 
@@ -107,8 +110,8 @@ class SearchForm extends React.Component {
 
 const mapStateToProps = state => {
   return {
-      valid_search: state.valid_search,
-      search_type: state.search_type
+    valid_search: state.valid_search,
+    search_type: state.search_type,
   };
 };
 

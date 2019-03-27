@@ -32,12 +32,14 @@ const styles = theme => ({
   },
   chipFocused: {
     backgroundColor: emphasize(
-      theme.palette.type === 'light' ? theme.palette.grey[300] : theme.palette.grey[700],
-      0.08,
+      theme.palette.type === 'light'
+        ? theme.palette.grey[300]
+        : theme.palette.grey[700],
+      0.08
     ),
   },
   noOptionsMessage: {
-    padding: '0px'//`${theme.spacing.unit}px ${theme.spacing.unit * 2}px`,
+    padding: '0px', //`${theme.spacing.unit}px ${theme.spacing.unit * 2}px`,
   },
   singleValue: {
     fontSize: 16,
@@ -54,7 +56,6 @@ const styles = theme => ({
     left: 0,
     right: 0,
   },
-
 });
 
 function NoOptionsMessage(props) {
@@ -121,20 +122,30 @@ function Placeholder(props) {
 
 function SingleValue(props) {
   return (
-    <Typography className={props.selectProps.classes.singleValue} {...props.innerProps}>
+    <Typography
+      className={props.selectProps.classes.singleValue}
+      {...props.innerProps}
+    >
       {props.children}
     </Typography>
   );
 }
 
 function ValueContainer(props) {
-  return <div className={props.selectProps.classes.valueContainer}>{props.children}</div>;
+  return (
+    <div className={props.selectProps.classes.valueContainer}>
+      {props.children}
+    </div>
+  );
 }
-
 
 function Menu(props) {
   return (
-    <Paper square className={props.selectProps.classes.paper} {...props.innerProps}>
+    <Paper
+      square
+      className={props.selectProps.classes.paper}
+      {...props.innerProps}
+    >
       {props.children}
     </Paper>
   );
@@ -152,33 +163,34 @@ const components = {
 
 class SearchAutocomplete extends React.Component {
   constructor(props) {
-    super(props)
-  this.state = {
-    single: null,search_type:"", choices:[]
-  };}
+    super(props);
+    this.state = {
+      single: null,
+      search_type: '',
+      choices: [],
+    };
+  }
 
-    componentWillMount() {
+  componentWillMount() {
     // Define API input string
     const API = api_endpoint + this.props.search_type.toLowerCase() + 's/all';
     // This will call the api when the component "Mounts", i.e. when the page is accessed
     fetch(API)
       .then(response => response.json())
-      .then(data => this.setState({ choices: data.result})); // Initial keying into result
+      .then(data => this.setState({ choices: data.result })); // Initial keying into result
   }
 
-componentDidUpdate(prevProps) {
-    if(!(this.props.search_type ===  this.state.search_type)) // Check if it's a new user, you can also use some unique property, like the ID  (this.props.user.id !== prevProps.user.id)
-    {  
-           this.setState({search_type:this.props.search_type})
-           this.componentWillMount()
-
+  componentDidUpdate(prevProps) {
+    if (!(this.props.search_type === this.state.search_type)) {
+      // Check if it's a new user, you can also use some unique property, like the ID  (this.props.user.id !== prevProps.user.id)
+      this.setState({ search_type: this.props.search_type });
+      this.componentWillMount();
     }
-} 
+  }
 
   render() {
-    var choices = this.state.choices
+    var choices = this.state.choices;
     const { classes, theme } = this.props;
-
 
     const selectStyles = {
       input: base => ({
@@ -191,26 +203,28 @@ componentDidUpdate(prevProps) {
     };
 
     // Build a placeholder based on the search type
-    var placeholder = ""
+    var placeholder = '';
     if (this.props.search_type === 'COURSE') {
-      placeholder = 'Type a course name'
-    }
-    else {
-      placeholder = "Type an instructor's name"
+      placeholder = 'Type a course name';
+    } else {
+      placeholder = "Type an instructor's name";
     }
 
     return (
-      <div className="form-control w-80 header-elem" style={{'padding':'0em', 'paddingLeft':'0.1em'}}>
-          <Select
-            classes={classes}
-            styles={selectStyles}
-            options={choices}
-            components={components}
-            placeholder={placeholder}
-            value={this.props.value}
-            onChange = {this.props.onChange}
-            isClearable
-          />
+      <div
+        className="form-control w-80 header-elem"
+        style={{ padding: '0em', paddingLeft: '0.1em' }}
+      >
+        <Select
+          classes={classes}
+          styles={selectStyles}
+          options={choices}
+          components={components}
+          placeholder={placeholder}
+          value={this.props.value}
+          onChange={this.props.onChange}
+          isClearable
+        />
       </div>
     );
   }
