@@ -7,7 +7,6 @@ import { connect } from 'react-redux'
   setSearchText,
   SearchType,
 } from '../actions';
-import { api_map, api_arg_map, api_endpoint } from '../constants.js';
 import SearchAutocomplete from './SearchAutocomplete.js'
 
 class SearchForm extends React.Component {
@@ -24,76 +23,37 @@ class SearchForm extends React.Component {
     this.handleSubmit = this.handleSubmit.bind(this);
   }
 
-  handleInputChange(event) {
-    console.log(event)
-    const target = event.target;
-    const value = target.value;
-    const name = target.name;
-
-    this.setState({
-      [name]: value,
-    });
+  handleSubmit(event) {
+        this.props.setSearchStatus(SearchStatus.VALID);
+    //This is because we are using string for course uuid and int for instructor ID
+    if (typeof event.value === 'string'){
+      this.props.setSearchText(event.value.toLowerCase());
+      return this.setState({ result: event.value.toLowerCase(), valid_search: true });
+    }
+    //this.props.setSearchType(this.state.search_type);
+    this.props.setSearchText(event.value)
+    return this.setState({ result: event.value, valid_search: true });
   }
 
-  handleSubmit(event) {
-    // Add an api query based on the input
-    // Fetch the object from the api endpoint
-    fetch(
-      api_endpoint +
-        api_map[this.state.search_type] +
-        api_arg_map[this.state.search_type] +
-        this.state.search_text
-    )
-      .then(response => {
-        console.log('resp:');
-        console.log(response);
-        return response.json();
-      })
-      .then(data => {
-        console.log(data);
-        console.log(data.result.length);
-        this.setState({ result: data.result }, () => {
-          console.log(this.state);
-          if (data.result.length === 1) {
-            this.props.setSearchStatus(SearchStatus.VALID);
-              this.props.setSearchText(this.state.search_text.toLowerCase());
-            //this.props.setSearchType(this.state.search_type);
-            return this.setState({ result: data.result, valid_search: true });
-          } else {
-            alert(
-              this.state.search_type +
-                ' ' +
-                this.state.search_text +
-                ' not found!'
-            );
-            return this.setState({ valid_search: false });
-          }
-        });
-      });
-
-    event.preventDefault();
+  handleInputChange(event) {
+    this.setState({
+      'search_text': event.value,
+    });
+    this.handleSubmit(event)
   }
 
   changeRadio(event) {
-    console.log(event.target.value);
     if (event.target.value === 'Course') {
-        //this.setState({ search_type: SearchType.COURSE});
         this.props.setSearchType(SearchType.COURSE);
+        this.setState({search_type: 'course'})
     } else if (event.target.value === 'Instructor') {
         this.props.setSearchType(SearchType.INSTRUCTOR);
-        //this.setState({ search_type: SearchType.INSTRUCTOR});
+        this.setState({search_type: 'instructor'})
     }
   }
 
   render() {
-      var prompt = "";
-      if (this.props.search_type === SearchType.COURSE) {
-          prompt = "Ex: ENGR1411";
-  }
-  else {
-      prompt = "Ex: 112112705";
-  }
-  console.log(this.state.search_text)
+    // this.search_type = this.props.search_type
 
     return (
       <div className="row">
@@ -101,14 +61,11 @@ class SearchForm extends React.Component {
           <form className="validate" onSubmit={this.handleSubmit}>
             <div className="input-group mb-3">
               <SearchAutocomplete
-                className="w-80"
+                className="w-100"
                 value={this.state.search_text}
                 onChange={this.handleInputChange}
                 search_type= {this.props.search_type}
               />
-              <div className="input-group-append">
-                <input id="search-btn" type="submit" value="Search" />
-              </div>
             </div>
 
             <div onChange={this.changeRadio.bind(this)}>

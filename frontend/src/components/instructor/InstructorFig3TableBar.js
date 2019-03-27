@@ -36,7 +36,6 @@ class InstructorFig3TableBar extends React.Component {
       return null;
     } else {
       var result = this.state.result;
-      console.log(result);
       var display_questions = this.state.display_questions;
 
       // Lets build our plot results to take data from the api and turn them into the form usable by the bar chart

@@ -154,27 +154,31 @@ class SearchAutocomplete extends React.Component {
   constructor(props) {
     super(props)
   this.state = {
-    single: null,search_type:props.search_type, choices:[]
+    single: null,search_type:"", choices:[]
   };}
 
     componentWillMount() {
     // Define API input string
-    const API = api_endpoint + this.state.search_type.toLowerCase() + 's/all';
+    const API = api_endpoint + this.props.search_type.toLowerCase() + 's/all';
     // This will call the api when the component "Mounts", i.e. when the page is accessed
     fetch(API)
       .then(response => response.json())
       .then(data => this.setState({ choices: data.result})); // Initial keying into result
   }
 
-  handleChange = name => value => {
-    this.setState({
-      [name]: value,
-    });
-  };
+componentDidUpdate(prevProps) {
+    if(!(this.props.search_type ===  this.state.search_type)) // Check if it's a new user, you can also use some unique property, like the ID  (this.props.user.id !== prevProps.user.id)
+    {  
+           this.setState({search_type:this.props.search_type})
+           this.componentWillMount()
+
+    }
+} 
 
   render() {
     var choices = this.state.choices
     const { classes, theme } = this.props;
+
 
     const selectStyles = {
       input: base => ({
@@ -189,14 +193,11 @@ class SearchAutocomplete extends React.Component {
     // Build a placeholder based on the search type
     var placeholder = ""
     if (this.props.search_type === 'COURSE') {
-      placeholder = 'Enter the name of a course'
+      placeholder = 'Type a course name'
     }
     else {
-      placeholder = 'Enter the name of an instructor'
+      placeholder = "Type an instructor's name"
     }
-
-    // onChange={this.handleChange('single')}
-
 
     return (
       <div className="form-control w-80 header-elem" style={{'padding':'0em', 'paddingLeft':'0.1em'}}>
