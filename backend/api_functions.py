@@ -630,6 +630,37 @@ def InstructorFig2Timeseries(db, instructor_id):
 
     return ret_json
 
+# Define the function to pull all of the courses or instructors as a dict of labels and values
+def SearchForm(db, search_type='courses'):
+    """
+    This function will return a dict object of courses or instructors, depending upon the search type. Each object in dict will
+    have a label (Professor name, first then last, if instructor, otherwise long course string) and a value (instructor id if 
+    search_type is instructor, course_uuid if search_type is course). 
+
+    Input:
+    db - a connection to the mongoDB
+    search_type - a string, either 'course' or 'instructor'
+
+    """
+    
+    df = pd.DataFrame()
+    for coll_name in COLLECTION_NAMES:
+        coll = db.get_db_collection('reviews-db', coll_name)
+        # Use the database query to pull needed data
+        cursor = coll.find(coll_filter)
+        # For whatever reason, generating a dataframe clears the cursor, so get population here
+        population = coll.count_documents(coll_filter)
+        # This assumes that there will be no same uuid's across the different collections, e.g. the same uuid in GCOE and JRCOE
+        if population > 0:
+            df_coll = pd.DataFrame(list(cursor))
+            print(len(df_coll))
+            df = pd.concat([df, df_coll], ignore_index=True)
+    print(len(df))
+
+    return df, coll_name
+
+
+
 
 def InstructorFig3TableBar(db, instructor_id):
     # Construct the json dictionary containing the necessary information for figure 3

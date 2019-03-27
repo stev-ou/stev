@@ -1,6 +1,6 @@
 .PHONY: image
 image:
-	docker build . -t schuermannator/ou-reviews-api
+	docker build . -t samjett/ou-reviews-api
 
 .PHONY: test
 test:

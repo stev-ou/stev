@@ -7,4 +7,4 @@ pretty:
 .PHONY: image
 
 image:
-	docker build . -t schuermannator/ou-reviews
+	docker build . -t samjett/ou-reviews
