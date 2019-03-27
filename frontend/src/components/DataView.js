@@ -21,6 +21,8 @@ const DataView = props => {
             <CourseFig1Table uuid={uuid} />
           </div>
 
+          <hr style={{ height: 30 }} />
+
           <div className="graphical-content">
             <CourseFig2Chart uuid={uuid} />
           </div>
