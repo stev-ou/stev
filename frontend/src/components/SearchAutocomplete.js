@@ -208,7 +208,7 @@ const components = {
   ValueContainer,
 };
 
-class IntegrationReactSelect extends React.Component {
+class SearchAutocomplete extends React.Component {
   state = {
     single: null,
   };
@@ -265,4 +265,4 @@ IntegrationReactSelect.propTypes = {
   theme: PropTypes.object.isRequired,
 };
 
-export default withStyles(styles, { withTheme: true })(IntegrationReactSelect);
+export default withStyles(styles, { withTheme: true })(SearchAutocomplete);
