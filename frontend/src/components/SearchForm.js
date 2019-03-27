@@ -13,7 +13,7 @@ class SearchForm extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      search_type: 'instructor',
+      search_type: 'course',
       search_text: '',
       result: {},
       valid_search: false,
@@ -54,7 +54,7 @@ class SearchForm extends React.Component {
           console.log(this.state);
           if (data.result.length === 1) {
             this.props.setSearchStatus(SearchStatus.VALID);
-            this.props.setSearchText(this.state.search_text);
+              this.props.setSearchText(this.state.search_text.toLowerCase());
             //this.props.setSearchType(this.state.search_type);
             return this.setState({ result: data.result, valid_search: true });
           } else {
