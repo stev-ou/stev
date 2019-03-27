@@ -35,10 +35,11 @@ def course_search_api():
     # Get the search query from the url string and convert to lowercase
     query = request.args.get('course', default='', type=str).lower()
 
+    ## Deprecated
     # Use the query function to search for the query
-    result_list = query_function(db, query, 'Queryable Course String')
+    #result_list = query_function(db, query, 'Queryable Course String')
 
-    return jsonify({'result':result_list})
+    return jsonify({'result':[query]})
 
 ### APIs for course search
 # Figure 1 api 
@@ -69,22 +70,37 @@ def course_figure_4_data_api(course_uuid):
 
     return jsonify(response)
 
+
+## APIs for Instructor Search
 # instructor search
-@app.route(base_api_route+'instructors')
+@app.route(base_api_route+'instructors/')
 def instructor_api():
     # Get the search query from the url string
     query = request.args.get('instructor', default='', type=str)
+    # Pass it right back for now, for consistency with course
 
-    if query == '':
-        # list all instructors
-        return jsonify({"default": "list"})
+    return jsonify({'result':[query]})
 
-    # Find the query in the collection
-    collection = db.get_db_collection(DB_NAME, "gcoe_sp18")
-    test_data = collection.find_one({'Subject Code':'ENGR'})
+# Figure 1 api 
+@app.route(base_api_route+'instructors/<int:instructor_id>/figure1', methods=['GET'])
+def instructor_figure_1_data_api(instructor_id):
+    response = InstructorFig1Table(db, instructor_id)
 
-    return jsonify(dumps(test_data))
+    return jsonify(response)
 
+# Figure 2 api 
+@app.route(base_api_route+'instructors/<int:instructor_id>/figure2', methods=['GET'])
+def instructor_figure_2_data_api(instructor_id):
+    response = InstructorFig2Timeseries(db, instructor_id)
+
+    return jsonify(response)
+
+# Figure 3 api 
+@app.route(base_api_route+'instructors/<int:instructor_id>/figure3', methods=['GET'])
+def instructor_figure_3_data_api(instructor_id):
+    response = InstructorFig3TableBar(db, instructor_id)
+
+    return jsonify(response)
 
 # dept search
 @app.route(base_api_route+'departments')

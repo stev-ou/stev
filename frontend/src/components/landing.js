@@ -1,5 +1,4 @@
 import React from 'react';
-
 import DataView from './DataView.js';
 import { connect } from 'react-redux';
 

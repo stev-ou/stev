@@ -14,10 +14,9 @@ class InstructorFig2Timeseries extends React.Component {
 
   componentWillMount() {
     // This will call the api when the component "Mounts", i.e. when the page is accessed
-    // fetch(API + this.state.uuid + '/figure3')
-    //   .then(response => response.json())
-    //   .then(data => this.setState({ result: data.result, loadedAPI: true })); // Initial keying into result
-    this.setState({ loadedAPI: true });
+    fetch(API + this.state.uuid.toString() + '/figure2')
+      .then(response => response.json())
+      .then(data => this.setState({ result: data.result, loadedAPI: true })); // Initial keying into result
   }
 
   render() {
@@ -25,64 +24,14 @@ class InstructorFig2Timeseries extends React.Component {
       return null;
     } else {
       var result = this.state.result;
-      result = {
-        'instructor name': 'Sam Jett Teacher',
-        'instructor over time': {
-          semesters: [
-            'Fall 2015',
-            'Spring 2016',
-            'Summer 2017',
-            'Fall 2016',
-            'Spring 2017',
-            'Spring 2018',
-          ],
-          ratings: [4.212, 4.354, 3.898, 2.98, 3.45, 3.69],
-        },
-        'dept over time': {
-          'dept name': 'AME',
-          semesters: [
-            'Fall 2015',
-            'Spring 2016',
-            'Summer 2017',
-            'Fall 2016',
-            'Spring 2017',
-            'Spring 2018',
-          ],
-          ratings: [4.6, 3.456732, 4.168, 4.212, 4.354, 3.898],
-        },
-        courses: [
-          {
-            name: 'Course 1',
-            semesters: ['Fall 2015', 'Fall 2016', 'Spring 2017', 'Spring 2018'],
-            ratings: [4.35, 4.2, 3.76, 2.6],
-          },
 
-          {
-            name: 'Course 2',
-            semesters: ['Fall 2015', 'Spring 2016', 'Summer 2017', 'Fall 2016'],
-            ratings: [4.1, 3.1, 3.2, 3.45],
-          },
-
-          {
-            name: 'Course 3',
-            semesters: [
-              'Summer 2017',
-              'Fall 2016',
-              'Spring 2017',
-              'Spring 2018',
-            ],
-            ratings: [4.6, 4.7, 3.9, 4.4],
-          },
-        ],
-      };
-
+      //Use this to randomize color order
       // colors.sort(function() {
       //   return 0.5 - Math.random();
       // });
-      //Use this to randomize color order
-      // Modify the data to get it into the form needed by the TimeSeriesChart function
 
-      //Build the data object for each Semester in the course over time
+      // Modify the data to get it into the form needed by the TimeSeriesChart function
+      // Build the data object for each Semester in the course over time
       // Define some commonly accessed objs
       var all_semesters = result['instructor over time']['semesters'];
 
