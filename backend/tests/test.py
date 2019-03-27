@@ -8,9 +8,6 @@ from api_functions import *
 class basictest(unittest.TestCase):
     """ Basic tests """
 
-    def test_dummy(self):
-        return self.assertEqual(True, True)
-
     # Test for mongo.py
     def test_connection(self):
         '''
@@ -91,6 +88,7 @@ class basictest(unittest.TestCase):
 
         # Try the function for autocomplete for all courses
         try:
+            print('SearchAutocomplete for all courses')
             response = SearchAutocomplete(db, search_type='course')
             json.loads(json.dumps(response))
         except:
@@ -122,6 +120,7 @@ class basictest(unittest.TestCase):
 
         # Try the function for autocomplete for all instructors
         try:
+            print('SearchAutocomplete for all instructors')
             response = SearchAutocomplete(db, search_type='instructor')
             json.loads(json.dumps(response))
         except:
