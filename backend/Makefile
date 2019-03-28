@@ -1,3 +1,7 @@
+.PHONY: debug
+debug:
+	env/bin/python server.py
+
 .PHONY: image
 image:
 	docker build . -t samjett/ou-reviews-api

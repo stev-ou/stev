@@ -1,5 +1,5 @@
 //////////
-const DEBUG = false;
+const DEBUG = true;
 //////////
 
 // API mapping, based on search type selected from the Header menu

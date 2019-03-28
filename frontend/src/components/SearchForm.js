@@ -25,7 +25,6 @@ class SearchForm extends React.Component {
 
   handleSubmit(event) {
     this.props.setSearchStatus(SearchStatus.VALID);
-    //This is because we are using string for course uuid and int for instructor ID
     if (typeof event.value === 'string') {
       this.props.setSearchText(event.value.toLowerCase());
       return this.setState({
@@ -47,17 +46,22 @@ class SearchForm extends React.Component {
 
   changeRadio(event) {
     if (event.target.value === 'Course') {
+      //this.setState({ search_type: SearchType.COURSE});
       this.props.setSearchType(SearchType.COURSE);
-      this.setState({ search_type: 'course' });
     } else if (event.target.value === 'Instructor') {
       this.props.setSearchType(SearchType.INSTRUCTOR);
-      this.setState({ search_type: 'instructor' });
+      //this.setState({ search_type: SearchType.INSTRUCTOR});
     }
   }
 
-  render() {
-    // this.search_type = this.props.search_type
-
+    render() {
+    // eslint-disable-next-line
+    var prompt;
+    if (this.props.search_type === SearchType.COURSE) {
+      prompt = 'Ex: ENGR1411';
+    } else {
+      prompt = 'Ex: 112112705';
+    }
     return (
       <div className="row">
         <div className="col-lg-12">
