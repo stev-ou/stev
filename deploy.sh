@@ -5,9 +5,6 @@ set -v
 set -x
 
 # docker build
-cd frontend
-make image
-cd ../backend
 make image
 
 echo $DOCKER_PW | base64 --decode -i > ${HOME}/password.txt
