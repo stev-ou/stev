@@ -1,16 +1,10 @@
-.PHONY: debug
-debug:
-	env/bin/python server.py
+.PHONY: pretty
+
+pretty: 
+	npm install -g prettier	
+	prettier --single-quote --trailing-comma es5 --write "{src,__{tests,mocks}__}/**/*.js"
 
 .PHONY: image
+
 image:
-	docker build . -t samjett/ou-reviews-api
-
-.PHONY: test
-test:
-	python3 -m unittest discover -v -s tests/
-	pylint --errors-only backend
-
-.PHONY: run
-run:
-	gunicorn -w 4 -b 0.0.0.0:5050 server:app
+	docker build . -t samjett/ou-reviews

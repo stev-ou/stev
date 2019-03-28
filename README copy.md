@@ -1,32 +1,27 @@
-# Backend Repo
+# Student-reviews Frontend
 
-[![Build Status](https://travis-ci.com/samjett247/OU-Student-Reviews-DB.svg?token=SVpA8x2aEJENtpVkhC28&branch=master)](https://travis-ci.com/samjett247/OU-Student-Reviews-DB)
+Bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
-Included functionality:
-- Flask server
-- MongoDB interface
-- Tests
-- need to add more
+## Available Scripts
 
-## Getting Started
-
+Formatting (run from frontend root) [**will override**]
 ```bash
-$ python3 -m venv env
-$ source env/bin/activate
-$ pip install -r requirements.txt
+# commit before 
+$ make pretty
+# review changes
+$ git diff 
 ```
 
-## Running Tests (incl. linting)
+In the project directory, you can run: **use yarn**
+- To begin the development, run `npm start` or `yarn start`.
+- To create a production bundle, use `npm run build` or `yarn build`.
 
-`make test`
+## Prereq's
+- run `npm install` to install deps
 
 ## Deploying
-
-Currently deploying using Docker.  
-Ensure Docker is installed on your machine before continuing.  
-Python WSGI application deployed behind Gunicorn.  
 ```bash
-$ docker build . -t schuermannator/ou-reviews-api
-$ docker run -p 5051:5050 schuermannator/ou-reviews-api:latest
-$ docker push schuermannator/ou-reviews-api:latest
+$ docker build . -t schuermannator/ou-reviews
+$ docker push schuermannator/ou-reviews:latest
+$ docker run -d -p 3000:80 schuermannator/ou-reviews:latest
 ```

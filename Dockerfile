@@ -1,6 +1,17 @@
-FROM python:3.7-slim-stretch
-COPY . /app
-WORKDIR /app
-RUN pip install -r requirements.txt
-EXPOSE 80 
-CMD gunicorn -w 1 -b 0.0.0.0:80 server:app
+# build
+FROM node:9.11.1 as build
+RUN mkdir /usr/src/app
+WORKDIR /usr/src/app
+ENV PATH /usr/src/app/node_modules/.bin:$PATH
+COPY package.json /usr/src/app/package.json
+#RUN npm install --silent
+RUN npm install
+#RUN npm install react-scripts -g --silent
+RUN npm install react-scripts -g 
+COPY . /usr/src/app
+RUN npm run build
+# prod
+FROM nginx:1.13.12-alpine
+COPY --from=build /usr/src/app/build /usr/share/nginx/html
+EXPOSE 80
+CMD ["nginx", "-g", "daemon off;"]
