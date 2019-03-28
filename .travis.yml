@@ -8,11 +8,11 @@ matrix:
       dist: xenial
       sudo: true
 # command to install dependencies
-# install:
-#   - pip install -r backend/requirements.txt
+install:
+  - echo "nothing to install"
 # command to run tests
-# script:
-#   - cd backend
+script:
+  - echo "no tests now"
 #   - python3 -m unittest discover -v -s tests/
 #   - pylint --errors-only backend/
 #   - cd ..
