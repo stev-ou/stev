@@ -10,7 +10,7 @@ import InstructorFig3TableBar from './instructor/InstructorFig3TableBar.js';
 
 const DataView = props => {
   const uuid = props.search_text;
-    const search_type = props.search_type;
+  const search_type = props.search_type;
 
   if (search_type === 'COURSE') {
     return (
