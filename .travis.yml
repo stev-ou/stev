@@ -1,12 +1,12 @@
-#language: python
-#python:
+language: python
+python:
   # - "3.6" # uncomment to test 3.6 compatability
   # - "3.7"  # 3.7.0 development branch only - below installs stable
-  # matrix:
-  #   include:
-  #     - python: 3.7
-  #       dist: xenial
-  #       sudo: true
+matrix:
+  include:
+    - python: 3.7
+      dist: xenial
+      sudo: true
 # command to install dependencies
 # install:
 #   - pip install -r backend/requirements.txt
