@@ -66,14 +66,14 @@ class SearchForm extends React.Component {
       <div className="row">
         <div className="col-lg-12">
           <form className="validate" onSubmit={this.handleSubmit}>
-            <div className="input-group mb-3">
+            {/*<div className="input-group mb-3">*/}
               <SearchAutocomplete
                 className="w-100"
                 value={this.state.search_text}
                 onChange={this.handleInputChange}
                 search_type={this.props.search_type}
               />
-            </div>
+            {/*</div>*/}
 
             <div onChange={this.changeRadio.bind(this)}>
               <div className="form-check form-check-inline">
