@@ -8,9 +8,6 @@ from api_functions import *
 class basictest(unittest.TestCase):
     """ Basic tests """
 
-    def test_dummy(self):
-        return self.assertEqual(True, True)
-
     # Test for mongo.py
     def test_connection(self):
         '''
@@ -89,6 +86,14 @@ class basictest(unittest.TestCase):
                 except:
                     return self.assertEqual(True, False)
 
+        # Try the function for autocomplete for all courses
+        try:
+            print('SearchAutocomplete for all courses')
+            response = SearchAutocomplete(db, search_type='course')
+            json.loads(json.dumps(response))
+        except:
+            return self.assertEqual(True, False)
+
         return self.assertEqual(True, True)
 
     # Test the current instructor apis to make sure that they are at least returning a valid json
@@ -100,6 +105,7 @@ class basictest(unittest.TestCase):
         # Define the currently working courses
         instructor_function_list = [InstructorFig1Table, InstructorFig2Timeseries, InstructorFig3TableBar] 
         instructor_test_list = [113007898, 112131147, 113316966, 112114393, 112111442, 113841484, 113320095]
+
         # Create connection to the db
         db = mongo.mongo_driver()
         print('Testing the api functions for the following instructors: ')
@@ -111,6 +117,14 @@ class basictest(unittest.TestCase):
                     json.loads(json.dumps(response))
                 except:
                     return self.assertEqual(True, False)
+
+        # Try the function for autocomplete for all instructors
+        try:
+            print('SearchAutocomplete for all instructors')
+            response = SearchAutocomplete(db, search_type='instructor')
+            json.loads(json.dumps(response))
+        except:
+            return self.assertEqual(True, False)
 
         return self.assertEqual(True, True)
 

@@ -41,6 +41,12 @@ def course_search_api():
 
     return jsonify({'result':[query]})
 
+# Search for all entries for autocomplete
+@app.route(base_api_route+'<string:search_type>/all')
+def course_autocomplete_api(search_type):
+    response_list = SearchAutocomplete(db, search_type[:-1])
+    return jsonify({'result':response_list})
+
 ### APIs for course search
 # Figure 1 api 
 @app.route(base_api_route+'courses/<string:course_uuid>/figure1', methods=['GET'])

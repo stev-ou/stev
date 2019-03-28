@@ -630,7 +630,6 @@ def InstructorFig2Timeseries(db, instructor_id):
 
     return ret_json
 
-
 def InstructorFig3TableBar(db, instructor_id):
     # Construct the json dictionary containing the necessary information for figure 3
     ret_json = {'result':{
@@ -684,6 +683,59 @@ def InstructorFig3TableBar(db, instructor_id):
 
     return ret_json
 
+
+##########
+
+# Define the function to pull all of the courses or instructors as a dict of labels and values
+def SearchAutocomplete(db, search_type='course'):
+    """
+    This function will return a dict object of courses or instructors, depending upon the search type. Each object in dict will
+    have a label (Professor name, first then last, if instructor, otherwise long course string) and a value (instructor id if 
+    search_type is instructor, course_uuid if search_type is course). 
+
+    Input:
+    db - a connection to the mongoDB
+    search_type - a string, either 'course' or 'instructor'
+
+    """
+    # Create a map to map search type inputs to keys in the dataframe
+    search_type_to_key = {'course':'course_uuid', 'instructor':'Instructor ID'}
+
+    # Make sure the search_type is valid
+    try:
+        search_key = search_type_to_key[search_type]
+    except:
+        raise Exception('Invalid Search Type for SearchForm API. Search Type: '+search_type+' provided, and should be course or instructor.')
+
+    # filter that we use on the collection
+    coll_filter = {"Term Code": {'$in': CURRENT_SEMESTERS}}
+    
+    df = pd.DataFrame()
+    for coll_name in COLLECTION_NAMES:
+        coll = db.get_db_collection('reviews-db', coll_name)
+        # Use the database query to pull needed data
+        cursor = coll.find(coll_filter)
+        # For whatever reason, generating a dataframe clears the cursor, so get population here
+        population = coll.count_documents(coll_filter)
+        # This assumes that there will be no same uuid's across the different collections, e.g. the same uuid in GCOE and JRCOE
+        if population > 0:
+            df_coll = pd.DataFrame(list(cursor))
+            df_coll.drop_duplicates(search_key, inplace=True)
+            df = pd.concat([df, df_coll], ignore_index=True)
+    df.drop_duplicates(search_key, inplace=True)
+
+    # Now, we just need to convert the dataframe to a dictionary with needed form for search autocomplete
+    if search_type == 'course':
+        # Create the label column
+        df['label'] = df['Subject Code'].str.strip()+df['Course Number'].astype(str)+': '+df['Course Title']
+        return_list = [{'label':row['label'], 'value':row[search_key]} for index, row in df.iterrows()]
+    else:
+        df['label'] = df['Instructor First Name']+' '+ df['Instructor Last Name']
+        return_list = [{'label':row['label'], 'value':row[search_key]} for index, row in df.iterrows()]
+
+    return return_list
+
+
 if __name__ == '__main__':
     # Test the db search
     # test = [201410, 201420, 201530, 201620, 201230, 201810]
@@ -691,9 +743,10 @@ if __name__ == '__main__':
     # sort_by_term_code([201710, 201820, 201620, 201410, 201110, 201630, 201610])
 
     # uuid_df, coll_name = query_df_from_mongo(mongo_driver(),cursor)
-    pprint.pprint(InstructorFig1Table(mongo_driver(), 112131147))
-    pprint.pprint(InstructorFig2Timeseries(mongo_driver(), 112131147))
-    pprint.pprint(InstructorFig3TableBar(mongo_driver(), 112131147))
+    # pprint.pprint(InstructorFig1Table(mongo_driver(), 112131147))
+    # pprint.pprint(InstructorFig2Timeseries(mongo_driver(), 112131147))
+    # pprint.pprint(InstructorFig3TableBar(mongo_driver(), 112131147))
+    print(SearchAutocomplete(mongo_driver(), 'instructor'))
 
 
 

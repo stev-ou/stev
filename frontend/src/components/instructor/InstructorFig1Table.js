@@ -52,7 +52,6 @@ class InstructorFig1Table extends React.Component {
 
   componentDidMount() {
     // This will call the api when the component "Mounts", i.e. when the page is accessed
-    console.log(API + this.state.uuid.toString() + '/figure1');
     fetch(API + this.state.uuid.toString() + '/figure1')
       .then(response => response.json())
       .then(data => this.setState({ data: data.result, loadedAPI: true }));
@@ -65,7 +64,6 @@ class InstructorFig1Table extends React.Component {
       let MyTable = withStyles(styles)(CustomizedTable); // This is important
       // Get the data ready to pass to the table by rounding and adding ids
       var table_data = this.state.data;
-      console.log(table_data);
       table_data.courses.forEach((item, i) => {
         item['instr_rating_in_course'] = item['instr_rating_in_course'].toFixed(
           2
