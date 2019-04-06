@@ -8,9 +8,11 @@ import CourseChip from './components/course/CourseChip.js'
 const App = () => {
   return (
     <div>
-      {/* <Header />
-      <Landing /> */}
-      <CourseChip cnum={2411} />
+       <Header />
+      <Landing /> 
+      {/*
+  <CourseChip cnum={3411} />*/}
+
     </div>
   );
 };

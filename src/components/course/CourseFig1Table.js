@@ -49,7 +49,7 @@ const API = api_endpoint + 'courses/';
 class CourseFig1Table extends React.Component {
   constructor(props) {
     super(props);
-    this.state = { data: [], uuid: props.uuid, info: {} };
+    this.state = { data: [], uuid: props.uuid, info: {}, loadedAPI:false};
   }
 
   componentDidMount() {
@@ -57,11 +57,12 @@ class CourseFig1Table extends React.Component {
     fetch(API + this.state.uuid + '/figure1')
       .then(response => response.json())
       .then(data =>
-        this.setState({ info: data.result, data: data.result.instructors })
+        this.setState({ info: data.result, data: data.result.instructors, loadedAPI:true })
       );
   }
 
   render() {
+    if (this.state.loadedAPI) {
     let MyTable = withStyles(styles)(CustomizedTable); // This is important
     // Get the data to pass to the table
     var table_data = this.state.data;
@@ -74,8 +75,9 @@ class CourseFig1Table extends React.Component {
     // Get the info to pass to the table
     const info = this.state.info;
 
-    return <MyTable rows={table_data} info={info} />;
+    return (<MyTable rows={table_data} info={info} />)
   }
+  else {return(null)}}
 }
 
 //This is the function to create the table for figure 1
@@ -91,7 +93,7 @@ function CustomizedTable(props) {
         {info['dept name']}
         {info['course number']}: {info['course name']}{' '}
       </h1>
-      <CourseChip />
+      <CourseChip cnum={info['course number']} />
       <h2 style={{ padding: '0.5em', paddingTop: '0.2em', paddingLeft: '0em'}}>
         {' '}
         These professors have taught the course recently{' '}
