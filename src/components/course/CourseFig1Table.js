@@ -88,13 +88,13 @@ function CustomizedTable(props) {
 
   return (
     <div>
-      <h1 style={{ fontWeight: 'bold', fontSize: '3.5em', padding: '0.75em', paddingLeft: '0em', paddingBottom:'0.35em'}}>
+      <h1 style={{ fontWeight: 'bold', fontSize: '3.5em', padding: '0.75em', paddingLeft: '0em', paddingBottom:'0.25em'}}>
         {' '}
         {info['dept name']}
         {info['course number']}: {info['course name']}{' '}
       </h1>
       <CourseChip cnum={info['course number']} />
-      <h2 style={{ padding: '0.5em', paddingTop: '0.2em', paddingLeft: '0em'}}>
+      <h2 style={{ padding: '0.5em', paddingTop: '0.25em', paddingLeft: '0em'}}>
         {' '}
         These professors have taught the course recently{' '}
       </h2>
