@@ -8,7 +8,7 @@ import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
 import Paper from '@material-ui/core/Paper';
 import { api_endpoint } from '../../constants.js';
-import CourseChip from './CourseChip.js'
+import CourseChip from './CourseChip.js';
 
 const CustomTableCell = withStyles(theme => ({
   head: {
@@ -49,7 +49,7 @@ const API = api_endpoint + 'courses/';
 class CourseFig1Table extends React.Component {
   constructor(props) {
     super(props);
-    this.state = { data: [], uuid: props.uuid, info: {}, loadedAPI:false};
+    this.state = { data: [], uuid: props.uuid, info: {}, loadedAPI: false };
   }
 
   componentDidMount() {
@@ -57,27 +57,33 @@ class CourseFig1Table extends React.Component {
     fetch(API + this.state.uuid + '/figure1')
       .then(response => response.json())
       .then(data =>
-        this.setState({ info: data.result, data: data.result.instructors, loadedAPI:true })
+        this.setState({
+          info: data.result,
+          data: data.result.instructors,
+          loadedAPI: true,
+        })
       );
   }
 
   render() {
     if (this.state.loadedAPI) {
-    let MyTable = withStyles(styles)(CustomizedTable); // This is important
-    // Get the data to pass to the table
-    var table_data = this.state.data;
-    table_data.forEach((item, i) => {
-      item['crs rating'] = item['crs rating'].toFixed(2); // Convert the long floats to 2 decimal places
-      item['avg rating'] = item['avg rating'].toFixed(2);
-      item['id'] = i + 1;
-    });
+      let MyTable = withStyles(styles)(CustomizedTable); // This is important
+      // Get the data to pass to the table
+      var table_data = this.state.data;
+      table_data.forEach((item, i) => {
+        item['crs rating'] = item['crs rating'].toFixed(2); // Convert the long floats to 2 decimal places
+        item['avg rating'] = item['avg rating'].toFixed(2);
+        item['id'] = i + 1;
+      });
 
-    // Get the info to pass to the table
-    const info = this.state.info;
+      // Get the info to pass to the table
+      const info = this.state.info;
 
-    return (<MyTable rows={table_data} info={info} />)
+      return <MyTable rows={table_data} info={info} />;
+    } else {
+      return null;
+    }
   }
-  else {return(null)}}
 }
 
 //This is the function to create the table for figure 1
@@ -88,13 +94,23 @@ function CustomizedTable(props) {
 
   return (
     <div>
-      <h1 style={{ fontWeight: 'bold', fontSize: '3.5em', padding: '0.75em', paddingLeft: '0em', paddingBottom:'0.25em'}}>
+      <h1
+        style={{
+          fontWeight: 'bold',
+          fontSize: '3.5em',
+          padding: '0.75em',
+          paddingLeft: '0em',
+          paddingBottom: '0.25em',
+        }}
+      >
         {' '}
         {info['dept name']}
         {info['course number']}: {info['course name']}{' '}
       </h1>
       <CourseChip cnum={info['course number']} />
-      <h2 style={{ padding: '0.5em', paddingTop: '0.25em', paddingLeft: '0em'}}>
+      <h2
+        style={{ padding: '0.5em', paddingTop: '0.25em', paddingLeft: '0em' }}
+      >
         {' '}
         These professors have taught the course recently{' '}
       </h2>
