@@ -8,6 +8,7 @@ import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
 import Paper from '@material-ui/core/Paper';
 import { api_endpoint } from '../../constants.js';
+import CourseChip from './CourseChip.js'
 
 const CustomTableCell = withStyles(theme => ({
   head: {
@@ -85,12 +86,13 @@ function CustomizedTable(props) {
 
   return (
     <div>
-      <h1 style={{ fontWeight: 'bold', fontSize: '3.5em', padding: '0.75em' }}>
+      <h1 style={{ fontWeight: 'bold', fontSize: '3.5em', padding: '0.75em', paddingLeft: '0em', paddingBottom:'0.35em'}}>
         {' '}
         {info['dept name']}
         {info['course number']}: {info['course name']}{' '}
       </h1>
-      <h2 style={{ padding: '0.5em', paddingTop: '0em' }}>
+      <CourseChip />
+      <h2 style={{ padding: '0.5em', paddingTop: '0.2em', paddingLeft: '0em'}}>
         {' '}
         These professors have taught the course recently{' '}
       </h2>

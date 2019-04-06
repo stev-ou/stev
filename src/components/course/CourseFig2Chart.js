@@ -207,7 +207,7 @@ class CourseFig2Chart extends React.Component {
               </div>
               <h6 style={{ padding: '1em' }}>
                 {' '}
-                {total_enrollment} students were enrolled in{' '}
+                {total_enrollment} students rated the course in{' '}
                 {result['most recent sem']}
               </h6>
             </div>

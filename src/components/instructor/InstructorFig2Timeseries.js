@@ -106,7 +106,7 @@ class InstructorFig2Timeseries extends React.Component {
           pointHoverRadius: 12,
           pointHoverBorderColor: 'rgba(0,0,0,1)',
           pointRadius: 8,
-          showLine: true,
+          showLine: false,
           hidden: true,
           strokeColor: 'rgba(0,0,0,1)',
           data: course_data,
