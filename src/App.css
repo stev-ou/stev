@@ -21,10 +21,6 @@
     margin-bottom: 15px;
 }
 
-#button-container {
-  align-items: left;
-}
-
 .App-header {
   font-family: 'Nunito', sans-serif;
   flex-direction: column;
@@ -152,9 +148,6 @@
   .Info {
     padding-left: 10%;
     padding-right: 10%;
-}
-  #button-container {
-  align-items: center;
 }
 }
 
