@@ -37,7 +37,6 @@ const styles = theme => ({
 
 function CourseChip(props) {
   const { classes } = props;
-  console.log(props.cnum);
   const first_char = props.cnum[0];
 
   // Define the chip label

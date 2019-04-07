@@ -8,8 +8,10 @@ import Typography from '@material-ui/core/Typography';
 import TextField from '@material-ui/core/TextField';
 import Paper from '@material-ui/core/Paper';
 import MenuItem from '@material-ui/core/MenuItem';
-import { emphasize } from '@material-ui/core/styles/colorManipulator';
-import { api_endpoint } from '../constants.js';
+import lists from '../course_instructor_list.json';
+
+const course_list = lists['courses']
+const instructor_list = lists['instructors']
 
 const styles = theme => ({
   root: {
@@ -27,22 +29,8 @@ const styles = theme => ({
     alignItems: 'center',
     overflow: 'hidden',
   },
-  chip: {
-    margin: `${theme.spacing.unit / 2}px ${theme.spacing.unit / 4}px`,
-  },
-  chipFocused: {
-    backgroundColor: emphasize(
-      theme.palette.type === 'light'
-        ? theme.palette.grey[300]
-        : theme.palette.grey[700],
-      0.08
-    ),
-  },
   noOptionsMessage: {
     padding: '0px', //`${theme.spacing.unit}px ${theme.spacing.unit * 2}px`,
-  },
-  singleValue: {
-    fontSize: 16,
   },
   placeholder: {
     position: 'absolute',
@@ -120,17 +108,6 @@ function Placeholder(props) {
   );
 }
 
-function SingleValue(props) {
-  return (
-    <Typography
-      className={props.selectProps.classes.singleValue}
-      {...props.innerProps}
-    >
-      {props.children}
-    </Typography>
-  );
-}
-
 function ValueContainer(props) {
   return (
     <div className={props.selectProps.classes.valueContainer}>
@@ -157,27 +134,35 @@ const components = {
   NoOptionsMessage,
   Option,
   Placeholder,
-  SingleValue,
   ValueContainer,
 };
 
 class SearchAutocomplete extends React.Component {
   constructor(props) {
     super(props);
-    this.state = {
-      single: null,
-      search_type: '',
-      choices: [],
+    var initial_state = {
+      search_type: this.props.search_type,
     };
+    if (this.props.search_type === 'COURSE') {
+      initial_state['choices'] = course_list
+    }
+    else {
+      initial_state['choices'] = instructor_list
+    }
+    this.state = initial_state
   }
 
   componentWillMount() {
-    // Define API input string
-    const API = api_endpoint + this.props.search_type.toLowerCase() + 's/all';
-    // This will call the api when the component "Mounts", i.e. when the page is accessed
-    fetch(API)
-      .then(response => response.json())
-      .then(data => this.setState({ choices: data.result })); // Initial keying into result
+    // Update the search list
+    if (this.props.search_type === 'COURSE') {
+      this.setState({choices: course_list})
+    }
+    else {
+      this.setState({choices: instructor_list})
+    }
+
+
+
   }
 
   componentDidUpdate(prevProps) {
