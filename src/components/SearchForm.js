@@ -75,7 +75,7 @@ class SearchForm extends React.Component {
             />
             {/*</div>*/}
 
-            <div onChange={this.changeRadio.bind(this)}>
+            <div onChange={this.changeRadio.bind(this)} id='button-container' className='w-100'>
               <div className="form-check form-check-inline">
                 <input
                   className="form-check-input"

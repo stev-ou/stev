@@ -6,7 +6,7 @@
 
 #main_nav {
     box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.2);/*, 0 6px 20px 0 rgba(0, 0, 0, 0.19);*/
-    margin-bottom: 50px;
+    margin-bottom: 3em;
 }
 
 #graph {
@@ -19,6 +19,10 @@
 
 #subtitle {
     margin-bottom: 15px;
+}
+
+#button-container {
+  align-items: left;
 }
 
 .App-header {
@@ -93,4 +97,70 @@
     height: 60px;
     background-color: #f5f5f5;
 }
+
+#search-form{
+  padding-top: 0.75em;
+  padding-bottom: 1.5em;
+    
+  }
+
+#landing-title {
+    /*color: #62dafb;*/
+    text-align: left;
+  }
+
+#landing-subtitle {
+  padding-top:0.25em;
+  padding-bottom: 0.25em;
+}
+
+#search-form{
+
+}
+/* CSS for Frontpage */
+
+@media only screen and (max-width: 600px) {
+  #landing-title {
+    /*color: #62dafb;*/
+    text-align: center;
+
+  }
+
+  #landing-subtitle {
+    text-align: center;
+    padding-top:0.5em;
+  }
+  #search-form{
+    padding-top: 1em;
+    padding-bottom: 1.5em;
+  }
+  #graph-container {
+    margin-left: 0em;
+}
+  #main_nav {
+    box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.2);/*, 0 6px 20px 0 rgba(0, 0, 0, 0.19);*/
+    margin-bottom: 1.5em;
+}
+  .App {
+    margin-top:3em;
+    margin-left:0em;
+    margin-right:0em;
+    margin-bottom:2em;
+    position: relative;
+    min-height: 50%;
+}
+  .Info {
+    padding-left: 10%;
+    padding-right: 10%;
+}
+  #button-container {
+  align-items: center;
+}
+}
+
+
+
+
+
+
 
