@@ -110,16 +110,37 @@
   padding-bottom: 0.25em;
 }
 
-#search-form{
-
-}
 /* CSS for Frontpage */
+
+/* CSS for dataview */
+.title {
+  font-weight:bold;
+  font-size: 3.5em; /* 3.5 */
+  padding: 0.75em;
+  padding-left: 0em;
+  padding-bottom: 0.25em;
+}
 
 @media only screen and (max-width: 600px) {
   #landing-title {
     /*color: #62dafb;*/
     text-align: center;
 
+  }
+  .title {
+  font-weight:normal;
+  font-size: 2.25em;
+  padding: 0.75em;
+  padding-left: 0em;
+  padding-bottom: 0.25em;
+}
+
+  .subtitle {
+    padding: 0.5em;
+    font-size: 2.25em;
+    padding-top: 0.25em;
+    padding-left: 0em;
+    font-size: 1.2em;
   }
 
   #landing-subtitle {

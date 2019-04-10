@@ -20,7 +20,6 @@ const styles = theme => ({
     flexWrap:'wrap'
     // height: 100,
   },
-
   input: {
     display: 'flex',
     flexWrap: 'wrap',
@@ -198,10 +197,11 @@ class SearchAutocomplete extends React.Component {
     };
 
     // Build a placeholder based on the search type
+    var placeholder = ''
     if (this.props.search_type === 'COURSE') {
-      var placeholder = 'Type a course name';
+      placeholder = 'Type a course name';
     } else {
-      var placeholder = "Type an instructor's name";
+      placeholder = "Type an instructor's name";
     }
 
     return (
