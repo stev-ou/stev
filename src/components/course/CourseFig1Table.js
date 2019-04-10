@@ -114,25 +114,21 @@ function CustomizedTable(props) {
           <TableHead className='table-header'>
             <TableRow className={classes.tableRow} >
               <CustomTableCell
-              className='table-header'
               align='left'
               >
                 Instructor Name
               </CustomTableCell>
               <CustomTableCell
-                className='table-header'
                 align="center"
               >
                 Average Instructor Rating (1-5)
               </CustomTableCell>
               <CustomTableCell
-                className='table-header'
                 align="center"
               >
                 Instructor Rating in Course (1-5)
               </CustomTableCell>
               <CustomTableCell
-                className='table-header'
                 align="right"
               >
                 Semester(s) Taught

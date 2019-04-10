@@ -4,7 +4,11 @@ import { schemeSet3 } from 'd3-scale-chromatic'; // This is the colors for the b
 import * as Math from 'mathjs';
 // import CanvasJS from 'canvasjs';
 import { api_endpoint } from '../../constants.js';
+import obj from '../MobileTools.js'
 
+// Define mobile parameters
+var em = obj['em']
+var mobile = obj['mobile']
 // This function will add the proper suffix, i.e 1st, 2nd, 3rd, given integer input
 function ordinal_suffix_of(i) {
   var j = i % 10,
@@ -23,6 +27,7 @@ function ordinal_suffix_of(i) {
 
 // Define API input string
 const API = api_endpoint + 'courses/';
+
 
 class CourseFig2Chart extends React.Component {
   constructor(props) {
@@ -47,11 +52,11 @@ class CourseFig2Chart extends React.Component {
       // Define the data for the bar chart
       var bar_data = {
         labels: [
-          result['dept']['dept name'] + ' Department Average',
+          result['dept']['dept name'] + ' Average',
           result['dept']['dept name'] +
             '' +
             result['course number'] +
-            ' Course Average',
+            ' Average',
         ],
         datasets: [
           {
@@ -115,13 +120,15 @@ class CourseFig2Chart extends React.Component {
 
       // We'll modify the options for our chart here
       var bar_options = {
+        responsive:true,
+        maintainAspectRatio: true,
         title: {
           text:
             result['course name'] +
             ' Ratings compared for ' +
             result['most recent sem'],
           display: true,
-          fontSize: 24,
+          fontSize: 1.5*em,
         },
         legend: { display: false },
         scales: {
@@ -136,21 +143,21 @@ class CourseFig2Chart extends React.Component {
                   '-' +
                   max_rating.toString() +
                   ' shown)',
-                fontSize: 16,
+                fontSize: 1.5*em,
               },
               ticks: {
                 beginAtZero: false,
                 min: min_rating,
                 max: max_rating,
                 stepSize: 1,
-                fontSize: 18,
+                fontSize: 1.5*em,
               },
             },
           ],
           yAxes: [
             {
               ticks: {
-                fontSize: 18,
+                fontSize: 1.5*em,
               },
             },
           ],
@@ -162,7 +169,7 @@ class CourseFig2Chart extends React.Component {
         title: {
           display: true,
           text: 'Enrollment by Instructor',
-          fontSize: 24,
+          fontSize: 2*em,
         },
         cutoutPercentage: 40, //Here for innerRadius. It's already exists
         outerRadius: 300, //Here for outerRadius
@@ -176,27 +183,23 @@ class CourseFig2Chart extends React.Component {
 
       return (
         <div>
-          <h2 style={{ padding: '0em' }}>
-            {' '}
+          <h2 className='subtitle'>
             This course is ranked {course_ranking} out of{' '}
             {result['dept']['courses in dept']} courses in the{' '}
             {result['dept']['dept name']} department for the{' '}
-            {result['most recent sem']} semester.
+            <b>{result['most recent sem']}</b> semester.
           </h2>
           <div className="row" style={{ align: 'left' }}>
             <div
-              className="col-md-8"
-              style={{
-                paddingTop: '0.5em',
-                paddingBottom: '0.5em',
-                padding: '2em',
-              }}
+              className="col-md-8" id='fig2chart-container'
             >
+            <div style={{ width: '100%', height: '80%' }}>
               <HorizontalBar
                 type="horizontalBar"
                 data={bar_data}
                 options={bar_options}
               />
+              </div>
             </div>
             <div
               className="col-md-4"

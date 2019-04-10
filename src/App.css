@@ -139,11 +139,16 @@
   padding: 0.1em;
 }
 
+/* Fig2 CSS */
+#fig2chart-container {
+  padding-top: 1em;
+  padding-bottom: 1em;
+}
+
 @media only screen and (max-width: 600px) {
   #landing-title {
     /*color: #62dafb;*/
     text-align: center;
-
   }
 
   .title {
@@ -168,6 +173,10 @@
   font-weight: bold ;
   margin: 0.1em;
   padding: 0.1em;
+}
+#fig2chart-container {
+  padding-top: 1em;
+  padding-bottom: 1em;
 }
 
   #landing-subtitle {
