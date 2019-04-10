@@ -9,33 +9,49 @@ import TextField from '@material-ui/core/TextField';
 import Paper from '@material-ui/core/Paper';
 import MenuItem from '@material-ui/core/MenuItem';
 import lists from '../course_instructor_list.json';
+import './../App.css';
 
 const course_list = lists['courses']
 const instructor_list = lists['instructors']
 
 const styles = theme => ({
   root: {
-    flexGrow: 0,
-    height: 100,
+    flex: 1,
+    flexWrap:'wrap'
+    // height: 100,
   },
+
   input: {
     display: 'flex',
+    flexWrap: 'wrap',
     padding: 0,
   },
+
   valueContainer: {
     display: 'flex',
     flexWrap: 'wrap',
     flex: 1,
     alignItems: 'center',
-    overflow: 'hidden',
+    overflowWrap: 'break-word',
+    overflow:'auto'
   },
+
   noOptionsMessage: {
     padding: '0px', //`${theme.spacing.unit}px ${theme.spacing.unit * 2}px`,
   },
   placeholder: {
     position: 'absolute',
-    left: 2,
-    fontSize: 16,
+    left: 1,
+    fontSize: '0.9em',
+  },
+  options: {
+    fontSize: '0.9em',
+    display: 'flex',
+    /// Lol this stupid ass thing wont wrap the text to the next line
+    flexWrap:'wrap',
+    flex: 1,
+    overflowWrap: 'anywhere',
+    overflow: 'auto'
   },
   paper: {
     position: 'absolute',
@@ -85,10 +101,7 @@ function Option(props) {
     <MenuItem
       buttonRef={props.innerRef}
       selected={props.isFocused}
-      component="div"
-      style={{
-        fontWeight: props.isSelected ? 500 : 400,
-      }}
+      className={props.selectProps.classes.options}
       {...props.innerProps}
     >
       {props.children}
@@ -160,9 +173,6 @@ class SearchAutocomplete extends React.Component {
     else {
       this.setState({choices: instructor_list})
     }
-
-
-
   }
 
   componentDidUpdate(prevProps) {
@@ -188,11 +198,10 @@ class SearchAutocomplete extends React.Component {
     };
 
     // Build a placeholder based on the search type
-    var placeholder = '';
     if (this.props.search_type === 'COURSE') {
-      placeholder = 'Type a course name';
+      var placeholder = 'Type a course name';
     } else {
-      placeholder = "Type an instructor's name";
+      var placeholder = "Type an instructor's name";
     }
 
     return (
@@ -201,6 +210,7 @@ class SearchAutocomplete extends React.Component {
         style={{ padding: '0em', paddingLeft: '0.1em' }}
       >
         <Select
+          className={'search-form'}
           classes={classes}
           styles={selectStyles}
           options={choices}
