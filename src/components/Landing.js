@@ -4,7 +4,8 @@ import { connect } from 'react-redux';
 
 class LandingComponent extends React.Component {
   render() {
-    const valid_search = this.props.valid_search === 'VALID';
+    // const valid_search = this.props.valid_search === 'VALID';
+    const valid_search = true
     if (!valid_search) {
       return (
         <div className="App">

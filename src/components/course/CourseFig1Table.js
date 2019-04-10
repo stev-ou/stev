@@ -14,9 +14,10 @@ const CustomTableCell = withStyles(theme => ({
   head: {
     backgroundColor: '#841617',
     color: theme.palette.common.white,
-  },
-  body: {
-    fontSize: 18,
+    fontSize: '0.75rem',
+    fontWeight: 'bold',
+    paddingTop: theme.spacing.unit,
+    paddingBottom: theme.spacing.unit
   },
 }))(TableCell);
 
@@ -25,13 +26,15 @@ const styles = theme => ({
   root: {
     align: 'center',
     width: '100%',
-    marginTop: theme.spacing.unit * 3,
+    // marginTop: theme.spacing.unit * 3,
     overflowX: 'auto',
   },
   table: {
-    minWidth: 700,
+    // minWidth: 700,
   },
   tableRow: {
+    margin: '0em',
+    padding: theme.spacing.unit,
     '&:hover': {
       backgroundColor: '#f3b7b7!important',
     },
@@ -102,34 +105,34 @@ function CustomizedTable(props) {
       </h1>
       <CourseChip cnum={info['course number']} />
       <h2 className='subtitle'
-        style={{ padding: '0.5em', paddingTop: '0.25em', paddingLeft: '0em' }}
       >
         {' '}
         These professors have taught the course recently{' '}
       </h2>
       <Paper className={classes.root}>
         <Table className={classes.table}>
-          <TableHead>
-            <TableRow className={classes.tableRow}>
+          <TableHead className='table-header'>
+            <TableRow className={classes.tableRow} >
               <CustomTableCell
-                style={{ fontWeight: 'bold', fontSize: '1.2em' }}
+              className='table-header'
+              align='left'
               >
                 Instructor Name
               </CustomTableCell>
               <CustomTableCell
-                style={{ fontWeight: 'bold', fontSize: '1.2em' }}
+                className='table-header'
                 align="center"
               >
                 Average Instructor Rating (1-5)
               </CustomTableCell>
               <CustomTableCell
-                style={{ fontWeight: 'bold', fontSize: '1.2em' }}
+                className='table-header'
                 align="center"
               >
                 Instructor Rating in Course (1-5)
               </CustomTableCell>
               <CustomTableCell
-                style={{ fontWeight: 'bold', fontSize: '1.2em' }}
+                className='table-header'
                 align="right"
               >
                 Semester(s) Taught

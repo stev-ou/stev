@@ -9,14 +9,16 @@ import InstructorFig2Timeseries from './instructor/InstructorFig2Timeseries.js';
 import InstructorFig3TableBar from './instructor/InstructorFig3TableBar.js';
 
 const DataView = props => {
-  const uuid = props.search_text;
-  const search_type = props.search_type;
+  // const uuid = props.search_text;
+  // const search_type = props.search_type;
+  const search_type = 'COURSE'
+  const uuid='ame3723'
 
   if (search_type === 'COURSE') {
     return (
-      <div className="container">
+      <div className="container dataview-container">
         <div className="graphical-content">
-          <div className="table-fig1">
+          <div className="graphical-content">
             <CourseFig1Table uuid={uuid} />
           </div>
 
@@ -42,7 +44,7 @@ const DataView = props => {
     );
   } else {
     return (
-      <div className="container">
+      <div className="container dataview-container ">
         <div className="graphical-content">
           <div className="table-fig1">
             <InstructorFig1Table uuid={uuid.toString()} />
