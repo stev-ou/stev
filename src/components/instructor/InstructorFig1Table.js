@@ -85,6 +85,7 @@ class InstructorFig1Table extends React.Component {
   constructor(props) {
     super(props);
     this.state = { loadedAPI: false, data: [], uuid: props.uuid };
+    this.handleClick = this.handleClick.bind(this)
   }
 
   componentDidMount() {
@@ -94,7 +95,24 @@ class InstructorFig1Table extends React.Component {
       .then(data => this.setState({ data: data.result, loadedAPI: true }));
   }
 
+  handleClick(event, id, child_state){
+  console.log(this.props)
+  var clicked = child_state.rows[id-1]['display name']
+  // Convert course list to dict/hash
+  var course_dict = course_list.reduce((obj, item) => {
+     obj[item['label'].toString()] = item['value'].toString()
+     return obj
+   }, {})
+  // Get the course uuid from the course dict
+  var course_uuid = course_dict[clicked]
+  if (typeof course_uuid != 'undefined') {
+  // Now just need to pass to redux to trigger redux state change
+  this.props.setSearchType('COURSE');
+  this.props.setSearchText(course_uuid);
+}}
+
   render() {
+    console.log(this.props)
     if (!this.state.loadedAPI) {
       return null;
     } else {
@@ -113,7 +131,7 @@ class InstructorFig1Table extends React.Component {
           item['course name'];
         item['id'] = i + 1;
       });
-      return <MyTable data={table_data} />;
+      return <MyTable data={table_data} handleClick={this.handleClick}/>;
     }
   }
 }
@@ -123,23 +141,8 @@ class CustomizedTable extends React.Component {
   constructor(props){
     super(props)
   this.state = {classes:props.classes, data:props.data, rows:props.data.courses}
+  console.log(this.props)
   }
-
-handleClick(event, id){
-  var clicked = this.state.rows[id-1]['display name']
-  // Convert course list to dict/hash
-  var course_dict = course_list.reduce((obj, item) => {
-     obj[item['label'].toString()] = item['value'].toString()
-     return obj
-   }, {})
-  // Get the course uuid from the course dict
-  var course_uuid = course_dict[clicked]
-  if (typeof course_uuid != 'undefined') {
-  // Now just need to pass to DataView , which will trigger redux state change
-  setSearchType('COURSE');
-  setSearchText(course_uuid);
-  this.setState(this.state)
-}}
 
 render() {
   var data = this.state.data
@@ -181,7 +184,7 @@ render() {
           <TableBody>
             {rows.map(row => (
               <TableRow className={classes.tableRow} key={row.id}>
-                <CustomTableCellHyperlink component="th" scope="row" onClick={event => this.handleClick(event, row.id)}>
+                <CustomTableCellHyperlink component="th" scope="row" onClick={event => this.props.handleClick(event, row.id, this.state, this.props)}>
                   {row['display name']}
                 </CustomTableCellHyperlink>
                 <CustomTableCell align='center'>
@@ -204,11 +207,17 @@ CustomizedTable.propTypes = {
   classes: PropTypes.object.isRequired,
 };
 
-const mapStateToProps = state => {
-  return {
-    search_type: state.search_type,
-    search_text: state.search_text
-  };
-};
+// function mapDispatchToProps(dispatch) {
+//   return {
+//  setSearchType: (this.state.search_type) => dispatch(setSearchStatus(this.state.search_type)),
+//  setSearchText: (this.state.search_text) => dispatch(setSearchStatus(this.state.search_text)),
+// }};
 
-export default (InstructorFig1Table);
+// const mapStateToProps = state => {
+//   return {
+//     search_type: state.search_type,
+//     search_text: state.search_text
+//   };
+// };
+
+export default connect(null, {setSearchType, setSearchText})(InstructorFig1Table);

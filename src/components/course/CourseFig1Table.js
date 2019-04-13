@@ -48,10 +48,17 @@ const CustomTableCell = withStyles(theme => ({
   body: {
     padding: table_padding*theme.spacing.unit,
     paddingTop: 0.5*table_padding*theme.spacing.unit,
-    paddingBottom: 0.5*table_padding*theme.spacing.unit
+    paddingBottom: 0.5*table_padding*theme.spacing.unit,
+}}))(TableCell);
 
+const CustomTableCellHyperlink = withStyles(theme => ({
+  body: {
+    '&:hover': {
+    fontWeight:'bold',
+    textDecoration: 'underline',
+    cursor:'pointer'
   }
-}))(TableCell);
+}}))(CustomTableCell);
 
 // This defines styles for the table
 const styles = theme => ({
