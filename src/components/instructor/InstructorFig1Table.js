@@ -26,10 +26,14 @@ const CustomTableCell = withStyles(theme => ({
     fontSize: head_text_size+'rem',
     fontWeight: 'bold',
     padding: table_padding*theme.spacing.unit,
+    paddingTop: 0.5*table_padding*theme.spacing.unit,
+    paddingBottom: 0.5*table_padding*theme.spacing.unit
 
   },
   body: {
     padding: table_padding*theme.spacing.unit,
+    paddingTop: 0.5*table_padding*theme.spacing.unit,
+    paddingBottom: 0.5*table_padding*theme.spacing.unit
 
   }
 }))(TableCell);
@@ -110,8 +114,7 @@ function CustomizedTable(props) {
       </h1>
       <h2 className='subtitle'>
         {' '}
-        {data['instructor name'] +
-          ' has taught these courses in the previous 3 years'}{' '}
+        {data['instructor name']} has taught these courses in the <b>previous 3 years</b>
       </h2>
       <Paper className={classes.root}>
         <Table className={classes.table}>

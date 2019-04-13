@@ -135,7 +135,6 @@ class CourseFig3Timeseries extends React.Component {
         }),
       });
 
-
       const options = {
         responsive:true,
         maintainAspectRatio: false,
@@ -151,14 +150,14 @@ class CourseFig3Timeseries extends React.Component {
               ticks: { fontSize: 0.75*chart_legend_size*em},
               scaleLabel: {
                 display: true,
-                labelString: 'Rating in Course (1-5)',
+                labelString: 'Rating',
                 fontSize: chart_legend_size*em,
               },
             },
           ],
           xAxes: [
             {
-              ticks: { fontSize: chart_legend_size*em },
+              ticks: { fontSize: 0.9*chart_legend_size*em },
               scaleLabel: {
                 display: true,
                 labelString: 'Semester',

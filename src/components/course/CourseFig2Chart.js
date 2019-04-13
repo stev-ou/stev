@@ -5,7 +5,7 @@ import * as Math from 'mathjs';
 // import CanvasJS from 'canvasjs';
 import { api_endpoint } from '../../constants.js';
 import obj from '../MobileTools.js'
-
+ 
 // Define mobile parameters
 var em = obj['em']
 var mobile = obj['mobile']

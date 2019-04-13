@@ -28,10 +28,14 @@ const CustomTableCell = withStyles(theme => ({
     fontSize: head_text_size+'rem',
     fontWeight: 'bold',
     padding: table_padding*theme.spacing.unit,
+    paddingTop: 0.5*table_padding*theme.spacing.unit,
+    paddingBottom: 0.5*table_padding*theme.spacing.unit
 
   },
   body: {
     padding: table_padding*theme.spacing.unit,
+    paddingTop: 0.5*table_padding*theme.spacing.unit,
+    paddingBottom: 0.5*table_padding*theme.spacing.unit
 
   }
 }))(TableCell);
