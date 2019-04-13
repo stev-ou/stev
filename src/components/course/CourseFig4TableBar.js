@@ -17,7 +17,6 @@ if (mobile) {
   header_size = 2.75
   label_size = 2.25
 }
-
 // Define API input string
 const API = api_endpoint + 'courses/';
 
@@ -66,7 +65,7 @@ class CourseFig4TableBar extends React.Component {
         },
         {
           dataField: 'avgRating',
-          text: 'Average Rating in Course (1-5)',
+          text: 'Course Average Rating (1-5)',
           headerStyle: { width: '35%', textAlign: 'left', fontSize: header_size*em },
         },
       ];
@@ -173,7 +172,7 @@ class CourseFig4TableBar extends React.Component {
         <div >
           <h3 className= 'subtitle'>
             {' '}
-            Question responses in this course, sorted by instructor{' '}
+            Question responses for this course, sorted by instructor{' '}
           </h3>
           <BootstrapTable
             keyField="qNumber"
