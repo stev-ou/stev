@@ -1,5 +1,5 @@
 import React from 'react';
-import { Line, Bar} from 'react-chartjs-2';
+import { Bar} from 'react-chartjs-2';
 // import * as Math from 'mathjs';
 import { api_endpoint } from '../../constants.js';
 import obj from '../MobileTools.js'

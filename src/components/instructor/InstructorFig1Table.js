@@ -8,15 +8,30 @@ import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
 import Paper from '@material-ui/core/Paper';
 import { api_endpoint } from '../../constants.js';
+import obj from '../MobileTools.js'
+
+// Define mobile parameters
+var em = obj['em']
+var mobile = obj['mobile']
+var head_text_size = (em/16).toString();
+var table_padding = 3;
+if (mobile) {
+  head_text_size = (em/6).toString()
+  table_padding = 1.25}
 
 const CustomTableCell = withStyles(theme => ({
   head: {
     backgroundColor: '#841617',
     color: theme.palette.common.white,
+    fontSize: head_text_size+'rem',
+    fontWeight: 'bold',
+    padding: table_padding*theme.spacing.unit,
+
   },
   body: {
-    fontSize: 18,
-  },
+    padding: table_padding*theme.spacing.unit,
+
+  }
 }))(TableCell);
 
 // This defines styles for the table
@@ -24,21 +39,20 @@ const styles = theme => ({
   root: {
     align: 'center',
     width: '100%',
-    marginTop: theme.spacing.unit * 3,
+
     overflowX: 'auto',
   },
   table: {
-    minWidth: 700,
   },
   tableRow: {
+    padding: theme.spacing.unit,
     '&:hover': {
-      backgroundColor: '#f3b7b7!important',
+      backgroundColor: '#f3b7b7',
     },
     '&:nth-of-type(odd)': {
       backgroundColor: theme.palette.background.default, // Might want to change this if desired
     },
   },
-  tableBody: {},
 });
 
 // This is the function that will fetch the desired data from the api
@@ -61,9 +75,11 @@ class InstructorFig1Table extends React.Component {
     if (!this.state.loadedAPI) {
       return null;
     } else {
+
       let MyTable = withStyles(styles)(CustomizedTable); // This is important
       // Get the data ready to pass to the table by rounding and adding ids
       var table_data = this.state.data;
+      console.log(table_data)
       table_data.courses.forEach((item, i) => {
         item['instr_rating_in_course'] = item['instr_rating_in_course'].toFixed(
           2
@@ -88,11 +104,11 @@ function CustomizedTable(props) {
 
   return (
     <div>
-      <h1 style={{ fontWeight: 'bold', fontSize: '3.5em', padding: '0.75em' }}>
+      <h1 className='title' style={{paddingBottom: '0.5em'}}>
         {' '}
-        {data['instructor name']}{' '}
+        {data['instructor name']}
       </h1>
-      <h2 style={{ padding: '0.5em', paddingTop: '0em' }}>
+      <h2 className='subtitle'>
         {' '}
         {data['instructor name'] +
           ' has taught these courses in the previous 3 years'}{' '}
@@ -101,19 +117,19 @@ function CustomizedTable(props) {
         <Table className={classes.table}>
           <TableHead>
             <TableRow className={classes.tableRow}>
-              <CustomTableCell
-                style={{ fontWeight: 'bold', fontSize: '1.2em' }}
-              >
+              <CustomTableCell align='left'>
+
                 Course Name
               </CustomTableCell>
               <CustomTableCell
-                style={{ fontWeight: 'bold', fontSize: '1.2em' }}
-                align="right"
-              >
-                {data['instructor name']} Average Rating in Course (1-5)
+                align="center">
+                Average Course Rating (1-5)
               </CustomTableCell>
               <CustomTableCell
-                style={{ fontWeight: 'bold', fontSize: '1.2em' }}
+                align="center">
+                {data['instructor name']} Rating in Course (1-5)
+              </CustomTableCell>
+              <CustomTableCell
                 align="right"
               >
                 Semester(s) Taught
@@ -125,6 +141,9 @@ function CustomizedTable(props) {
               <TableRow className={classes.tableRow} key={row.id}>
                 <CustomTableCell component="th" scope="row">
                   {row['display name']}
+                </CustomTableCell>
+                <CustomTableCell align='center'>
+                {row['avg_course_rating'].toFixed(2).toString()}
                 </CustomTableCell>
                 <CustomTableCell align="center">
                   {row['instr_rating_in_course']}

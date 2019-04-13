@@ -9,7 +9,6 @@ const mobile = obj['mobile']
 var justify = 'left'
 if (mobile){
   justify='center'
-
 }
 
 const styles = theme => ({
@@ -24,7 +23,7 @@ const styles = theme => ({
   chip: {
     margin: theme.spacing.unit,
     color: 'primary',
-    fontSize: '1.2em',
+    fontSize: '1.1em',
   },
   palette: {
     primary: {
@@ -48,7 +47,19 @@ function CourseChip(props) {
   const first_char = props.cnum[0];
 
   // Define the chip label
-  const label_dict = {
+  var label_dict={}
+  if (mobile){
+  label_dict = {
+    1: 'Freshman-Level Course',
+    2: 'Sophomore-Level Course',
+    3: 'Junior-Level Course',
+    4: 'Senior-Level Course',
+    5: 'Graduate-Level Course',
+    6: 'Graduate-Level Course',
+    7: 'Graduate-Level Course'}
+  }
+  else {
+      label_dict = {
     1: 'Freshman',
     2: 'Sophomore',
     3: 'Junior',
@@ -57,6 +68,7 @@ function CourseChip(props) {
     6: 'Graduate',
     7: 'Graduate',
   };
+  }
   const bg_color_dict = {
     1: '#40BF42',
     2: '#ba68c8',

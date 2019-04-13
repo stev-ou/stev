@@ -16,7 +16,9 @@ var em = obj['em']
 var mobile = obj['mobile']
 var head_text_size = (em/16).toString();
 var table_padding = 3;
-if (mobile) {head_text_size = (em/6).toString(); table_padding = 1.25}
+if (mobile) {
+  head_text_size = (em/6).toString()
+  table_padding = 1.25}
 
 
 const CustomTableCell = withStyles(theme => ({
