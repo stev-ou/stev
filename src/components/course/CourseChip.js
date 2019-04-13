@@ -3,12 +3,12 @@ import PropTypes from 'prop-types';
 import { withStyles } from '@material-ui/core/styles';
 import Chip from '@material-ui/core/Chip';
 import Tooltip from '@material-ui/core/Tooltip';
-import obj from '../MobileTools.js'
+import obj from '../MobileTools.js';
 
-const mobile = obj['mobile']
-var justify = 'left'
-if (mobile){
-  justify='center'
+const mobile = obj['mobile'];
+var justify = 'left';
+if (mobile) {
+  justify = 'center';
 }
 
 const styles = theme => ({
@@ -47,27 +47,27 @@ function CourseChip(props) {
   const first_char = props.cnum[0];
 
   // Define the chip label
-  var label_dict={}
-  if (mobile){
-  label_dict = {
-    1: 'Freshman-Level Course',
-    2: 'Sophomore-Level Course',
-    3: 'Junior-Level Course',
-    4: 'Senior-Level Course',
-    5: 'Graduate-Level Course',
-    6: 'Graduate-Level Course',
-    7: 'Graduate-Level Course'}
-  }
-  else {
-      label_dict = {
-    1: 'Freshman-Level Course',
-    2: 'Sophomore-Level Course',
-    3: 'Junior-Level Course',
-    4: 'Senior-Level Course',
-    5: 'Graduate-Level Course',
-    6: 'Graduate-Level Course',
-    7: 'Graduate-Level Course'
-  };
+  var label_dict = {};
+  if (mobile) {
+    label_dict = {
+      1: 'Freshman-Level Course',
+      2: 'Sophomore-Level Course',
+      3: 'Junior-Level Course',
+      4: 'Senior-Level Course',
+      5: 'Graduate-Level Course',
+      6: 'Graduate-Level Course',
+      7: 'Graduate-Level Course',
+    };
+  } else {
+    label_dict = {
+      1: 'Freshman-Level Course',
+      2: 'Sophomore-Level Course',
+      3: 'Junior-Level Course',
+      4: 'Senior-Level Course',
+      5: 'Graduate-Level Course',
+      6: 'Graduate-Level Course',
+      7: 'Graduate-Level Course',
+    };
   }
   const bg_color_dict = {
     1: '#40BF42',
@@ -92,23 +92,23 @@ function CourseChip(props) {
   const tooltip = tooltip_dict[first_char];
 
   return (
-    <div className='chip-container'>
-    <div className={classes.root}>
-      <Tooltip
-        title={tooltip}
-        classes={{
-          popper: classes.htmlPopper,
-          tooltip: classes.htmlTooltip,
-        }}
-        placement="right"
-      >
-        <Chip
-          label={label}
-          className={classes.chip}
-          variant="outlined"
-          style={{ color: '#ffffff', backgroundColor: bg_color }}
-        />
-      </Tooltip>
+    <div className="chip-container">
+      <div className={classes.root}>
+        <Tooltip
+          title={tooltip}
+          classes={{
+            popper: classes.htmlPopper,
+            tooltip: classes.htmlTooltip,
+          }}
+          placement="right"
+        >
+          <Chip
+            label={label}
+            className={classes.chip}
+            variant="outlined"
+            style={{ color: '#ffffff', backgroundColor: bg_color }}
+          />
+        </Tooltip>
       </div>
     </div>
   );

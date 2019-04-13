@@ -4,18 +4,18 @@ import { schemePaired } from 'd3-scale-chromatic'; // This is the colors for the
 import { api_endpoint } from '../../constants.js';
 import 'react-bootstrap-table-next/dist/react-bootstrap-table2.min.css';
 import BootstrapTable from 'react-bootstrap-table-next';
-import obj from '../MobileTools.js'
+import obj from '../MobileTools.js';
 
 // Define mobile parameters
-var em = obj['em']
-var mobile = obj['mobile']
+var em = obj['em'];
+var mobile = obj['mobile'];
 
 // Define the mobile modifiers
-var header_size = 1.1
-var label_size = 1.25
+var header_size = 1.1;
+var label_size = 1.25;
 if (mobile) {
-  header_size = 2.75
-  label_size = 2.25
+  header_size = 2.75;
+  label_size = 2.25;
 }
 // Define API input string
 const API = api_endpoint + 'courses/';
@@ -61,12 +61,20 @@ class CourseFig4TableBar extends React.Component {
         {
           dataField: 'question',
           text: 'Question',
-          headerStyle: { width: '65%', textAlign: 'left', fontSize:header_size*em},
+          headerStyle: {
+            width: '65%',
+            textAlign: 'left',
+            fontSize: header_size * em,
+          },
         },
         {
           dataField: 'avgRating',
           text: 'Course Average Rating (1-5)',
-          headerStyle: { width: '35%', textAlign: 'left', fontSize: header_size*em },
+          headerStyle: {
+            width: '35%',
+            textAlign: 'left',
+            fontSize: header_size * em,
+          },
         },
       ];
 
@@ -107,25 +115,25 @@ class CourseFig4TableBar extends React.Component {
               scaleLabel: {
                 display: true,
                 labelString: 'Question Rating',
-                fontSize: 1.2*label_size*em,
+                fontSize: 1.2 * label_size * em,
               },
               ticks: {
                 beginAtZero: false,
                 min: 1,
                 max: 5,
                 stepSize: 1,
-                fontSize: 0.75*label_size*em,
+                fontSize: 0.75 * label_size * em,
               },
             },
           ],
           xAxes: [
             {
               stacked: false,
-              ticks: { fontSize: 0.9*label_size*em},
+              ticks: { fontSize: 0.9 * label_size * em },
               scaleLabel: {
                 display: true,
                 labelString: 'Instructors',
-                fontSize: 1.2*label_size*em,
+                fontSize: 1.2 * label_size * em,
               },
             },
           ],
@@ -169,8 +177,8 @@ class CourseFig4TableBar extends React.Component {
       };
 
       return (
-        <div >
-          <h3 className= 'subtitle'>
+        <div>
+          <h3 className="subtitle">
             {' '}
             Question responses for this course, sorted by instructor{' '}
           </h3>
@@ -179,10 +187,10 @@ class CourseFig4TableBar extends React.Component {
             data={products}
             columns={columns}
             selectRow={selectRow}
-            rowStyle={{fontSize: 0.9*header_size*em}}
+            rowStyle={{ fontSize: 0.9 * header_size * em }}
           />
-          <div className='question-fig'>
-          <Bar data={plot_result} options={plot_options} />
+          <div className="question-fig">
+            <Bar data={plot_result} options={plot_options} />
           </div>
         </div>
       );

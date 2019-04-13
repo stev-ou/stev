@@ -10,11 +10,11 @@ class LandingComponent extends React.Component {
       return (
         <div className="App">
           <div className="Info">
-            <p style={{fontSize:'0.8em'}}>
+            <p style={{ fontSize: '0.8em' }}>
               {' '}
-              <b>Disclaimer</b>: This website is not affiliated with nor approved by
-              the University of Oklahoma. There is no warranty nor any guarantee
-              on the validity of the data.
+              <b>Disclaimer</b>: This website is not affiliated with nor
+              approved by the University of Oklahoma. There is no warranty nor
+              any guarantee on the validity of the data.
             </p>
           </div>
           <a

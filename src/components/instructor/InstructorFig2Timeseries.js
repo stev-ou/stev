@@ -2,22 +2,22 @@ import React from 'react';
 import { Bar } from 'react-chartjs-2';
 // import * as Math from 'mathjs';
 import { api_endpoint, colors } from '../../constants.js';
-import obj from '../MobileTools.js'
+import obj from '../MobileTools.js';
 
 // Define mobile parameters
-var em = obj['em']
-var mobile = obj['mobile']
+var em = obj['em'];
+var mobile = obj['mobile'];
 
 // Define the mobile modifiers
-var chart_title_size = 1.25
-var chart_legend_size = 1.25
-var point_radius = 1.25
-var legend_font_size = 1.4
+var chart_title_size = 1.25;
+var chart_legend_size = 1.25;
+var point_radius = 1.25;
+var legend_font_size = 1.4;
 if (mobile) {
-  chart_title_size = 2.5
-  chart_legend_size = 2.5
-  point_radius = 2.1
-  legend_font_size = 2.25 
+  chart_title_size = 2.5;
+  chart_legend_size = 2.5;
+  point_radius = 2.1;
+  legend_font_size = 2.25;
 }
 // Define API parameters
 const API = api_endpoint + 'instructors/';
@@ -72,15 +72,15 @@ class InstructorFig2Timeseries extends React.Component {
         data.datasets.push({
           label: course['name'],
           fill: false,
-          type:'line',
+          type: 'line',
           borderWidth: 2,
           backgroundColor: colors[j + 2],
           borderColor: colors[j + 2],
           pointBorderColor: 'rgba(0,0,0,1)',
           pointHoverBackgroundColor: colors[j + 2],
-          pointHoverRadius: 1.5*point_radius*em,
+          pointHoverRadius: 1.5 * point_radius * em,
           pointHoverBorderColor: 'rgba(0,0,0,1)',
-          pointRadius: point_radius*em,
+          pointRadius: point_radius * em,
           showLine: false,
           hidden: true,
           strokeColor: 'rgba(0,0,0,1)',
@@ -113,43 +113,43 @@ class InstructorFig2Timeseries extends React.Component {
         }),
       });
 
-
       const options = {
-        responsive:true,
+        responsive: true,
         maintainAspectRatio: false,
         title: {
           display: true,
           text:
             'Click a course in the legend below to toggle its ratings on or off',
-            fontSize: chart_title_size*em
+          fontSize: chart_title_size * em,
         },
         scales: {
           yAxes: [
             {
-              ticks: { fontSize: 0.75*chart_legend_size*em},
+              ticks: { fontSize: 0.75 * chart_legend_size * em },
               scaleLabel: {
                 display: true,
                 labelString: 'Rating',
-                fontSize: chart_legend_size*em,
+                fontSize: chart_legend_size * em,
               },
             },
           ],
           xAxes: [
             {
-              ticks: { fontSize: 0.9*chart_legend_size*em },
+              ticks: { fontSize: 0.9 * chart_legend_size * em },
               scaleLabel: {
                 display: true,
                 labelString: 'Semester',
-                fontSize: 1.25*chart_legend_size*em,
+                fontSize: 1.25 * chart_legend_size * em,
               },
             },
           ],
         },
         legend: {
           labels: {
-            boxWidth: 2*legend_font_size*em,
-            fontSize: legend_font_size*em,
-        }},
+            boxWidth: 2 * legend_font_size * em,
+            fontSize: legend_font_size * em,
+          },
+        },
         tooltips: {
           mode: 'index',
           // callbacks: {
@@ -166,11 +166,12 @@ class InstructorFig2Timeseries extends React.Component {
       };
       return (
         <div>
-          <h3 className='subtitle'>
-          The ratings this instructor received in recent courses are shown below
+          <h3 className="subtitle">
+            The ratings this instructor received in recent courses are shown
+            below
           </h3>
-          <div className='timeseries-container'>
-          <Bar data={data} options={options} />
+          <div className="timeseries-container">
+            <Bar data={data} options={options} />
           </div>
         </div>
       );

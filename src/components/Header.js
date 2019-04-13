@@ -5,7 +5,8 @@ import { connect } from 'react-redux';
 
 class Header extends React.Component {
   render() {
-    if (this.props.valid_search === 'INVALID') { //this.props.valid_search === 'INVALID' // This for debugging
+    if (this.props.valid_search === 'INVALID') {
+      //this.props.valid_search === 'INVALID' // This for debugging
       return (
         <div>
           <nav id="main_nav" className="navbar navbar-light navbar-expand-lg">
@@ -33,13 +34,15 @@ class Header extends React.Component {
               <div className="container">
                 <div className="col-xl-6 col-lg-6 col-md-6 col-sm-6 align-self-center">
                   <h2 id="landing-title">
-                    <b>S</b>tudent-<b>T</b>eacher <b>E</b>valuation <b>V</b>isualizations at OU
+                    <b>S</b>tudent-<b>T</b>eacher <b>E</b>valuation <b>V</b>
+                    isualizations at OU
                   </h2>
                   <h6 id="landing-subtitle">
-                    Search through large public datasets of previous course reviews at the University of Oklahoma
+                    Search through large public datasets of previous course
+                    reviews at the University of Oklahoma
                   </h6>
-                  <div id='search-form'>
-                  <SearchForm />
+                  <div id="search-form">
+                    <SearchForm />
                   </div>
                 </div>
                 <div className="col-xl-6 col-lg-6 col-md-6 col-sm-6 align-self-center">

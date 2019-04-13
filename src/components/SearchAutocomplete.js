@@ -10,13 +10,13 @@ import Paper from '@material-ui/core/Paper';
 import MenuItem from '@material-ui/core/MenuItem';
 import lists from '../course_instructor_list.json';
 
-const course_list = lists['courses']
-const instructor_list = lists['instructors']
+const course_list = lists['courses'];
+const instructor_list = lists['instructors'];
 
 const styles = theme => ({
   root: {
     flex: 1,
-    flexWrap:'wrap'
+    flexWrap: 'wrap',
     // height: 100,
   },
   input: {
@@ -31,7 +31,7 @@ const styles = theme => ({
     flex: 1,
     alignItems: 'center',
     overflowWrap: 'break-word',
-    overflow:'auto'
+    overflow: 'auto',
   },
 
   noOptionsMessage: {
@@ -46,10 +46,10 @@ const styles = theme => ({
     fontSize: '0.9em',
     display: 'flex',
     /// Lol this stupid ass thing wont wrap the text to the next line
-    flexWrap:'wrap',
+    flexWrap: 'wrap',
     flex: 1,
     overflowWrap: 'anywhere',
-    overflow: 'auto'
+    overflow: 'auto',
   },
   paper: {
     position: 'absolute',
@@ -155,21 +155,19 @@ class SearchAutocomplete extends React.Component {
       search_type: this.props.search_type,
     };
     if (this.props.search_type === 'COURSE') {
-      initial_state['choices'] = course_list
+      initial_state['choices'] = course_list;
+    } else {
+      initial_state['choices'] = instructor_list;
     }
-    else {
-      initial_state['choices'] = instructor_list
-    }
-    this.state = initial_state
+    this.state = initial_state;
   }
 
   componentWillMount() {
     // Update the search list
     if (this.props.search_type === 'COURSE') {
-      this.setState({choices: course_list})
-    }
-    else {
-      this.setState({choices: instructor_list})
+      this.setState({ choices: course_list });
+    } else {
+      this.setState({ choices: instructor_list });
     }
   }
 
@@ -196,7 +194,7 @@ class SearchAutocomplete extends React.Component {
     };
 
     // Build a placeholder based on the search type
-    var placeholder = ''
+    var placeholder = '';
     if (this.props.search_type === 'COURSE') {
       placeholder = 'Type a course name';
     } else {

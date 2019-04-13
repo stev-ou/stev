@@ -4,18 +4,18 @@ import { schemeSet3 } from 'd3-scale-chromatic'; // This is the colors for the b
 import * as Math from 'mathjs';
 // import CanvasJS from 'canvasjs';
 import { api_endpoint } from '../../constants.js';
-import obj from '../MobileTools.js'
- 
+import obj from '../MobileTools.js';
+
 // Define mobile parameters
-var em = obj['em']
-var mobile = obj['mobile']
+var em = obj['em'];
+var mobile = obj['mobile'];
 
 // Define the mobile modifiers
-var chart_title_size = 1.5
-var chart_legend_size = 1
+var chart_title_size = 1.5;
+var chart_legend_size = 1;
 if (mobile) {
-  chart_title_size = 3
-  chart_legend_size = 2
+  chart_title_size = 3;
+  chart_legend_size = 2;
 }
 
 // This function will add the proper suffix, i.e 1st, 2nd, 3rd, given integer input
@@ -36,7 +36,6 @@ function ordinal_suffix_of(i) {
 
 // Define API input string
 const API = api_endpoint + 'courses/';
-
 
 class CourseFig2Chart extends React.Component {
   constructor(props) {
@@ -117,9 +116,9 @@ class CourseFig2Chart extends React.Component {
       var course_ranking = ordinal_suffix_of(result['course ranking']);
 
       // Determine what scale to plot the averages on
-      var min_rating = Math.min(bar_data.datasets[0].data.map(Number)) - 0.2
-      var max_rating = Math.max(bar_data.datasets[0].data.map(Number))+ 0.2
-      if (max_rating >=5) {
+      var min_rating = Math.min(bar_data.datasets[0].data.map(Number)) - 0.2;
+      var max_rating = Math.max(bar_data.datasets[0].data.map(Number)) + 0.2;
+      if (max_rating >= 5) {
         max_rating = 5;
       }
       // Calculate total enrollment
@@ -127,15 +126,13 @@ class CourseFig2Chart extends React.Component {
 
       // We'll modify the options for our chart here
       var bar_options = {
-        responsive:true,
+        responsive: true,
         maintainAspectRatio: true,
         title: {
           text:
-            result['course name'] +
-            ' Ratings for ' +
-            result['most recent sem'],
+            result['course name'] + ' Ratings for ' + result['most recent sem'],
           display: true,
-          fontSize: chart_title_size*em,
+          fontSize: chart_title_size * em,
         },
         legend: { display: false },
         scales: {
@@ -144,23 +141,22 @@ class CourseFig2Chart extends React.Component {
               position: 'bottom',
               scaleLabel: {
                 display: true,
-                labelString:
-                  'Rating (1-5)',
-                fontSize: chart_legend_size*em,
+                labelString: 'Rating (1-5)',
+                fontSize: chart_legend_size * em,
               },
               ticks: {
                 beginAtZero: false,
                 min: min_rating,
                 max: max_rating,
                 stepSize: 1,
-                fontSize: chart_legend_size*em,
+                fontSize: chart_legend_size * em,
               },
             },
           ],
           yAxes: [
             {
               ticks: {
-                fontSize: chart_legend_size*em,
+                fontSize: chart_legend_size * em,
               },
             },
           ],
@@ -172,7 +168,7 @@ class CourseFig2Chart extends React.Component {
         title: {
           display: true,
           text: 'Enrollment by Instructor',
-          fontSize: chart_title_size*em,
+          fontSize: chart_title_size * em,
         },
         cutoutPercentage: 40, //Here for innerRadius. It's already exists
         outerRadius: 300, //Here for outerRadius
@@ -185,32 +181,33 @@ class CourseFig2Chart extends React.Component {
 
       return (
         <div>
-          <h2 className='subtitle'>
+          <h2 className="subtitle">
             This course is ranked {course_ranking} out of{' '}
             {result['dept']['courses in dept']} courses in the{' '}
             {result['dept']['dept name']} department for the{' '}
             <b>{result['most recent sem']}</b> semester.
           </h2>
           <div className="row" style={{ align: 'left' }}>
-            <div
-              className="col-md-8" id='fig2bar-container'
-            >
-            <div style={{ width: '100%', height: '90%' }}>
-              <HorizontalBar
-                type="horizontalBar"
-                data={bar_data}
-                options={bar_options}
-              />
+            <div className="col-md-8" id="fig2bar-container">
+              <div style={{ width: '100%', height: '90%' }}>
+                <HorizontalBar
+                  type="horizontalBar"
+                  data={bar_data}
+                  options={bar_options}
+                />
               </div>
             </div>
             <div
               className="col-md-4"
               style={{ padding: '1em', verticalAlign: 'middle' }}
             >
-              <div id='donut-container'style={{ width: '100%', height: '80%' }}>
+              <div
+                id="donut-container"
+                style={{ width: '100%', height: '80%' }}
+              >
                 <Doughnut data={donut_data} options={donut_options} />
               </div>
-              <h6 style={{ padding: '1em', 'textAlign':'center'}}>
+              <h6 style={{ padding: '1em', textAlign: 'center' }}>
                 {' '}
                 {total_enrollment} students rated the course in{' '}
                 {result['most recent sem']}
