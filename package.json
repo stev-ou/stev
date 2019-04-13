@@ -18,7 +18,6 @@
     "react-chartjs-2": "^2.7.4",
     "react-dom": "^16.6.3",
     "react-redux": "^6.0.1",
-    "react-responsive": "^6.1.1",
     "react-scripts": "^2.1.5",
     "react-select": "^2.4.2",
     "react-virtualized": "^9.21.0",
@@ -38,9 +37,5 @@
     "not dead",
     "not ie <= 11",
     "not op_mini all"
-  ],
-  "devDependencies": {
-    "css-loader": "^2.1.1",
-    "style-loader": "^0.23.1"
-  }
+  ]
 }

@@ -1,6 +1,6 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import Footer from './Footer.js'
+// import Footer from './Footer.js'
 import CourseFig1Table from './course/CourseFig1Table.js';
 import CourseFig2Chart from './course/CourseFig2Chart.js';
 import CourseFig3Timeseries from './course/CourseFig3Timeseries.js';
