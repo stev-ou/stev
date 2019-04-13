@@ -117,11 +117,9 @@ class CourseFig2Chart extends React.Component {
       var course_ranking = ordinal_suffix_of(result['course ranking']);
 
       // Determine what scale to plot the averages on
-      var min_rating = Math.floor(
-        Math.min(bar_data.datasets[0].data.map(Number)) - 0.01
-      );
-      var max_rating = Math.ceil(Math.max(bar_data.datasets[0].data));
-      if (max_rating === 6) {
+      var min_rating = Math.min(bar_data.datasets[0].data.map(Number)) - 0.2
+      var max_rating = Math.max(bar_data.datasets[0].data.map(Number))+ 0.2
+      if (max_rating >=5) {
         max_rating = 5;
       }
       // Calculate total enrollment

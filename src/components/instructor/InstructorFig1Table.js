@@ -16,7 +16,7 @@ import {
   setSearchText,
 } from '../../actions';
 
-// Get course and instructor lists
+// Get course list
 const course_list = lists['courses']
 
 // Define mobile parameters
@@ -191,7 +191,7 @@ render() {
           </TableBody>
         </Table>
       </Paper>
-      <h5 className='footnote'> * Click an course's name to navigate to its ratings </h5>
+      <h5 className='footnote'> * Click a course name to navigate to its ratings </h5>
     </div>
   );
 }}

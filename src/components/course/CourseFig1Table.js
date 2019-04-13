@@ -17,7 +17,7 @@ import {
   setSearchText,
 } from '../../actions';
 
-// Get course and instructor lists
+// Get instructor lists
 const instructor_list = lists['instructors']
 
 // Define mobile parameters

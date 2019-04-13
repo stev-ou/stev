@@ -1,5 +1,6 @@
 import React from 'react';
 import { connect } from 'react-redux';
+import Footer from './Footer.js'
 import CourseFig1Table from './course/CourseFig1Table.js';
 import CourseFig2Chart from './course/CourseFig2Chart.js';
 import CourseFig3Timeseries from './course/CourseFig3Timeseries.js';
@@ -9,13 +10,8 @@ import InstructorFig2Timeseries from './instructor/InstructorFig2Timeseries.js';
 import InstructorFig3TableBar from './instructor/InstructorFig3TableBar.js';
 
 const DataView = props => {
-  // const uuid = props.search_text;
-  // const search_type = props.search_type;
-  console.log(props.search_text)
-  console.log(props.search_type)
-  const search_type = 'COURSE'
-  const uuid='ame3173'
-
+  const uuid = props.search_text;
+  const search_type = props.search_type;
   if (search_type === 'COURSE') {
     return (
       <div className="dataview-container">
