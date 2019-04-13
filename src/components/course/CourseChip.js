@@ -3,11 +3,19 @@ import PropTypes from 'prop-types';
 import { withStyles } from '@material-ui/core/styles';
 import Chip from '@material-ui/core/Chip';
 import Tooltip from '@material-ui/core/Tooltip';
+import obj from '../MobileTools.js'
+
+const mobile = obj['mobile']
+var justify = 'left'
+if (mobile){
+  justify='center'
+
+}
 
 const styles = theme => ({
   root: {
     display: 'flex',
-    justifyContent: 'left',
+    justifyContent: justify,
     flexWrap: 'wrap',
     paddingTop: '0.15em',
     paddingBottom: '0.55em',
@@ -72,6 +80,7 @@ function CourseChip(props) {
   const tooltip = tooltip_dict[first_char];
 
   return (
+    <div className='chip-container'>
     <div className={classes.root}>
       <Tooltip
         title={tooltip}
@@ -88,6 +97,7 @@ function CourseChip(props) {
           style={{ color: '#ffffff', backgroundColor: bg_color }}
         />
       </Tooltip>
+      </div>
     </div>
   );
 }

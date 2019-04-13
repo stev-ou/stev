@@ -160,6 +160,11 @@
   height: 30vw;
 }
 
+/* Chip */
+.chip-container {
+  align-items: left;
+}
+
 @media only screen and (max-width: 770px) {
   #landing-title {
     /*color: #62dafb;*/
@@ -207,6 +212,10 @@
 }
 .question-fig {
   height: 60vw;
+}
+/* Chip */
+.chip-container {
+  align-items: center;
 }
 
   #landing-subtitle {
