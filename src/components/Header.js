@@ -5,7 +5,7 @@ import { connect } from 'react-redux';
 
 class Header extends React.Component {
   render() {
-    if (this.props.valid_search === 'INVALID') { //this.props.valid_search === 'INVALID'
+    if (false) { //this.props.valid_search === 'INVALID'
       return (
         <div>
           <nav id="main_nav" className="navbar navbar-light navbar-expand-lg">

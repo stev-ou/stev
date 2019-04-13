@@ -13,16 +13,12 @@ import obj from '../MobileTools.js'
 import lists from '../../course_instructor_list.json';
 import { connect } from 'react-redux';
 import {
-  setSearchStatus,
-  SearchStatus,
   setSearchType,
   setSearchText,
-  SearchType,
 } from '../../actions';
 
 // Get course and instructor lists
-const course_list = lists['courses']
-// const instructor_list = lists['instructors']
+const instructor_list = lists['instructors']
 
 // Define mobile parameters
 var em = obj['em']
@@ -54,7 +50,7 @@ const CustomTableCell = withStyles(theme => ({
 const CustomTableCellHyperlink = withStyles(theme => ({
   body: {
     '&:hover': {
-    fontWeight:'bold',
+    color:'blue',
     textDecoration: 'underline',
     cursor:'pointer'
   }
@@ -65,7 +61,6 @@ const styles = theme => ({
   root: {
     align: 'center',
     width: '100%',
-
     overflowX: 'auto',
   },
   table: {
@@ -89,6 +84,7 @@ class CourseFig1Table extends React.Component {
   constructor(props) {
     super(props);
     this.state = { data: [], uuid: props.uuid, info: {}, loadedAPI: false };
+    this.handleClick = this.handleClick.bind(this)
   }
 
   componentDidMount() {
@@ -104,8 +100,26 @@ class CourseFig1Table extends React.Component {
       );
   }
 
+  handleClick(event, id, child_state){
+  var clicked = child_state.rows[id-1]['name']
+  // Convert instructor list to dict/hash
+  var instr_dict = instructor_list.reduce((obj, item) => {
+     obj[item['label'].toString()] = item['value']
+     return obj
+   }, {})
+  // Get the instr uuid from the course dict
+  var instr_uuid = instr_dict[clicked]
+  if (typeof instr_uuid != 'undefined') {
+  // Now just need to pass to redux to trigger redux state change
+  this.props.setSearchType('INSTRUCTOR');
+  this.props.setSearchText(instr_uuid);
+}}
+
+
   render() {
-    if (this.state.loadedAPI) {
+    if (!this.state.loadedAPI)
+      {return null} 
+    else {
       let MyTable = withStyles(styles)(CustomizedTable); // This is important
       // Get the data to pass to the table
       var table_data = this.state.data;
@@ -118,18 +132,22 @@ class CourseFig1Table extends React.Component {
       // Get the info to pass to the table
       const info = this.state.info;
 
-      return <MyTable rows={table_data} info={info} />;
-    } else {
-      return null;
-    }
+      return <MyTable rows={table_data} info={info} handleClick={this.handleClick}/>;
+    } 
   }
 }
 
-//This is the function to create the table for figure 1
-function CustomizedTable(props) {
-  const { classes } = props;
-  const rows = props.rows;
-  const info = props.info;
+//This is the component for Figure1
+class CustomizedTable extends React.Component {
+  constructor(props){
+    super(props)
+  this.state = {classes:props.classes, info:props.info, rows:props.rows}
+  }
+
+  render(){
+  const info = this.state.info
+  const classes = this.state.classes
+  const rows = this.state.rows
 
   return (
     <div>
@@ -173,12 +191,12 @@ function CustomizedTable(props) {
           </TableHead>
           <TableBody>
             {rows.map(row => (
-              <TableRow hover className={classes.tableRow} key={row.id}>
-                <CustomTableCell component="th" scope="row">
+              <TableRow className={classes.tableRow} key={row.id}>
+                <CustomTableCellHyperlink component="th" scope="row" onClick={event => this.props.handleClick(event, row.id, this.state)}>
                   {row.name}
-                </CustomTableCell>
-                <CustomTableCell align="center">
-                  {row['avg rating']}
+                </CustomTableCellHyperlink>
+                <CustomTableCell align='center'>
+                {row['avg rating']}
                 </CustomTableCell>
                 <CustomTableCell align="center">
                   {row['crs rating']}
@@ -189,12 +207,13 @@ function CustomizedTable(props) {
           </TableBody>
         </Table>
       </Paper>
+      <h5 className='footnote'> * Click an instructor's name to navigate to their ratings </h5>
     </div>
   );
-}
+}}
 
 CustomizedTable.propTypes = {
   classes: PropTypes.object.isRequired,
 };
-// export default withStyles(styles)(CustomizedTable);
-export default CourseFig1Table;
+
+export default connect(null, {setSearchType, setSearchText})(CourseFig1Table);

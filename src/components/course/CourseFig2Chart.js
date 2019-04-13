@@ -147,11 +147,7 @@ class CourseFig2Chart extends React.Component {
               scaleLabel: {
                 display: true,
                 labelString:
-                  'Rating (1-5, range ' +
-                  min_rating.toString() +
-                  '-' +
-                  max_rating.toString() +
-                  ' shown)',
+                  'Rating (1-5)',
                 fontSize: chart_legend_size*em,
               },
               ticks: {

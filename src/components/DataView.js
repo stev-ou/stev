@@ -9,12 +9,12 @@ import InstructorFig2Timeseries from './instructor/InstructorFig2Timeseries.js';
 import InstructorFig3TableBar from './instructor/InstructorFig3TableBar.js';
 
 const DataView = props => {
-  const uuid = props.search_text;
-  const search_type = props.search_type;
+  // const uuid = props.search_text;
+  // const search_type = props.search_type;
   console.log(props.search_text)
   console.log(props.search_type)
-  // const search_type = 'INSTRUCTOR'
-  // const uuid='112114393'
+  const search_type = 'COURSE'
+  const uuid='ame3173'
 
   if (search_type === 'COURSE') {
     return (

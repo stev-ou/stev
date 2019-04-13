@@ -126,6 +126,13 @@
   font-size: 1.6em;
 }
 
+  .footnote {
+  color: rgba(90,90,90,1);
+  padding-bottom: 1.5em;
+  padding-top: 1em;
+  font-size: 0.8em;
+}
+
 .dataview-container {
   padding-left: 12vw;
   padding-right: 12vw;
@@ -197,6 +204,13 @@
     font-size: 1.2em;
     text-align: center;
   }
+
+  .footnote {
+  padding-bottom: 1.5em;
+  padding-top: 1em;
+  font-size: 0.8em;
+}
+
   .dataview-container {
   padding-left: 8vw;
   padding-right: 8vw;

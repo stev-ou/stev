@@ -12,16 +12,12 @@ import obj from '../MobileTools.js'
 import lists from '../../course_instructor_list.json';
 import { connect } from 'react-redux';
 import {
-  setSearchStatus,
-  SearchStatus,
   setSearchType,
   setSearchText,
-  SearchType,
 } from '../../actions';
 
 // Get course and instructor lists
 const course_list = lists['courses']
-// const instructor_list = lists['instructors']
 
 // Define mobile parameters
 var em = obj['em']
@@ -52,7 +48,7 @@ const CustomTableCell = withStyles(theme => ({
 const CustomTableCellHyperlink = withStyles(theme => ({
   body: {
     '&:hover': {
-    fontWeight:'bold',
+    color:'blue',
     textDecoration: 'underline',
     cursor:'pointer'
   }
@@ -96,7 +92,6 @@ class InstructorFig1Table extends React.Component {
   }
 
   handleClick(event, id, child_state){
-  console.log(this.props)
   var clicked = child_state.rows[id-1]['display name']
   // Convert course list to dict/hash
   var course_dict = course_list.reduce((obj, item) => {
@@ -112,11 +107,9 @@ class InstructorFig1Table extends React.Component {
 }}
 
   render() {
-    console.log(this.props)
     if (!this.state.loadedAPI) {
       return null;
     } else {
-
       let MyTable = withStyles(styles)(CustomizedTable); // This is important
       // Get the data ready to pass to the table by rounding and adding ids
       var table_data = this.state.data;
@@ -136,18 +129,17 @@ class InstructorFig1Table extends React.Component {
   }
 }
 
-//This is the function to create the table for figure 1
+//This is the component for figure 1
 class CustomizedTable extends React.Component {
   constructor(props){
     super(props)
   this.state = {classes:props.classes, data:props.data, rows:props.data.courses}
-  console.log(this.props)
   }
 
 render() {
-  var data = this.state.data
-  var classes = this.state.classes
-  var rows = this.state.rows
+  const data = this.state.data
+  const classes = this.state.classes
+  const rows = this.state.rows
   return (
     <div>
       <h1 className='title' style={{paddingBottom: '0.5em'}}>
@@ -199,6 +191,7 @@ render() {
           </TableBody>
         </Table>
       </Paper>
+      <h5 className='footnote'> * Click an course's name to navigate to its ratings </h5>
     </div>
   );
 }}
@@ -206,18 +199,5 @@ render() {
 CustomizedTable.propTypes = {
   classes: PropTypes.object.isRequired,
 };
-
-// function mapDispatchToProps(dispatch) {
-//   return {
-//  setSearchType: (this.state.search_type) => dispatch(setSearchStatus(this.state.search_type)),
-//  setSearchText: (this.state.search_text) => dispatch(setSearchStatus(this.state.search_text)),
-// }};
-
-// const mapStateToProps = state => {
-//   return {
-//     search_type: state.search_type,
-//     search_text: state.search_text
-//   };
-// };
 
 export default connect(null, {setSearchType, setSearchText})(InstructorFig1Table);

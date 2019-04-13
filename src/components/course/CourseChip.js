@@ -60,13 +60,13 @@ function CourseChip(props) {
   }
   else {
       label_dict = {
-    1: 'Freshman',
-    2: 'Sophomore',
-    3: 'Junior',
-    4: 'Senior',
-    5: 'Graduate',
-    6: 'Graduate',
-    7: 'Graduate',
+    1: 'Freshman-Level Course',
+    2: 'Sophomore-Level Course',
+    3: 'Junior-Level Course',
+    4: 'Senior-Level Course',
+    5: 'Graduate-Level Course',
+    6: 'Graduate-Level Course',
+    7: 'Graduate-Level Course'
   };
   }
   const bg_color_dict = {
