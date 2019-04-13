@@ -7,7 +7,6 @@ function getValue(id){
     em = div.offsetHeight;
 }
 getValue('div')
-console.log(em)
 // Determine if the screen is mobile, based on the viewport width
 var mobile=false
 if (em <=8){
