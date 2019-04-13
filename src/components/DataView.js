@@ -4,7 +4,7 @@ import CourseFig1Table from './course/CourseFig1Table.js';
 import CourseFig2Chart from './course/CourseFig2Chart.js';
 import CourseFig3Timeseries from './course/CourseFig3Timeseries.js';
 import CourseFig4TableBar from './course/CourseFig4TableBar.js';
-import InstructorFig1Table from './instructor/Old_InstructorFig1Table.js';
+import InstructorFig1Table from './instructor/InstructorFig1Table.js';
 import InstructorFig2Timeseries from './instructor/InstructorFig2Timeseries.js';
 import InstructorFig3TableBar from './instructor/InstructorFig3TableBar.js';
 

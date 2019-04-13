@@ -10,6 +10,19 @@ import Paper from '@material-ui/core/Paper';
 import { api_endpoint } from '../../constants.js';
 import CourseChip from './CourseChip.js';
 import obj from '../MobileTools.js'
+import lists from '../../course_instructor_list.json';
+import { connect } from 'react-redux';
+import {
+  setSearchStatus,
+  SearchStatus,
+  setSearchType,
+  setSearchText,
+  SearchType,
+} from '../../actions';
+
+// Get course and instructor lists
+const course_list = lists['courses']
+// const instructor_list = lists['instructors']
 
 // Define mobile parameters
 var em = obj['em']

@@ -46,11 +46,9 @@ class SearchForm extends React.Component {
 
   changeRadio(event) {
     if (event.target.value === 'Course') {
-      //this.setState({ search_type: SearchType.COURSE});
       this.props.setSearchType(SearchType.COURSE);
     } else if (event.target.value === 'Instructor') {
       this.props.setSearchType(SearchType.INSTRUCTOR);
-      //this.setState({ search_type: SearchType.INSTRUCTOR});
     }
   }
 

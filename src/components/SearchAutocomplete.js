@@ -9,7 +9,6 @@ import TextField from '@material-ui/core/TextField';
 import Paper from '@material-ui/core/Paper';
 import MenuItem from '@material-ui/core/MenuItem';
 import lists from '../course_instructor_list.json';
-import './../App.css';
 
 const course_list = lists['courses']
 const instructor_list = lists['instructors']

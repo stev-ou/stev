@@ -6,7 +6,7 @@ const Footer = () => {
       <div className="container">
         <div className="row">
           <p id="footer-text">
-            © Zach Schuermann, Sam Jett 2019 All rights reserved.
+            © Zach Schuermann, Sam Jett, Joe Lovoi 2019 All rights reserved.
           </p>
         </div>
       </div>
