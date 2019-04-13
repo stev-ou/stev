@@ -141,15 +141,27 @@
 }
 
 /* Fig2 CSS */
-#fig2chart-container {
+#fig2bar-container {
   padding-top: 1em;
   padding-bottom: 1em;
+}
+#donut-container {
+  max-height: 25vw;
+}
+.timeseries-container {
+  height: 50vw;
+  width: 100%;
+  align-items: center;
 }
 
 @media only screen and (max-width: 770px) {
   #landing-title {
     /*color: #62dafb;*/
     text-align: center;
+  }
+  .timeseries-container {
+  height: 90vw;
+  width: 100%;
   }
 
   .title {
@@ -178,9 +190,13 @@
   margin: 0.1em;
   padding: 0.1em;
 }
-#fig2chart-container {
-  padding-top: 1em;
-  padding-bottom: 1em;
+#fig2bar-container {
+  padding-top: 0em;
+  padding-bottom: 0em;
+}
+#donut-container {
+  max-height: 40vw;
+  padding: 0em;
 }
 
   #landing-subtitle {

@@ -39,11 +39,10 @@ const styles = theme => ({
   root: {
     align: 'center',
     width: '100%',
-    // marginTop: theme.spacing.unit * 3,
+
     overflowX: 'auto',
   },
   table: {
-    // minWidth: 700,
   },
   tableRow: {
     padding: theme.spacing.unit,

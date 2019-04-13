@@ -199,7 +199,7 @@ class CourseFig2Chart extends React.Component {
           </h2>
           <div className="row" style={{ align: 'left' }}>
             <div
-              className="col-md-8" id='fig2chart-container'
+              className="col-md-8" id='fig2bar-container'
             >
             <div style={{ width: '100%', height: '90%' }}>
               <HorizontalBar
@@ -213,7 +213,7 @@ class CourseFig2Chart extends React.Component {
               className="col-md-4"
               style={{ padding: '1em', verticalAlign: 'middle' }}
             >
-              <div style={{ width: '100%', height: '80%' }}>
+              <div id='donut-container'style={{ width: '100%', height: '80%' }}>
                 <Doughnut data={donut_data} options={donut_options} />
               </div>
               <h6 style={{ padding: '1em', 'textAlign':'center'}}>
