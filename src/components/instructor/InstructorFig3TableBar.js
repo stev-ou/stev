@@ -194,6 +194,4 @@ class InstructorFig3TableBar extends React.Component {
   }
 }
 
-// <h1> {result['course name']} is ranked {ordinal_suffix_of(result['course rating'])} out of {result.dept['courses in dept']} courses in the {result['dept']['dept name']} department </h1>
-// , verticalAlign:'middle'
 export default InstructorFig3TableBar;
