@@ -1,17 +1,3 @@
-import { unstable_useMediaQuery as useMediaQuery } from '@material-ui/core/useMediaQuery';
-
-// Use the media query to determine if the viewing window is mobile
-const media = true;
-const media => (
-<MediaQuery minDeviceWidth={700}>
-  {(matches) => {
-    if (matches) {
-      console.log(matches)
-    } else {
-      console.log(matches)
-    }
-  }}
-</MediaQuery>)
 
 // Get the value of an em in pixels cause ChartJS cant take em argument 
 var em;
@@ -21,5 +7,11 @@ function getValue(id){
     em = div.offsetHeight;
 }
 getValue('div')
+console.log(em)
+// Determine if the screen is mobile, based on the viewport width
+var mobile=false
+if (em <=8){
+	mobile=true
+}
 
-export default {'em':em, 'mobile':!media};
+export default {'em':em, 'mobile':mobile};

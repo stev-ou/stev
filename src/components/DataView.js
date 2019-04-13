@@ -16,7 +16,7 @@ const DataView = props => {
 
   if (search_type === 'COURSE') {
     return (
-      <div className="container dataview-container">
+      <div className="dataview-container">
         <div className="graphical-content">
           <div className="graphical-content">
             <CourseFig1Table uuid={uuid} />
@@ -44,7 +44,7 @@ const DataView = props => {
     );
   } else {
     return (
-      <div className="container dataview-container ">
+      <div className="dataview-container ">
         <div className="graphical-content">
           <div className="table-fig1">
             <InstructorFig1Table uuid={uuid.toString()} />

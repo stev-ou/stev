@@ -9,6 +9,15 @@ import obj from '../MobileTools.js'
 // Define mobile parameters
 var em = obj['em']
 var mobile = obj['mobile']
+
+// Define the mobile modifiers
+var chart_title_size = 1.5
+var chart_legend_size = 1
+if (mobile) {
+  chart_title_size = 3
+  chart_legend_size = 2
+}
+
 // This function will add the proper suffix, i.e 1st, 2nd, 3rd, given integer input
 function ordinal_suffix_of(i) {
   var j = i % 10,
@@ -125,39 +134,39 @@ class CourseFig2Chart extends React.Component {
         title: {
           text:
             result['course name'] +
-            ' Ratings compared for ' +
+            ' Ratings for ' +
             result['most recent sem'],
           display: true,
-          fontSize: 1.5*em,
+          fontSize: chart_title_size*em,
         },
         legend: { display: false },
         scales: {
           xAxes: [
             {
-              position: 'top',
+              position: 'bottom',
               scaleLabel: {
                 display: true,
                 labelString:
-                  'Rating from 1 to 5 (range ' +
+                  'Rating (1-5, range ' +
                   min_rating.toString() +
                   '-' +
                   max_rating.toString() +
                   ' shown)',
-                fontSize: 1.5*em,
+                fontSize: chart_legend_size*em,
               },
               ticks: {
                 beginAtZero: false,
                 min: min_rating,
                 max: max_rating,
                 stepSize: 1,
-                fontSize: 1.5*em,
+                fontSize: chart_legend_size*em,
               },
             },
           ],
           yAxes: [
             {
               ticks: {
-                fontSize: 1.5*em,
+                fontSize: chart_legend_size*em,
               },
             },
           ],
@@ -169,13 +178,12 @@ class CourseFig2Chart extends React.Component {
         title: {
           display: true,
           text: 'Enrollment by Instructor',
-          fontSize: 2*em,
+          fontSize: chart_title_size*em,
         },
         cutoutPercentage: 40, //Here for innerRadius. It's already exists
         outerRadius: 300, //Here for outerRadius
         responsive: true,
         maintainAspectRatio: false,
-
         legend: {
           display: false,
         },
@@ -193,7 +201,7 @@ class CourseFig2Chart extends React.Component {
             <div
               className="col-md-8" id='fig2chart-container'
             >
-            <div style={{ width: '100%', height: '80%' }}>
+            <div style={{ width: '100%', height: '90%' }}>
               <HorizontalBar
                 type="horizontalBar"
                 data={bar_data}
@@ -203,12 +211,12 @@ class CourseFig2Chart extends React.Component {
             </div>
             <div
               className="col-md-4"
-              style={{ padding: '2.5em', verticalAlign: 'middle' }}
+              style={{ padding: '1em', verticalAlign: 'middle' }}
             >
               <div style={{ width: '100%', height: '80%' }}>
                 <Doughnut data={donut_data} options={donut_options} />
               </div>
-              <h6 style={{ padding: '1em' }}>
+              <h6 style={{ padding: '1em', 'textAlign':'center'}}>
                 {' '}
                 {total_enrollment} students rated the course in{' '}
                 {result['most recent sem']}

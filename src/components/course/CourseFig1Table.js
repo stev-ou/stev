@@ -9,16 +9,29 @@ import TableRow from '@material-ui/core/TableRow';
 import Paper from '@material-ui/core/Paper';
 import { api_endpoint } from '../../constants.js';
 import CourseChip from './CourseChip.js';
+import obj from '../MobileTools.js'
+
+// Define mobile parameters
+var em = obj['em']
+var mobile = obj['mobile']
+var head_text_size = (em/16).toString();
+var table_padding = 3;
+if (mobile) {head_text_size = (em/6).toString(); table_padding = 1.25}
+
 
 const CustomTableCell = withStyles(theme => ({
   head: {
     backgroundColor: '#841617',
     color: theme.palette.common.white,
-    fontSize: '0.75rem',
+    fontSize: head_text_size+'rem',
     fontWeight: 'bold',
-    paddingTop: theme.spacing.unit,
-    paddingBottom: theme.spacing.unit
+    padding: table_padding*theme.spacing.unit,
+
   },
+  body: {
+    padding: table_padding*theme.spacing.unit,
+
+  }
 }))(TableCell);
 
 // This defines styles for the table
@@ -33,16 +46,14 @@ const styles = theme => ({
     // minWidth: 700,
   },
   tableRow: {
-    margin: '0em',
     padding: theme.spacing.unit,
     '&:hover': {
-      backgroundColor: '#f3b7b7!important',
+      backgroundColor: '#f3b7b7',
     },
     '&:nth-of-type(odd)': {
       backgroundColor: theme.palette.background.default, // Might want to change this if desired
     },
   },
-  tableBody: {},
 });
 
 // This is the function that will fetch the desired data from the api

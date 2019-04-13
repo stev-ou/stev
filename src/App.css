@@ -115,6 +115,7 @@
 /* CSS for dataview */
 .title {
   font-weight:bold;
+  color:red;
   font-size: 3em; /* 3.5 */
   padding-top: 0.75em;
   padding-bottom: 0.25em;
@@ -127,8 +128,8 @@
 }
 
 .dataview-container {
-  padding-left: 4em;
-  padding-right: 4em;
+  padding-left: 12vw;
+  padding-right: 12vw;
 }
 
 /* Css for table1, course */
@@ -145,7 +146,7 @@
   padding-bottom: 1em;
 }
 
-@media only screen and (max-width: 600px) {
+@media only screen and (max-width: 770px) {
   #landing-title {
     /*color: #62dafb;*/
     text-align: center;
@@ -153,9 +154,11 @@
 
   .title {
   font-weight:bold;
+  color: blue;
   font-size: 2.25em;
   padding-top: 0.75em;
   padding-bottom: 0.25em;
+  text-align: center;
 }
 
   .subtitle {
@@ -163,10 +166,11 @@
     font-size: 2.25em;
     padding-bottom: 0.25em;
     font-size: 1.2em;
+    text-align: center;
   }
   .dataview-container {
-  padding-left: 2.5em;
-  padding-right: 2.5em;
+  padding-left: 8vw;
+  padding-right: 8vw;
 }
 .table-header {
   font-size: 5em;
