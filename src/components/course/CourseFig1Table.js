@@ -52,11 +52,11 @@ const styles = theme => ({
   },
   tableRow: {
     padding: theme.spacing.unit,
-    '&:hover': {
-      backgroundColor: '#f3b7b7',
-    },
     '&:nth-of-type(odd)': {
       backgroundColor: theme.palette.background.default, // Might want to change this if desired
+    },
+    '&:hover': {
+      backgroundColor: '#f3b7b7',
     },
   },
 });

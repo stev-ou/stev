@@ -33,28 +33,48 @@ const CustomTableCell = withStyles(theme => ({
   body: {
     padding: table_padding*theme.spacing.unit,
     paddingTop: 0.5*table_padding*theme.spacing.unit,
+    paddingBottom: 0.5*table_padding*theme.spacing.unit,
+}}))(TableCell);
+
+const CustomTableCellHyperlink = withStyles(theme => ({
+  head: {
+    backgroundColor: '#841617',
+    color: theme.palette.common.white,
+    fontSize: head_text_size+'rem',
+    fontWeight: 'bold',
+    padding: table_padding*theme.spacing.unit,
+    paddingTop: 0.5*table_padding*theme.spacing.unit,
     paddingBottom: 0.5*table_padding*theme.spacing.unit
 
+  },
+  body: {
+    padding: table_padding*theme.spacing.unit,
+    paddingTop: 0.5*table_padding*theme.spacing.unit,
+    paddingBottom: 0.5*table_padding*theme.spacing.unit,
+
+    '&:hover': {
+    fontWeight:'bold',
+    textDecoration: 'underline',
+    cursor:'pointer'
   }
-}))(TableCell);
+}}))(TableCell);
 
 // This defines styles for the table
 const styles = theme => ({
   root: {
     align: 'center',
     width: '100%',
-
     overflowX: 'auto',
   },
   table: {
   },
   tableRow: {
     padding: theme.spacing.unit,
-    '&:hover': {
-      backgroundColor: '#f3b7b7',
-    },
     '&:nth-of-type(odd)': {
       backgroundColor: theme.palette.background.default, // Might want to change this if desired
+    },
+    '&:hover': {
+      backgroundColor: '#f3b7b7',
     },
   },
 });
@@ -103,13 +123,15 @@ class InstructorFig1Table extends React.Component {
 class CustomizedTable extends React.Component {
   constructor(props){
     super(props)
-  // const { classes } = props;
-  // const data = props.data;
-  // var rows = data.courses;
-  console.log(props)
   this.state = {classes:props.classes, data:props.data, rows:props.data.courses}
+  }
 
+handleClick(event, id){
+  console.log(event)
+  console.log(id)
+  // this.setState(this.state)
 }
+
 render() {
   var data = this.state.data
   var classes = this.state.classes
@@ -127,8 +149,7 @@ render() {
       <Paper className={classes.root}>
         <Table className={classes.table}>
           <TableHead>
-            <TableRow className={classes.tableRow}
-            onClick={console.log('clicked')}>
+            <TableRow className={classes.tableRow}>
               <CustomTableCell align='left'>
 
                 Course Name
@@ -150,10 +171,10 @@ render() {
           </TableHead>
           <TableBody>
             {rows.map(row => (
-              <TableRow className={classes.tableRow} key={row.id}>
-                <CustomTableCell component="th" scope="row">
+              <TableRow className={classes.tableRow} key={row.id} onClick={event => this.handleClick(event, row.id)}>
+                <CustomTableCellHyperlink component="th" scope="row">
                   {row['display name']}
-                </CustomTableCell>
+                </CustomTableCellHyperlink>
                 <CustomTableCell align='center'>
                 {row['avg_course_rating'].toFixed(2).toString()}
                 </CustomTableCell>

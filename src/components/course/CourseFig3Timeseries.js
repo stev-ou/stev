@@ -1,7 +1,7 @@
 import React from 'react';
 import { Bar} from 'react-chartjs-2';
 // import * as Math from 'mathjs';
-import { api_endpoint } from '../../constants.js';
+import { api_endpoint, colors } from '../../constants.js';
 import obj from '../MobileTools.js'
 
 // Define mobile parameters
@@ -41,29 +41,6 @@ class CourseFig3Timeseries extends React.Component {
       return null;
     } else {
       var result = this.state.result;
-
-      // Define a color pallete to use
-      var colors = [
-        '#3f51b5',
-        '#ff5722',
-        '#e91e63',
-        '#ffc107',
-        '#9c27b0',
-        '#00bcd4',
-        '#8bc34a',
-        '#cddc39',
-        '#ffeb3b',
-        '#f44336',
-        '#795548',
-        '#607d8b',
-        '#4caf50',
-        '#2196f3',
-        '#8bc34a',
-        '#ff9800',
-        '#3f51b5',
-        '#ff5722',
-        '#e91e63',
-      ];
       // colors.sort(function() {
       //   return 0.5 - Math.random();
       // });
