@@ -23,7 +23,7 @@ class RadioSelector extends React.Component {
           name="options"
           defaultValue={'COURSE'}
           onChange={this.handleChange}
-          style={{ position: 'fixed' }}
+          style={{ position: 'sticky' }}
         >
           <ToggleButton
             type="radio"
