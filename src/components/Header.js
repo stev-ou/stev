@@ -2,6 +2,7 @@ import React from 'react';
 import SearchForm from './SearchForm.js';
 import graph from '../img/graph.png';
 import { connect } from 'react-redux';
+import BackButton from './BackButton.js'
 
 class Header extends React.Component {
   render() {
@@ -12,7 +13,7 @@ class Header extends React.Component {
           <nav id="main_nav" className="navbar navbar-light navbar-expand-lg">
             <div className="container">
               <a className="navbar-brand" href="./">
-                STEV @ OU
+                <b>STEV</b> @ OU
               </a>
               <button
                 className="custom-toggler navbar-toggler"
@@ -38,7 +39,7 @@ class Header extends React.Component {
                     isualizations at OU
                   </h2>
                   <h6 id="landing-subtitle">
-                    Search through large public datasets of previous course
+                    Search through large public datasets of previous course and instructor
                     reviews at the University of Oklahoma
                   </h6>
                   <div id="search-form">
@@ -65,9 +66,10 @@ class Header extends React.Component {
         <nav id="main_nav" className="navbar navbar-light navbar-expand-lg">
           <div className="container">
             <a className="navbar-brand" href="./">
-              STEV @ OU
+              <b>STEV</b> @ OU
             </a>
-            <button
+            <BackButton/>
+            {/*<button
               className="custom-toggler navbar-toggler"
               type="button"
               data-toggle="collapse"
@@ -75,10 +77,10 @@ class Header extends React.Component {
               aria-controls="navbarResponsive"
               aria-expanded="false"
               aria-label="Toggle navigation"
-            >
+            > 
               <span className="navbar-toggler-icon" />
-            </button>
-            <div className="collapse navbar-collapse" id="navbarResponsive" />
+            </button> 
+            <div className="collapse navbar-collapse" id="navbarResponsive" /> */}
           </div>
         </nav>
       );

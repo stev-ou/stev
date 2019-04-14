@@ -15,7 +15,6 @@ const DataView = props => {
   if (search_type === 'COURSE') {
     return (
       <div className="dataview-container">
-        <div className="graphical-content">
           <div className="graphical-content">
             <CourseFig1Table uuid={uuid} />
           </div>
@@ -36,20 +35,16 @@ const DataView = props => {
 
           <div className="graphical-content">
             <CourseFig4TableBar uuid={uuid} />
-          </div>
         </div>
       </div>
     );
   } else {
     return (
       <div className="dataview-container ">
-        <div className="graphical-content">
           <div className="table-fig1">
             <InstructorFig1Table uuid={uuid.toString()} />
           </div>
           <hr style={{ height: 30 }} />
-        </div>
-
         <div className="graphical-content">
           <InstructorFig2Timeseries uuid={uuid.toString()} />
         </div>

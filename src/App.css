@@ -71,7 +71,7 @@
 }
 
 .App-link {
-  color: #62dafb;
+  color:  #0645AD;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -116,7 +116,7 @@
 .title {
   font-weight:bold;
   font-size: 3em; /* 3.5 */
-  padding-top: 0.75em;
+  padding-top: 0.25em;
   padding-bottom: 0.25em;
 }
 
@@ -172,10 +172,10 @@
   align-items: left;
 }
 
-.table-cell {
+.back-button {
+  align-self: right;
+  font-size: 0.75em;
 }
-.table-cell:hover {}
-
 
 @media only screen and (max-width: 770px) {
   #landing-title {
@@ -209,6 +209,10 @@
   padding-bottom: 1.5em;
   padding-top: 1em;
   font-size: 0.8em;
+}
+.back-button {
+  align-self: right;
+  font-size: 0.75em;
 }
 
   .dataview-container {
