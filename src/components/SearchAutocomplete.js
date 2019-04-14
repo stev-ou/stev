@@ -198,7 +198,7 @@ class SearchAutocomplete extends React.Component {
     if (this.props.search_type === 'COURSE') {
       placeholder = 'Type a course name';
     } else {
-      placeholder = "Type an instructor name";
+      placeholder = 'Type an instructor name';
     }
 
     return (

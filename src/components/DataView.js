@@ -15,36 +15,36 @@ const DataView = props => {
   if (search_type === 'COURSE') {
     return (
       <div className="dataview-container">
-          <div className="graphical-content">
-            <CourseFig1Table uuid={uuid} />
-          </div>
+        <div className="graphical-content">
+          <CourseFig1Table uuid={uuid} />
+        </div>
 
-          <hr style={{ height: 30 }} />
+        <hr style={{ height: 30 }} />
 
-          <div className="graphical-content">
-            <CourseFig2Chart uuid={uuid} />
-          </div>
+        <div className="graphical-content">
+          <CourseFig2Chart uuid={uuid} />
+        </div>
 
-          <hr style={{ height: 30 }} />
+        <hr style={{ height: 30 }} />
 
-          <div className="graphical-content">
-            <CourseFig3Timeseries uuid={uuid} />
-          </div>
+        <div className="graphical-content">
+          <CourseFig3Timeseries uuid={uuid} />
+        </div>
 
-          <hr style={{ height: 30 }} />
+        <hr style={{ height: 30 }} />
 
-          <div className="graphical-content">
-            <CourseFig4TableBar uuid={uuid} />
+        <div className="graphical-content">
+          <CourseFig4TableBar uuid={uuid} />
         </div>
       </div>
     );
   } else {
     return (
       <div className="dataview-container ">
-          <div className="table-fig1">
-            <InstructorFig1Table uuid={uuid.toString()} />
-          </div>
-          <hr style={{ height: 30 }} />
+        <div className="table-fig1">
+          <InstructorFig1Table uuid={uuid.toString()} />
+        </div>
+        <hr style={{ height: 30 }} />
         <div className="graphical-content">
           <InstructorFig2Timeseries uuid={uuid.toString()} />
         </div>

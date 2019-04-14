@@ -2,7 +2,7 @@ import React from 'react';
 import SearchForm from './SearchForm.js';
 import graph from '../img/graph.png';
 import { connect } from 'react-redux';
-import BackButton from './BackButton.js'
+import BackButton from './BackButton.js';
 
 class Header extends React.Component {
   render() {
@@ -39,8 +39,8 @@ class Header extends React.Component {
                     isualizations at OU
                   </h2>
                   <h6 id="landing-subtitle">
-                    Search through large public datasets of previous course and instructor
-                    reviews at the University of Oklahoma
+                    Search through large public datasets of previous course and
+                    instructor reviews at the University of Oklahoma
                   </h6>
                   <div id="search-form">
                     <SearchForm />
@@ -68,7 +68,7 @@ class Header extends React.Component {
             <a className="navbar-brand" href="./">
               <b>STEV</b> @ OU
             </a>
-            <BackButton/>
+            <BackButton />
             {/*<button
               className="custom-toggler navbar-toggler"
               type="button"
