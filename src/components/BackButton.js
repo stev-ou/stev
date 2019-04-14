@@ -1,5 +1,4 @@
 import Button from 'react-bootstrap/Button'
-import ButtonToolbar from 'react-bootstrap/ButtonToolbar'
 import React from 'react';
 import { connect } from 'react-redux';
 import { setSearchStatus, SearchStatus} from '../actions';

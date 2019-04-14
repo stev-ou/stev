@@ -151,7 +151,7 @@ class CustomizedTable extends React.Component {
         </h1>
         <h2 className="subtitle">
           {data['instructor name']} has taught these courses in the
-          <b>previous 3 years</b>
+          <b> previous 3 years</b>
         </h2>
         <Paper className={classes.root}>
           <Table className={classes.table}>
