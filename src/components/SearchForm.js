@@ -76,30 +76,6 @@ class SearchForm extends React.Component {
             <h6 style={{margin: 'auto'}}> Search by: {'  '}</h6>
             <RadioSelector style={{padding:'0em'}}/>
             </div>
-            {/*
-
-            <div onChange={this.changeRadio.bind(this)}>
-              <div className="form-check form-check-inline">
-                <input
-                  className="form-check-input"
-                  type="radio"
-                  name="search-type"
-                  defaultChecked
-                  value="Course"
-                />
-                <label className="form-check-label">Course</label>
-              </div>
-
-              <div className="form-check form-check-inline">
-                <input
-                  className="form-check-input"
-                  type="radio"
-                  name="search-type"
-                  value="Instructor"
-                />
-                <label className="form-check-label">Instructor</label>
-              </div>
-            </div>*/}
           </form>
         </div>
       </div>
