@@ -6,7 +6,7 @@
 
 #main_nav {
     box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.2);/*, 0 6px 20px 0 rgba(0, 0, 0, 0.19);*/
-    margin-bottom: 50px;
+    margin-bottom: 3em;
 }
 
 #graph {
@@ -71,7 +71,7 @@
 }
 
 .App-link {
-  color: #62dafb;
+  color:  #0645AD;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -93,4 +93,186 @@
     height: 60px;
     background-color: #f5f5f5;
 }
+
+#search-form{
+  padding-top: 0.75em;
+  padding-bottom: 1.5em;
+    
+  }
+
+#landing-title {
+    /*color: #62dafb;*/
+    text-align: left;
+  }
+
+#landing-subtitle {
+  padding-top:0.25em;
+  padding-bottom: 0.25em;
+}
+
+/* CSS for Frontpage */
+
+/* CSS for dataview */
+.title {
+  font-weight:bold;
+  font-size: 3em; /* 3.5 */
+  padding-top: 0.25em;
+  padding-bottom: 0.25em;
+}
+
+.subtitle {
+  padding-bottom: 0.25em;
+  padding-top: 0.25em;
+  font-size: 1.6em;
+}
+
+  .footnote {
+  color: rgba(90,90,90,1);
+  padding-bottom: 1.5em;
+  padding-top: 1em;
+  font-size: 0.8em;
+}
+
+.dataview-container {
+  padding-left: 12vw;
+  padding-right: 12vw;
+}
+
+/* Css for table1, course */
+.table-header {
+  font-size: 5em;
+  font-weight: bold ;
+  margin: 0.1em;
+  padding: 0.1em;
+}
+
+/* Fig2 CSS */
+#fig2bar-container {
+  padding-top: 1em;
+  padding-bottom: 1em;
+}
+#donut-container {
+  max-height: 25vw;
+}
+.timeseries-container {
+  height: 50vw;
+  width: 100%;
+  align-items: center;
+  padding-top: 3vw;
+  padding-bottom: 3vw;
+}
+
+/* Question Fig */
+.question-fig {
+  height: 30vw;
+}
+
+/* Chip */
+.chip-container {
+  align-items: left;
+}
+
+.back-button {
+  align-self: right;
+  font-size: 0.75em;
+}
+
+@media only screen and (max-width: 770px) {
+  #landing-title {
+    /*color: #62dafb;*/
+    text-align: center;
+  }
+  .timeseries-container {
+  height: 90vw;
+  width: 95%;
+  margin-right: 5vw;
+  padding-bottom: 5vw;
+  }
+
+  .title {
+  font-weight:normal;
+  font-size: 2.25em;
+  padding-top: 0.75em;
+  padding-bottom: 0.25em;
+  text-align: center;
+}
+
+  .subtitle {
+    padding-top: 0.25em;
+    font-size: 2.25em;
+    padding-bottom: 0.25em;
+    font-size: 1.2em;
+    text-align: center;
+  }
+
+  .footnote {
+  padding-bottom: 1.5em;
+  padding-top: 1em;
+  font-size: 0.8em;
+}
+.back-button {
+  align-self: right;
+  font-size: 0.75em;
+}
+
+  .dataview-container {
+  padding-left: 8vw;
+  padding-right: 8vw;
+}
+.table-header {
+  font-size: 5em;
+  font-weight: bold ;
+  margin: 0.1em;
+  padding: 0.1em;
+}
+#fig2bar-container {
+  padding-top: 0em;
+  padding-bottom: 0em;
+}
+#donut-container {
+  max-height: 40vw;
+  padding: 0em;
+}
+.question-fig {
+  height: 60vw;
+}
+/* Chip */
+.chip-container {
+  align-items: center;
+}
+
+  #landing-subtitle {
+    text-align: center;
+    padding-top:0.5em;
+  }
+  #search-form{
+    padding-top: 1em;
+    padding-bottom: 1.5em;
+  }
+  #graph-container {
+    margin-left: 0em;
+}
+  #main_nav {
+    box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.2);/*, 0 6px 20px 0 rgba(0, 0, 0, 0.19);*/
+    margin-bottom: 1.5em;
+}
+  .App {
+    margin-top:3em;
+    margin-left:0em;
+    margin-right:0em;
+    margin-bottom:2em;
+    position: relative;
+    min-height: 50%;
+}
+  .Info {
+    padding-left: 10%;
+    padding-right: 10%;
+}
+}
+
+
+
+
+
+
 

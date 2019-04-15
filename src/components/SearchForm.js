@@ -8,6 +8,7 @@ import {
   SearchType,
 } from '../actions';
 import SearchAutocomplete from './SearchAutocomplete.js';
+import RadioSelector from './RadioSelector.js';
 
 class SearchForm extends React.Component {
   constructor(props) {
@@ -46,11 +47,9 @@ class SearchForm extends React.Component {
 
   changeRadio(event) {
     if (event.target.value === 'Course') {
-      //this.setState({ search_type: SearchType.COURSE});
       this.props.setSearchType(SearchType.COURSE);
     } else if (event.target.value === 'Instructor') {
       this.props.setSearchType(SearchType.INSTRUCTOR);
-      //this.setState({ search_type: SearchType.INSTRUCTOR});
     }
   }
 
@@ -73,29 +72,9 @@ class SearchForm extends React.Component {
               onChange={this.handleInputChange}
               search_type={this.props.search_type}
             />
-            {/*</div>*/}
-
-            <div onChange={this.changeRadio.bind(this)}>
-              <div className="form-check form-check-inline">
-                <input
-                  className="form-check-input"
-                  type="radio"
-                  name="search-type"
-                  defaultChecked
-                  value="Course"
-                />
-                <label className="form-check-label">Course</label>
-              </div>
-
-              <div className="form-check form-check-inline">
-                <input
-                  className="form-check-input"
-                  type="radio"
-                  name="search-type"
-                  value="Instructor"
-                />
-                <label className="form-check-label">Instructor</label>
-              </div>
+            <div className="form-check-inline">
+              <h6 style={{ margin: 'auto' }}> Search by: {'  '}</h6>
+              <RadioSelector style={{ padding: '0em' }} />
             </div>
           </form>
         </div>

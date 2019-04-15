@@ -8,37 +8,69 @@ import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
 import Paper from '@material-ui/core/Paper';
 import { api_endpoint } from '../../constants.js';
+import CourseChip from './CourseChip.js';
+import obj from '../MobileTools.js';
+import lists from '../../course_instructor_list.json';
+import { connect } from 'react-redux';
+import { setSearchType, setSearchText } from '../../actions';
+
+// Get instructor lists
+const instructor_list = lists['instructors'];
+
+// Define mobile parameters
+var em = obj['em'];
+var mobile = obj['mobile'];
+var head_text_size = (em / 16).toString();
+var table_padding = 3;
+if (mobile) {
+  head_text_size = (em / 6).toString();
+  table_padding = 1.25;
+}
 
 const CustomTableCell = withStyles(theme => ({
   head: {
     backgroundColor: '#841617',
     color: theme.palette.common.white,
+    fontSize: head_text_size + 'rem',
+    fontWeight: 'bold',
+    padding: table_padding * theme.spacing.unit,
+    paddingTop: 0.5 * table_padding * theme.spacing.unit,
+    paddingBottom: 0.5 * table_padding * theme.spacing.unit,
   },
   body: {
-    fontSize: 18,
+    padding: table_padding * theme.spacing.unit,
+    paddingTop: 0.5 * table_padding * theme.spacing.unit,
+    paddingBottom: 0.5 * table_padding * theme.spacing.unit,
   },
 }))(TableCell);
+
+const CustomTableCellHyperlink = withStyles(theme => ({
+  body: {
+    '&:hover': {
+      color: 'blue',
+      textDecoration: 'underline',
+      cursor: 'pointer',
+    },
+  },
+}))(CustomTableCell);
 
 // This defines styles for the table
 const styles = theme => ({
   root: {
     align: 'center',
     width: '100%',
-    marginTop: theme.spacing.unit * 3,
     overflowX: 'auto',
   },
-  table: {
-    minWidth: 700,
-  },
+  table: {},
   tableRow: {
-    '&:hover': {
-      backgroundColor: '#f3b7b7!important',
-    },
+    padding: theme.spacing.unit,
     '&:nth-of-type(odd)': {
       backgroundColor: theme.palette.background.default, // Might want to change this if desired
     },
+    '&:hover': {
+      backgroundColor: '#f3b7b7',
+    },
   },
-  tableBody: {},
 });
 
 // This is the function that will fetch the desired data from the api
@@ -48,7 +80,8 @@ const API = api_endpoint + 'courses/';
 class CourseFig1Table extends React.Component {
   constructor(props) {
     super(props);
-    this.state = { data: [], uuid: props.uuid, info: {} };
+    this.state = { data: [], uuid: props.uuid, info: {}, loadedAPI: false };
+    this.handleClick = this.handleClick.bind(this);
   }
 
   componentDidMount() {
@@ -56,97 +89,131 @@ class CourseFig1Table extends React.Component {
     fetch(API + this.state.uuid + '/figure1')
       .then(response => response.json())
       .then(data =>
-        this.setState({ info: data.result, data: data.result.instructors })
+        this.setState({
+          info: data.result,
+          data: data.result.instructors,
+          loadedAPI: true,
+        })
       );
   }
 
+  handleClick(event, id, child_state) {
+    var clicked = child_state.rows[id - 1]['name'];
+    // Convert instructor list to dict/hash
+    var instr_dict = instructor_list.reduce((obj, item) => {
+      obj[item['label'].toString()] = item['value'];
+      return obj;
+    }, {});
+    // Get the instr uuid from the course dict
+    var instr_uuid = instr_dict[clicked];
+    if (typeof instr_uuid != 'undefined') {
+      // Now just need to pass to redux to trigger redux state change
+      this.props.setSearchType('INSTRUCTOR');
+      this.props.setSearchText(instr_uuid);
+    }
+  }
+
   render() {
-    let MyTable = withStyles(styles)(CustomizedTable); // This is important
-    // Get the data to pass to the table
-    var table_data = this.state.data;
-    table_data.forEach((item, i) => {
-      item['crs rating'] = item['crs rating'].toFixed(2); // Convert the long floats to 2 decimal places
-      item['avg rating'] = item['avg rating'].toFixed(2);
-      item['id'] = i + 1;
-    });
+    if (!this.state.loadedAPI) {
+      return null;
+    } else {
+      let MyTable = withStyles(styles)(CustomizedTable); // This is important
+      // Get the data to pass to the table
+      var table_data = this.state.data;
+      table_data.forEach((item, i) => {
+        item['crs rating'] = item['crs rating'].toFixed(2); // Convert the long floats to 2 decimal places
+        item['avg rating'] = item['avg rating'].toFixed(2);
+        item['id'] = i + 1;
+      });
 
-    // Get the info to pass to the table
-    const info = this.state.info;
+      // Get the info to pass to the table
+      const info = this.state.info;
 
-    return <MyTable rows={table_data} info={info} />;
+      return (
+        <MyTable rows={table_data} info={info} handleClick={this.handleClick} />
+      );
+    }
   }
 }
 
-//This is the function to create the table for figure 1
-function CustomizedTable(props) {
-  const { classes } = props;
-  const rows = props.rows;
-  const info = props.info;
+//This is the component for Figure1
+class CustomizedTable extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = { classes: props.classes, info: props.info, rows: props.rows };
+  }
 
-  return (
-    <div>
-      <h1 style={{ fontWeight: 'bold', fontSize: '3.5em', padding: '0.75em' }}>
-        {' '}
-        {info['dept name']}
-        {info['course number']}: {info['course name']}{' '}
-      </h1>
-      <h2 style={{ padding: '0.5em', paddingTop: '0em' }}>
-        {' '}
-        These professors have taught the course recently{' '}
-      </h2>
-      <Paper className={classes.root}>
-        <Table className={classes.table}>
-          <TableHead>
-            <TableRow className={classes.tableRow}>
-              <CustomTableCell
-                style={{ fontWeight: 'bold', fontSize: '1.2em' }}
-              >
-                Instructor Name
-              </CustomTableCell>
-              <CustomTableCell
-                style={{ fontWeight: 'bold', fontSize: '1.2em' }}
-                align="center"
-              >
-                Average Instructor Rating (1-5)
-              </CustomTableCell>
-              <CustomTableCell
-                style={{ fontWeight: 'bold', fontSize: '1.2em' }}
-                align="center"
-              >
-                Instructor Rating in Course (1-5)
-              </CustomTableCell>
-              <CustomTableCell
-                style={{ fontWeight: 'bold', fontSize: '1.2em' }}
-                align="right"
-              >
-                Semester(s) Taught
-              </CustomTableCell>
-            </TableRow>
-          </TableHead>
-          <TableBody>
-            {rows.map(row => (
-              <TableRow hover className={classes.tableRow} key={row.id}>
-                <CustomTableCell component="th" scope="row">
-                  {row.name}
+  render() {
+    const info = this.state.info;
+    const classes = this.state.classes;
+    const rows = this.state.rows;
+
+    return (
+      <div>
+        <h1 className="title">
+          {' '}
+          {info['dept name']}
+          {info['course number']}: {info['course name']}{' '}
+        </h1>
+        <CourseChip cnum={info['course number']} />
+        <h2 className="subtitle">
+          {' '}
+          These professors have taught the course recently{' '}
+        </h2>
+        <Paper className={classes.root}>
+          <Table className={classes.table}>
+            <TableHead className="table-header">
+              <TableRow className={classes.tableRow}>
+                <CustomTableCell align="left">Instructor Name</CustomTableCell>
+                <CustomTableCell align="center">
+                  Average Instructor Rating (1-5)
                 </CustomTableCell>
                 <CustomTableCell align="center">
-                  {row['avg rating']}
+                  Instructor Rating in Course (1-5)
                 </CustomTableCell>
-                <CustomTableCell align="center">
-                  {row['crs rating']}
+                <CustomTableCell align="right">
+                  Semester(s) Taught
                 </CustomTableCell>
-                <CustomTableCell align="right">{row['term']}</CustomTableCell>
               </TableRow>
-            ))}
-          </TableBody>
-        </Table>
-      </Paper>
-    </div>
-  );
+            </TableHead>
+            <TableBody>
+              {rows.map(row => (
+                <TableRow className={classes.tableRow} key={row.id}>
+                  <CustomTableCellHyperlink
+                    component="th"
+                    scope="row"
+                    onClick={event =>
+                      this.props.handleClick(event, row.id, this.state)
+                    }
+                  >
+                    {row.name}
+                  </CustomTableCellHyperlink>
+                  <CustomTableCell align="center">
+                    {row['avg rating']}
+                  </CustomTableCell>
+                  <CustomTableCell align="center">
+                    {row['crs rating']}
+                  </CustomTableCell>
+                  <CustomTableCell align="right">{row['term']}</CustomTableCell>
+                </TableRow>
+              ))}
+            </TableBody>
+          </Table>
+        </Paper>
+        <h5 className="footnote">
+          {' '}
+          * Click an instructor's name to navigate to their ratings{' '}
+        </h5>
+      </div>
+    );
+  }
 }
 
 CustomizedTable.propTypes = {
   classes: PropTypes.object.isRequired,
 };
-// export default withStyles(styles)(CustomizedTable);
-export default CourseFig1Table;
+
+export default connect(
+  null,
+  { setSearchType, setSearchText }
+)(CourseFig1Table);

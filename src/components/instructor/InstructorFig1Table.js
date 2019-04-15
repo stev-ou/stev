@@ -8,37 +8,68 @@ import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
 import Paper from '@material-ui/core/Paper';
 import { api_endpoint } from '../../constants.js';
+import obj from '../MobileTools.js';
+import lists from '../../course_instructor_list.json';
+import { connect } from 'react-redux';
+import { setSearchType, setSearchText } from '../../actions';
+
+// Get course list
+const course_list = lists['courses'];
+
+// Define mobile parameters
+var em = obj['em'];
+var mobile = obj['mobile'];
+var head_text_size = (em / 16).toString();
+var table_padding = 3;
+if (mobile) {
+  head_text_size = (em / 6).toString();
+  table_padding = 1.25;
+}
 
 const CustomTableCell = withStyles(theme => ({
   head: {
     backgroundColor: '#841617',
     color: theme.palette.common.white,
+    fontSize: head_text_size + 'rem',
+    fontWeight: 'bold',
+    padding: table_padding * theme.spacing.unit,
+    paddingTop: 0.5 * table_padding * theme.spacing.unit,
+    paddingBottom: 0.5 * table_padding * theme.spacing.unit,
   },
   body: {
-    fontSize: 18,
+    padding: table_padding * theme.spacing.unit,
+    paddingTop: 0.5 * table_padding * theme.spacing.unit,
+    paddingBottom: 0.5 * table_padding * theme.spacing.unit,
   },
 }))(TableCell);
+
+const CustomTableCellHyperlink = withStyles(theme => ({
+  body: {
+    '&:hover': {
+      color: 'blue',
+      textDecoration: 'underline',
+      cursor: 'pointer',
+    },
+  },
+}))(CustomTableCell);
 
 // This defines styles for the table
 const styles = theme => ({
   root: {
     align: 'center',
     width: '100%',
-    marginTop: theme.spacing.unit * 3,
     overflowX: 'auto',
   },
-  table: {
-    minWidth: 700,
-  },
+  table: {},
   tableRow: {
-    '&:hover': {
-      backgroundColor: '#f3b7b7!important',
-    },
+    padding: theme.spacing.unit,
     '&:nth-of-type(odd)': {
       backgroundColor: theme.palette.background.default, // Might want to change this if desired
     },
+    '&:hover': {
+      backgroundColor: '#f3b7b7',
+    },
   },
-  tableBody: {},
 });
 
 // This is the function that will fetch the desired data from the api
@@ -48,6 +79,7 @@ class InstructorFig1Table extends React.Component {
   constructor(props) {
     super(props);
     this.state = { loadedAPI: false, data: [], uuid: props.uuid };
+    this.handleClick = this.handleClick.bind(this);
   }
 
   componentDidMount() {
@@ -55,6 +87,22 @@ class InstructorFig1Table extends React.Component {
     fetch(API + this.state.uuid.toString() + '/figure1')
       .then(response => response.json())
       .then(data => this.setState({ data: data.result, loadedAPI: true }));
+  }
+
+  handleClick(event, id, child_state) {
+    var clicked = child_state.rows[id - 1]['display name'];
+    // Convert course list to dict/hash
+    var course_dict = course_list.reduce((obj, item) => {
+      obj[item['label'].toString()] = item['value'].toString();
+      return obj;
+    }, {});
+    // Get the course uuid from the course dict
+    var course_uuid = course_dict[clicked];
+    if (typeof course_uuid != 'undefined') {
+      // Now just need to pass to redux to trigger redux state change
+      this.props.setSearchType('COURSE');
+      this.props.setSearchText(course_uuid);
+    }
   }
 
   render() {
@@ -75,72 +123,95 @@ class InstructorFig1Table extends React.Component {
           item['course name'];
         item['id'] = i + 1;
       });
-      return <MyTable data={table_data} />;
+      return <MyTable data={table_data} handleClick={this.handleClick} />;
     }
   }
 }
 
-//This is the function to create the table for figure 1
-function CustomizedTable(props) {
-  const { classes } = props;
-  const data = props.data;
-  var rows = data.courses;
+//This is the component for figure 1
+class CustomizedTable extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      classes: props.classes,
+      data: props.data,
+      rows: props.data.courses,
+    };
+  }
 
-  return (
-    <div>
-      <h1 style={{ fontWeight: 'bold', fontSize: '3.5em', padding: '0.75em' }}>
-        {' '}
-        {data['instructor name']}{' '}
-      </h1>
-      <h2 style={{ padding: '0.5em', paddingTop: '0em' }}>
-        {' '}
-        {data['instructor name'] +
-          ' has taught these courses in the previous 3 years'}{' '}
-      </h2>
-      <Paper className={classes.root}>
-        <Table className={classes.table}>
-          <TableHead>
-            <TableRow className={classes.tableRow}>
-              <CustomTableCell
-                style={{ fontWeight: 'bold', fontSize: '1.2em' }}
-              >
-                Course Name
-              </CustomTableCell>
-              <CustomTableCell
-                style={{ fontWeight: 'bold', fontSize: '1.2em' }}
-                align="right"
-              >
-                {data['instructor name']} Average Rating in Course (1-5)
-              </CustomTableCell>
-              <CustomTableCell
-                style={{ fontWeight: 'bold', fontSize: '1.2em' }}
-                align="right"
-              >
-                Semester(s) Taught
-              </CustomTableCell>
-            </TableRow>
-          </TableHead>
-          <TableBody>
-            {rows.map(row => (
-              <TableRow className={classes.tableRow} key={row.id}>
-                <CustomTableCell component="th" scope="row">
-                  {row['display name']}
+  render() {
+    const data = this.state.data;
+    const classes = this.state.classes;
+    const rows = this.state.rows;
+    return (
+      <div>
+        <h1 className="title" style={{ paddingBottom: '0.5em' }}>
+          {' '}
+          {data['instructor name']}
+        </h1>
+        <h2 className="subtitle">
+          {data['instructor name']} has taught these courses in the
+          <b> previous 3 years</b>
+        </h2>
+        <Paper className={classes.root}>
+          <Table className={classes.table}>
+            <TableHead>
+              <TableRow className={classes.tableRow}>
+                <CustomTableCell align="left">Course Name</CustomTableCell>
+                <CustomTableCell align="center">
+                  Average Course Rating (1-5)
                 </CustomTableCell>
                 <CustomTableCell align="center">
-                  {row['instr_rating_in_course']}
+                  {data['instructor name']} Rating in Course (1-5)
                 </CustomTableCell>
-                <CustomTableCell align="right">{row['term']}</CustomTableCell>
+                <CustomTableCell align="right">
+                  Semester(s) Taught
+                </CustomTableCell>
               </TableRow>
-            ))}
-          </TableBody>
-        </Table>
-      </Paper>
-    </div>
-  );
+            </TableHead>
+            <TableBody>
+              {rows.map(row => (
+                <TableRow className={classes.tableRow} key={row.id}>
+                  <CustomTableCellHyperlink
+                    component="th"
+                    scope="row"
+                    onClick={event =>
+                      this.props.handleClick(
+                        event,
+                        row.id,
+                        this.state,
+                        this.props
+                      )
+                    }
+                  >
+                    {row['display name']}
+                  </CustomTableCellHyperlink>
+                  <CustomTableCell align="center">
+                    {row['avg_course_rating'].toFixed(2).toString()}
+                  </CustomTableCell>
+                  <CustomTableCell align="center">
+                    {row['instr_rating_in_course']}
+                  </CustomTableCell>
+                  <CustomTableCell align="right">{row['term']}</CustomTableCell>
+                </TableRow>
+              ))}
+            </TableBody>
+          </Table>
+        </Paper>
+        <h5 className="footnote">
+          {' '}
+          * Click a course name to navigate to its ratings{' '}
+        </h5>
+      </div>
+    );
+  }
 }
 
 CustomizedTable.propTypes = {
   classes: PropTypes.object.isRequired,
 };
-// export default withStyles(styles)(CustomizedTable);
-export default InstructorFig1Table;
+
+export default connect(
+  null,
+  { setSearchType, setSearchText }
+)(InstructorFig1Table);

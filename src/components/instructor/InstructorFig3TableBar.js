@@ -4,7 +4,19 @@ import { schemePaired } from 'd3-scale-chromatic'; // This is the colors for the
 import { api_endpoint } from '../../constants.js';
 import 'react-bootstrap-table-next/dist/react-bootstrap-table2.min.css';
 import BootstrapTable from 'react-bootstrap-table-next';
+import obj from '../MobileTools.js';
 
+// Define mobile parameters
+var em = obj['em'];
+var mobile = obj['mobile'];
+
+// Define the mobile modifiers
+var header_size = 1.1;
+var label_size = 1.25;
+if (mobile) {
+  header_size = 2.75;
+  label_size = 2.25;
+}
 // Define API input string
 const API = api_endpoint + 'instructors/';
 
@@ -49,12 +61,20 @@ class InstructorFig3TableBar extends React.Component {
         {
           dataField: 'question',
           text: 'Question',
-          headerStyle: { width: '70%', textAlign: 'left' },
+          headerStyle: {
+            width: '65%',
+            textAlign: 'left',
+            fontSize: header_size * em,
+          },
         },
         {
           dataField: 'avgRating',
           text: 'Instructor Average Rating (1-5)',
-          headerStyle: { width: '30%', textAlign: 'left' },
+          headerStyle: {
+            width: '35%',
+            textAlign: 'left',
+            fontSize: header_size * em,
+          },
         },
       ];
 
@@ -90,6 +110,8 @@ class InstructorFig3TableBar extends React.Component {
       }
       // Chart options
       var plot_options = {
+        responsive: true,
+        maintainAspectRatio: false,
         scales: {
           yAxes: [
             {
@@ -97,25 +119,25 @@ class InstructorFig3TableBar extends React.Component {
               scaleLabel: {
                 display: true,
                 labelString: 'Question Rating',
-                fontSize: 24,
+                fontSize: 1.2 * label_size * em,
               },
               ticks: {
                 beginAtZero: false,
                 min: 1,
                 max: 5,
                 stepSize: 1,
-                fontSize: 16,
+                fontSize: 0.75 * label_size * em,
               },
             },
           ],
           xAxes: [
             {
               stacked: false,
-              ticks: { fontSize: 16 },
+              ticks: { fontSize: 0.9 * label_size * em },
               scaleLabel: {
                 display: true,
-                labelString: 'Courses',
-                fontSize: 24,
+                labelString: 'Instructors',
+                fontSize: 1.2 * label_size * em,
               },
             },
           ],
@@ -159,26 +181,25 @@ class InstructorFig3TableBar extends React.Component {
       };
 
       return (
-        <div style={{ padding: '1em' }}>
-          <h3 style={{ padding: '0.5em' }}>
+        <div>
+          <h3 className="subtitle">
             {' '}
-            Question responses sorted by course for {
-              result['instructor name']
-            }{' '}
+            Question responses for {result['instructor name']}, sorted by course
           </h3>
           <BootstrapTable
             keyField="qNumber"
             data={products}
             columns={columns}
             selectRow={selectRow}
+            rowStyle={{ fontSize: 0.9 * header_size * em }}
           />
-          <Bar data={plot_result} options={plot_options} />
+          <div className="question-fig">
+            <Bar data={plot_result} options={plot_options} />
+          </div>
         </div>
       );
     }
   }
 }
 
-// <h1> {result['course name']} is ranked {ordinal_suffix_of(result['course rating'])} out of {result.dept['courses in dept']} courses in the {result['dept']['dept name']} department </h1>
-// , verticalAlign:'middle'
 export default InstructorFig3TableBar;

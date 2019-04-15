@@ -8,46 +8,48 @@ import Typography from '@material-ui/core/Typography';
 import TextField from '@material-ui/core/TextField';
 import Paper from '@material-ui/core/Paper';
 import MenuItem from '@material-ui/core/MenuItem';
-import { emphasize } from '@material-ui/core/styles/colorManipulator';
-import { api_endpoint } from '../constants.js';
+import lists from '../course_instructor_list.json';
+
+const course_list = lists['courses'];
+const instructor_list = lists['instructors'];
 
 const styles = theme => ({
   root: {
-    flexGrow: 0,
-    height: 100,
+    flex: 1,
+    flexWrap: 'wrap',
+    // height: 100,
   },
   input: {
     display: 'flex',
+    flexWrap: 'wrap',
     padding: 0,
   },
+
   valueContainer: {
     display: 'flex',
     flexWrap: 'wrap',
     flex: 1,
     alignItems: 'center',
-    overflow: 'hidden',
+    overflowWrap: 'break-word',
+    overflow: 'auto',
   },
-  chip: {
-    margin: `${theme.spacing.unit / 2}px ${theme.spacing.unit / 4}px`,
-  },
-  chipFocused: {
-    backgroundColor: emphasize(
-      theme.palette.type === 'light'
-        ? theme.palette.grey[300]
-        : theme.palette.grey[700],
-      0.08
-    ),
-  },
+
   noOptionsMessage: {
     padding: '0px', //`${theme.spacing.unit}px ${theme.spacing.unit * 2}px`,
   },
-  singleValue: {
-    fontSize: 16,
-  },
   placeholder: {
     position: 'absolute',
-    left: 2,
-    fontSize: 16,
+    left: 1,
+    fontSize: '0.9em',
+  },
+  options: {
+    fontSize: '0.9em',
+    display: 'flex',
+    /// Lol this stupid ass thing wont wrap the text to the next line
+    flexWrap: 'wrap',
+    flex: 1,
+    overflowWrap: 'anywhere',
+    overflow: 'auto',
   },
   paper: {
     position: 'absolute',
@@ -97,10 +99,7 @@ function Option(props) {
     <MenuItem
       buttonRef={props.innerRef}
       selected={props.isFocused}
-      component="div"
-      style={{
-        fontWeight: props.isSelected ? 500 : 400,
-      }}
+      className={props.selectProps.classes.options}
       {...props.innerProps}
     >
       {props.children}
@@ -113,17 +112,6 @@ function Placeholder(props) {
     <Typography
       color="textSecondary"
       className={props.selectProps.classes.placeholder}
-      {...props.innerProps}
-    >
-      {props.children}
-    </Typography>
-  );
-}
-
-function SingleValue(props) {
-  return (
-    <Typography
-      className={props.selectProps.classes.singleValue}
       {...props.innerProps}
     >
       {props.children}
@@ -157,27 +145,30 @@ const components = {
   NoOptionsMessage,
   Option,
   Placeholder,
-  SingleValue,
   ValueContainer,
 };
 
 class SearchAutocomplete extends React.Component {
   constructor(props) {
     super(props);
-    this.state = {
-      single: null,
-      search_type: '',
-      choices: [],
+    var initial_state = {
+      search_type: this.props.search_type,
     };
+    if (this.props.search_type === 'COURSE') {
+      initial_state['choices'] = course_list;
+    } else {
+      initial_state['choices'] = instructor_list;
+    }
+    this.state = initial_state;
   }
 
   componentWillMount() {
-    // Define API input string
-    const API = api_endpoint + this.props.search_type.toLowerCase() + 's/all';
-    // This will call the api when the component "Mounts", i.e. when the page is accessed
-    fetch(API)
-      .then(response => response.json())
-      .then(data => this.setState({ choices: data.result })); // Initial keying into result
+    // Update the search list
+    if (this.props.search_type === 'COURSE') {
+      this.setState({ choices: course_list });
+    } else {
+      this.setState({ choices: instructor_list });
+    }
   }
 
   componentDidUpdate(prevProps) {
@@ -207,7 +198,7 @@ class SearchAutocomplete extends React.Component {
     if (this.props.search_type === 'COURSE') {
       placeholder = 'Type a course name';
     } else {
-      placeholder = "Type an instructor's name";
+      placeholder = 'Type an instructor name';
     }
 
     return (
@@ -216,6 +207,7 @@ class SearchAutocomplete extends React.Component {
         style={{ padding: '0em', paddingLeft: '0.1em' }}
       >
         <Select
+          className={'search-form'}
           classes={classes}
           styles={selectStyles}
           options={choices}

@@ -1,5 +1,6 @@
 import React from 'react';
 import { connect } from 'react-redux';
+// import Footer from './Footer.js'
 import CourseFig1Table from './course/CourseFig1Table.js';
 import CourseFig2Chart from './course/CourseFig2Chart.js';
 import CourseFig3Timeseries from './course/CourseFig3Timeseries.js';
@@ -11,45 +12,39 @@ import InstructorFig3TableBar from './instructor/InstructorFig3TableBar.js';
 const DataView = props => {
   const uuid = props.search_text;
   const search_type = props.search_type;
-
   if (search_type === 'COURSE') {
     return (
-      <div className="container">
+      <div className="dataview-container">
         <div className="graphical-content">
-          <div className="table-fig1">
-            <CourseFig1Table uuid={uuid} />
-          </div>
+          <CourseFig1Table uuid={uuid} />
+        </div>
 
-          <hr style={{ height: 30 }} />
+        <hr style={{ height: 30 }} />
 
-          <div className="graphical-content">
-            <CourseFig2Chart uuid={uuid} />
-          </div>
+        <div className="graphical-content">
+          <CourseFig2Chart uuid={uuid} />
+        </div>
 
-          <hr style={{ height: 30 }} />
+        <hr style={{ height: 30 }} />
 
-          <div className="graphical-content">
-            <CourseFig3Timeseries uuid={uuid} />
-          </div>
+        <div className="graphical-content">
+          <CourseFig3Timeseries uuid={uuid} />
+        </div>
 
-          <hr style={{ height: 30 }} />
+        <hr style={{ height: 30 }} />
 
-          <div className="graphical-content">
-            <CourseFig4TableBar uuid={uuid} />
-          </div>
+        <div className="graphical-content">
+          <CourseFig4TableBar uuid={uuid} />
         </div>
       </div>
     );
   } else {
     return (
-      <div className="container">
-        <div className="graphical-content">
-          <div className="table-fig1">
-            <InstructorFig1Table uuid={uuid.toString()} />
-          </div>
-          <hr style={{ height: 30 }} />
+      <div className="dataview-container ">
+        <div className="table-fig1">
+          <InstructorFig1Table uuid={uuid.toString()} />
         </div>
-
+        <hr style={{ height: 30 }} />
         <div className="graphical-content">
           <InstructorFig2Timeseries uuid={uuid.toString()} />
         </div>
