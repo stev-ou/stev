@@ -1,6 +1,6 @@
 # STEV 
 [![Build Status](https://travis-ci.com/stev-ou/stev.svg?branch=master)](https://travis-ci.com/stev-ou/stev)  
-Student-Teacher Evaulutaion Visualization -> "Steve"  
+Student-Teacher Evaluation Visualization -> "Steve"  
 
 A project to create a better data visualization for anonymous student reviews of professors/courses/departments at the University of Oklahoma. The reviews are currently available in individual, non-queryable pdfs (a collection of thousands of pdfs) at the following website - http://www.ou.edu/provost/course-evaluation-data. We want to create a data visualization to present this information and make it accessible to students.  
 
