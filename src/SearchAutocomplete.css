@@ -10,6 +10,8 @@
   cursor: pointer;
   line-height: 0.9rem;
   font-size: 1em;
+  position: absolute;
+  z-index: 2;
 }
 
 @media only screen and (max-width: 770px) {

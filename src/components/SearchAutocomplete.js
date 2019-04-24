@@ -3,7 +3,6 @@ import "react-select-2/dist/css/react-select-2.css";
 import "./../SearchAutocomplete.css"
 
 import React from 'react';
-import PropTypes from 'prop-types';
 import Select from 'react-virtualized-select';
 import Typography from '@material-ui/core/Typography';
 import TextField from '@material-ui/core/TextField';
@@ -163,10 +162,5 @@ class SearchAutocomplete extends React.Component {
     );
   }
 }
-
-SearchAutocomplete.propTypes = {
-  classes: PropTypes.object.isRequired,
-  theme: PropTypes.object.isRequired,
-};
 
 export default SearchAutocomplete;
