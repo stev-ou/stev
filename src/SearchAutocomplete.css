@@ -1,0 +1,20 @@
+/* This is for the react virtualized table */
+.VirtualizedSelectOption {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  padding: 0.5rem;
+  cursor: pointer;
+  line-height: 0.9rem;
+  font-size: 1em;
+}
+
+@media only screen and (max-width: 770px) {
+.VirtualizedSelectOption {
+  font-size: 0.85em;
+
+ }
+  }
