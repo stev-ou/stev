@@ -7,4 +7,4 @@ pretty:
 .PHONY: image
 
 image:
-	docker build . -t samjett/ou-reviews
+	docker build . -t gcr.io/ou-reviews/stev
