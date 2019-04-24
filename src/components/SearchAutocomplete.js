@@ -137,7 +137,7 @@ class SearchAutocomplete extends React.Component {
 
   render() {
     var choices = this.state.choices;
-    const { classes, theme } = this.props;
+    const { classes} = this.props;
 
     // Build a placeholder based on the search type
     var placeholder = '';
