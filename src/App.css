@@ -1,5 +1,6 @@
 .App {
     margin-top:5em;
+    padding-top: 6vw;
     position: relative;
     min-height: 100%;
 }
@@ -75,6 +76,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
+  padding-top: 0em;
 }
 
 .Info {
@@ -257,7 +259,7 @@
     margin-bottom: 1.5em;
 }
   .App {
-    margin-top:3em;
+    margin-top:0em;
     margin-left:0em;
     margin-right:0em;
     margin-bottom:2em;

@@ -1,11 +1,8 @@
 /* eslint-disable react/prop-types, react/jsx-handler-names */
 import "react-select-2/dist/css/react-select-2.css";
-// import "react-virtualized/styles.css";
-// import "react-virtualized-select/styles.css";
 import "./../SearchAutocomplete.css"
 
 import React from 'react';
-import PropTypes from 'prop-types';
 import Select from 'react-virtualized-select';
 import Typography from '@material-ui/core/Typography';
 import TextField from '@material-ui/core/TextField';
@@ -137,7 +134,6 @@ class SearchAutocomplete extends React.Component {
 
   render() {
     var choices = this.state.choices;
-    const { classes} = this.props;
 
     // Build a placeholder based on the search type
     var placeholder = '';
@@ -154,7 +150,6 @@ class SearchAutocomplete extends React.Component {
       >
         <Select
           className={'search-form'}
-          classes={classes}
           options={choices}
           components={components}
           placeholder={placeholder}
@@ -167,10 +162,5 @@ class SearchAutocomplete extends React.Component {
     );
   }
 }
-
-SearchAutocomplete.propTypes = {
-  classes: PropTypes.object.isRequired,
-  theme: PropTypes.object.isRequired,
-};
 
 export default SearchAutocomplete;
