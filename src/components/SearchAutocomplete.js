@@ -1,9 +1,9 @@
 /* eslint-disable react/prop-types, react/jsx-handler-names */
+import "react-select-2/dist/css/react-select-2.css";
+import "./../SearchAutocomplete.css"
 
 import React from 'react';
-import PropTypes from 'prop-types';
-import Select from 'react-select';
-import { withStyles } from '@material-ui/core/styles';
+import Select from 'react-virtualized-select';
 import Typography from '@material-ui/core/Typography';
 import TextField from '@material-ui/core/TextField';
 import Paper from '@material-ui/core/Paper';
@@ -12,53 +12,6 @@ import lists from '../course_instructor_list.json';
 
 const course_list = lists['courses'];
 const instructor_list = lists['instructors'];
-
-const styles = theme => ({
-  root: {
-    flex: 1,
-    flexWrap: 'wrap',
-    // height: 100,
-  },
-  input: {
-    display: 'flex',
-    flexWrap: 'wrap',
-    padding: 0,
-  },
-
-  valueContainer: {
-    display: 'flex',
-    flexWrap: 'wrap',
-    flex: 1,
-    alignItems: 'center',
-    overflowWrap: 'break-word',
-    overflow: 'auto',
-  },
-
-  noOptionsMessage: {
-    padding: '0px', //`${theme.spacing.unit}px ${theme.spacing.unit * 2}px`,
-  },
-  placeholder: {
-    position: 'absolute',
-    left: 1,
-    fontSize: '0.9em',
-  },
-  options: {
-    fontSize: '0.9em',
-    display: 'flex',
-    /// Lol this stupid ass thing wont wrap the text to the next line
-    flexWrap: 'wrap',
-    flex: 1,
-    overflowWrap: 'anywhere',
-    overflow: 'auto',
-  },
-  paper: {
-    position: 'absolute',
-    zIndex: 1,
-    marginTop: theme.spacing.unit,
-    left: 0,
-    right: 0,
-  },
-});
 
 function NoOptionsMessage(props) {
   return (
@@ -181,17 +134,6 @@ class SearchAutocomplete extends React.Component {
 
   render() {
     var choices = this.state.choices;
-    const { classes, theme } = this.props;
-
-    const selectStyles = {
-      input: base => ({
-        ...base,
-        color: theme.palette.text.primary,
-        '& input': {
-          font: 'inherit',
-        },
-      }),
-    };
 
     // Build a placeholder based on the search type
     var placeholder = '';
@@ -204,27 +146,21 @@ class SearchAutocomplete extends React.Component {
     return (
       <div
         className="form-control w-80 header-elem"
-        style={{ padding: '0em', paddingLeft: '0.1em' }}
+        style={{ padding: '0em'}}
       >
         <Select
           className={'search-form'}
-          classes={classes}
-          styles={selectStyles}
           options={choices}
           components={components}
           placeholder={placeholder}
           value={this.props.value}
           onChange={this.props.onChange}
           isClearable
+          menuIsOpen
         />
       </div>
     );
   }
 }
 
-SearchAutocomplete.propTypes = {
-  classes: PropTypes.object.isRequired,
-  theme: PropTypes.object.isRequired,
-};
-
-export default withStyles(styles, { withTheme: true })(SearchAutocomplete);
+export default SearchAutocomplete;

@@ -17,7 +17,7 @@ class RadioSelector extends React.Component {
 
   render() {
     return (
-      <div className="d-flex flex-column" style={{ padding: '0.7em' }}>
+      <div className="d-flex flex-column" style={{ padding: '0.7em' , zIndex: 0}}>
         <ToggleButtonGroup
           type="radio"
           name="options"

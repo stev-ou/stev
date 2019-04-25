@@ -11,11 +11,12 @@ echo $DOCKER_PW | base64 --decode -i > ${HOME}/password.txt
 cat ~/password.txt | docker login --username ${DOCKER_USERNAME} --password-stdin
 
 #docker push (old-image)
+#docker push gcr.io/ou-reviews/stev:latest
 
 echo $GCLOUD_SERVICE_KEY | base64 --decode -i > ${HOME}/gcloud-service-key.json
 gcloud auth activate-service-account --key-file ${HOME}/gcloud-service-key.json
 
-gcloud auth configure-docker
+echo "y" | gcloud auth configure-docker
 docker push gcr.io/ou-reviews/stev:latest
 
 gcloud --quiet config set project $PROJECT_NAME

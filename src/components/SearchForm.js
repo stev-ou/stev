@@ -62,7 +62,7 @@ class SearchForm extends React.Component {
       prompt = 'Ex: 112112705';
     }
     return (
-      <div className="row">
+      <div className="row" style={{zIndex: 2}}>
         <div className="col-lg-12">
           <form className="validate" onSubmit={this.handleSubmit}>
             {/*<div className="input-group mb-3">*/}
