@@ -14,6 +14,10 @@ export const setSearchText = content => ({
   text: content,
 });
 
+export const alertUser = content => ({
+  type: 'ALERT_USER'
+})
+
 export const SearchStatus = {
   VALID: 'VALID',
   INVALID: 'INVALID',
