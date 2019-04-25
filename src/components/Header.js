@@ -69,18 +69,6 @@ class Header extends React.Component {
               <b>STEV</b> @ OU
             </a>
             <BackButton />
-            {/*<button
-              className="custom-toggler navbar-toggler"
-              type="button"
-              data-toggle="collapse"
-              data-target="#navbarResponsive"
-              aria-controls="navbarResponsive"
-              aria-expanded="false"
-              aria-label="Toggle navigation"
-            > 
-              <span className="navbar-toggler-icon" />
-            </button> 
-            <div className="collapse navbar-collapse" id="navbarResponsive" /> */}
           </div>
         </nav>
       );
