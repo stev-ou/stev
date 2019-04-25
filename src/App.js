@@ -19,4 +19,6 @@ const App = () => {
   );
 };
 
+initializeReactGA();
+
 export default App;
