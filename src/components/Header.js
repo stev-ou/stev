@@ -3,8 +3,21 @@ import SearchForm from './SearchForm.js';
 import graph from '../img/graph.png';
 import { connect } from 'react-redux';
 import BackButton from './BackButton.js';
+import { setSearchStatus, SearchStatus } from '../actions';
 
 class Header extends React.Component {
+  constructor(props) {
+    super(props);
+    this.handleClick = this.handleClick.bind(this);
+  }
+
+  handleClick() {
+    console.log('clicked')
+    if (this.props.valid_search != 'INVALID') {
+      this.props.setSearchStatus(SearchStatus.INVALID);
+    }
+  }
+
   render() {
     if (this.props.valid_search === 'INVALID') {
       //this.props.valid_search === 'INVALID' // This for debugging
@@ -12,9 +25,9 @@ class Header extends React.Component {
         <div>
           <nav id="main_nav" className="navbar navbar-light navbar-expand-lg">
             <div className="container">
-              <a className="navbar-brand" href="./">
-                <b>STEV</b> @ OU
-              </a>
+              <button className="navbar-brand" onClick={this.handleClick}>
+               <b>STEV</b> @ OU
+              </button> 
               <button
                 className="custom-toggler navbar-toggler"
                 type="button"
@@ -65,9 +78,9 @@ class Header extends React.Component {
       return (
         <nav id="main_nav" className="navbar navbar-light navbar-expand-lg">
           <div className="container">
-            <a className="navbar-brand" href="./">
+            <button className="navbar-brand" onClick={this.handleClick}>
               <b>STEV</b> @ OU
-            </a>
+            </button>
             <BackButton />
           </div>
         </nav>
@@ -83,4 +96,4 @@ const mapStateToProps = state => {
   };
 };
 
-export default connect(mapStateToProps)(Header);
+export default connect(mapStateToProps, {setSearchStatus})(Header);
