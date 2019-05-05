@@ -13,7 +13,7 @@ class Header extends React.Component {
 
   handleClick() {
     console.log('clicked')
-    if (this.props.valid_search != 'INVALID') {
+    if (this.props.valid_search !== 'INVALID') {
       this.props.setSearchStatus(SearchStatus.INVALID);
     }
   }
@@ -25,7 +25,7 @@ class Header extends React.Component {
         <div>
           <nav id="main_nav" className="navbar navbar-light navbar-expand-lg">
             <div className="container">
-              <button className="navbar-brand" onClick={this.handleClick}>
+              <button className="STEV-button navbar-brand" onClick={this.handleClick}>
                <b>STEV</b> @ OU
               </button> 
               <button
@@ -78,7 +78,7 @@ class Header extends React.Component {
       return (
         <nav id="main_nav" className="navbar navbar-light navbar-expand-lg">
           <div className="container">
-            <button className="navbar-brand" onClick={this.handleClick}>
+            <button className="STEV-button navbar-brand" onClick={this.handleClick}>
               <b>STEV</b> @ OU
             </button>
             <BackButton />
