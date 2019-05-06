@@ -8,7 +8,7 @@ class RadioSelector extends React.Component {
   constructor(props) {
     super(props);
     this.handleChange = this.handleChange.bind(this);
-    this.state = { value: 'COURSE' };
+    this.state = { value: this.props.search_type };
   }
 
   handleChange(value, event) {
@@ -21,7 +21,7 @@ class RadioSelector extends React.Component {
         <ToggleButtonGroup
           type="radio"
           name="options"
-          defaultValue={'COURSE'}
+          defaultValue={this.state.value}
           onChange={this.handleChange}
           style={{ position: 'sticky' }}
         >
@@ -48,7 +48,14 @@ class RadioSelector extends React.Component {
   }
 }
 
+const mapStateToProps = state => {
+  console.log(state)
+  return {
+    search_type: state.search_type,
+  };
+};
+
 export default connect(
-  null,
+  mapStateToProps,
   { setSearchType }
 )(RadioSelector);

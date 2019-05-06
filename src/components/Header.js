@@ -12,7 +12,6 @@ class Header extends React.Component {
   }
 
   handleClick() {
-    console.log('clicked')
     if (this.props.valid_search !== 'INVALID') {
       this.props.setSearchStatus(SearchStatus.INVALID);
     }
