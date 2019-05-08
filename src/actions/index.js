@@ -21,8 +21,8 @@ export const setStatetoURL = content => (
   type: 'SET_STATE_TO_URL',
   search_type: content.search_type,
   search_text: content.search_text,
+  user_alerted: content.user_alerted,
   search_status: content.search_status,
-  user_alerted: content.user_alerted
 });
 
 export const alertUser = content => ({

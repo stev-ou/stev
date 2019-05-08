@@ -7,11 +7,21 @@ import React from 'react';
 class RadioSelector extends React.Component {
   constructor(props) {
     super(props);
-    this.handleChange = this.handleChange.bind(this);
-    this.state = { value: this.props.search_type };
-  }
+    this.handleClick = this.handleClick.bind(this);}
+  //   this.state = {value:this.props.search_type}
+  // }
+  // componentDidMount() {
+  //   this.setState({ value: this.props.search_type })
+  // }
 
-  handleChange(value, event) {
+  // componentWillUpdate() {
+  //   console.log('RadioSelector Updated')
+  //   console.log(this.props)
+  //   // this.handleClick({value=this.props.search_type, event=[]})
+  //   this.render()
+  // }
+
+  handleClick(value, event) {
     this.props.setSearchType(value);
   }
 
@@ -21,15 +31,14 @@ class RadioSelector extends React.Component {
         <ToggleButtonGroup
           type="radio"
           name="options"
-          defaultValue={this.state.value}
-          onChange={this.handleChange}
+          value={this.props.search_type}
+          onChange={this.handleClick}
           style={{ position: 'sticky' }}
         >
           <ToggleButton
             type="radio"
             name="radio"
             variant="secondary"
-            defaultChecked
             value={'COURSE'}
           >
             Course

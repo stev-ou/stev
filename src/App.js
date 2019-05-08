@@ -14,9 +14,8 @@ function initializeReactGA() {
 
 class App extends React.Component {
 	constructor(props) {
-		console.log(props)
 		super(props)
-
+		this.state={prior_state:this.props.current_state}
 		}
 	componentDidMount(){
 		const url_state = this.props.match.params
@@ -24,82 +23,46 @@ class App extends React.Component {
 		
 		// If state and URL different the first time the component mounts, take URL => State
 		if (url_state.search_type !==undefined && url_state.search_text !== undefined) {
-		this.props.setStatetoURL({...url_state, user_alerted:current_state['user_alerted']})}
-		
-		// Have to push the current location onto the history stack; Not sure why
-		this.props.history.push(this.props.location.pathname)
+		this.props.setStatetoURL({...url_state, search_status: 'VALID', user_alerted:current_state['user_alerted']})}
+
+		// this.props.history.push(this.props.location.pathname)
 	}
 		// ROUTING
 		// Check to see if props.history are the same as state
 	componentDidUpdate(){
-
-		// If component is just updating, then state => URL
-		// console.log(this.props)
-		// console.log(this.props.history.action)
-		// Browser events come through as POP actions, whereas programmatic events are replace actions
-		// If browser initiates, set state to new path
-		if (this.props.history.action === 'POP'){
-			console.log('POP ACTION')
-			var url_state = this.props.match.params
-			if (url_state['search_text']===undefined) {
-				url_state['search_text'] = ''
-			}
-			this.props.setStatetoURL({...url_state, user_alerted:this.props.current_state['user_alerted']})
+		// Establish check for if undefined search_textis okay
+		var accept_undefined 
+		if(this.props.current_state.search_status === 'VALID') {accept_undefined = (this.props.current_state.search_text.toString() !== this.props.match.params.search_text)} 
+		else {
+			accept_undefined = (!['', undefined].includes(this.props.match.params.search_text))
 		}
-
-
+		// Check to see if the URL is different from the current state
+		if (this.props.match.params.search_type !== this.props.current_state.search_type || accept_undefined) {
+		const prior = this.state.prior_state
+		const current = this.props.current_state
+		// Gets hit if the change was driven by redux state rather than the URL
+		if (prior['search_status']!==current['search_status'] || prior['search_type']!==current['search_type'] || prior['search_text']!==current['search_text'] ) {
 		if (this.props.history.location.pathname !== '/searchby/'+this.props.current_state.search_type+'/'+this.props.current_state.search_text && this.props.current_state.search_status === 'VALID') {
-		this.props.history.replace('/searchby/'+this.props.current_state.search_type+'/'+this.props.current_state.search_text)}
-		else if (this.props.current_state.search_status === 'INVALID' && this.props.history.location.pathname !== '/searchby/'+this.props.current_state.search_type) {
-			this.props.history.replace('/searchby/'+this.props.current_state.search_type)
+		this.props.history.push('/searchby/'+this.props.current_state.search_type+'/'+this.props.current_state.search_text)}
+		else if (this.props.current_state.search_status === 'INVALID') {
+			this.props.history.push('/searchby/'+this.props.current_state.search_type)}
+		this.setState({prior_state:this.props.current_state})
 		}
 
-
+		// Gets hit if the change was driven by URL change, adjusts the state accordingly
+		else {
+			var valid_search = SearchStatus.VALID
+			var url_state = this.props.match.params
+			if (url_state['search_text']===undefined || url_state['search_text']==='') {
+				url_state['search_text'] = ''
+				valid_search = SearchStatus.INVALID
+			}
+			this.setState({prior_state:{...url_state, search_status: valid_search, user_alerted:this.props.current_state['user_alerted']}})
+			this.props.setStatetoURL({...url_state, search_status: valid_search, user_alerted:this.props.current_state['user_alerted']})
+		}
 	}
-		// const current_state = this.props.current_state
-		// const url_state = this.props.history.location.pathname
+		}
 
-		// const programmatic_change = (this.props.history.location.state.keys !== undefined)
-		// console.log(this.props.history)
-		// if (programmatic_change) {
-		// console.log(this.props)
-		// if (current_state['search_status']===SearchStatus.VALID) {
-		// 	console.log(url_state)
-		// 	if (url_state['search_type']!== current_state['search_type']|| url_state['search_text']!== current_state['search_text']) {
-		// 		console.log('update')
-		// 		console.log(this.props.current_state.search_type)
-		// 		console.log(this.props.current_state.search_text)
-		// 		this.props.history.push({path: '/searchby/'+this.props.current_state.search_type+'/'+this.props.current_state.search_text, state:{initiator: 'program'}})
-		// 	}}
-
-		// else {
-		// 	if (url_state['search_type']!== current_state['search_type']) {
-		// 		this.props.history.push('/searchby/'+this.props.current_state.search_type)
-		// 	}}
-
-		// }
-
-		// else {
-		// 	setStatetoURL({...url_state, user_alerted:current_state['user_alerted']})
-
-		// }}
-		// This is only deployed if a function is provided to the 
-		// if (Object.keys(props.match.params).length>=2) {
-		// 	const url_state = {...props.match.params, search_status:'VALID'}
-		// 	console.log(current_state)
-		// 	console.log(url_state)
-		// 	if (url_state['search_type']!== undefined && url_state['search_text']!== undefined && this.props.history.location.pathname.length>0) {
-		// 			if (['COURSE', 'INSTRUCTOR'].includes(this.props.search_type)) {
-		// 				var append_string = '/searchby/'+this.props.search_type+'/'+this.props.search_text
-		// 				this.props.history.push(append_string)
-		// 			}
-
-		// 		this.props.setStatetoURL({...url_state, user_alerted:current_state['user_alerted']})
-		// 	}
-		// 	else if (current_state['valid_search'] === SearchStatus.INVALID && this.props.history.location.pathname.length>0) {
-		// 		this.props.setStatetoURL({...url_state, valid_search: SearchStatus.INVALID, user_alerted:current_state['user_alerted']})
-		// 	this.props.history.push('/searchby/'+current_state['search_type'])}
-		// }
 
 	render() {
   return (
