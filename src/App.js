@@ -83,4 +83,6 @@ const mapStateToProps = state => {
   };
 };
 
+
+initializeReactGA();
 export default connect(mapStateToProps, {setStatetoURL})(App);
