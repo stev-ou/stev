@@ -1,11 +1,12 @@
 import React from 'react';
 import { render } from 'react-dom';
 import './index.css';
-import { Provider } from 'react-redux';
 import { createStore } from 'redux';
 import rootReducer from './reducers/reducer'; // eventually change to configureStore file to hold setup
-import App from './App';
+import Root from './Root.js';
 import * as serviceWorker from './serviceWorker';
+import { Route, Link, BrowserRouter as Router } from 'react-router-dom'
+import { connect } from 'react-redux';
 
 const store = createStore(
   rootReducer,
@@ -13,9 +14,7 @@ const store = createStore(
 );
 
 render(
-  <Provider store={store}>
-    <App />
-  </Provider>,
+  <Root store={store}/>,
   document.getElementById('root')
 );
 

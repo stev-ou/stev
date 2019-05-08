@@ -1,17 +1,29 @@
 // actions
+import FilterLink from '../containers/FilterLink'
 export const setSearchStatus = content => ({
   type: 'SET_SEARCH_STATUS',
   status: content,
 });
 
-export const setSearchType = content => ({
+export const setSearchType = content => (
+{
   type: 'SET_SEARCH_TYPE',
   search_type: content,
 });
 
-export const setSearchText = content => ({
+export const setSearchText = content => (
+{
   type: 'SET_SEARCH_TEXT',
   text: content,
+});
+
+export const setStatetoURL = content => (
+{
+  type: 'SET_STATE_TO_URL',
+  search_type: content.search_type,
+  search_text: content.search_text,
+  search_status: content.search_status,
+  user_alerted: content.user_alerted
 });
 
 export const alertUser = content => ({

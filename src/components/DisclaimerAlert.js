@@ -13,14 +13,9 @@ class DisclaimerAlert extends React.Component {
 	}
   componentDidMount() {
     this.props.alertUser()
-
   }
-
-  user_alerted() {
-
-  }
+  
   render() {
-    const user_alerted = this.props.user_alerted
     if (!this.props.user_alerted){
   	confirmAlert({
       title: 'Data Disclaimer',

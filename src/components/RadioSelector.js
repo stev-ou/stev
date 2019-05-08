@@ -49,7 +49,6 @@ class RadioSelector extends React.Component {
 }
 
 const mapStateToProps = state => {
-  console.log(state)
   return {
     search_type: state.search_type,
   };
