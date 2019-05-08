@@ -1,5 +1,4 @@
 // actions
-import FilterLink from '../containers/FilterLink'
 export const setSearchStatus = content => ({
   type: 'SET_SEARCH_STATUS',
   status: content,

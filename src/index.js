@@ -5,8 +5,6 @@ import { createStore } from 'redux';
 import rootReducer from './reducers/reducer'; // eventually change to configureStore file to hold setup
 import Root from './Root.js';
 import * as serviceWorker from './serviceWorker';
-import { Route, Link, BrowserRouter as Router } from 'react-router-dom'
-import { connect } from 'react-redux';
 
 const store = createStore(
   rootReducer,
