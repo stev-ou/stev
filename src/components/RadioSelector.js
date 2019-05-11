@@ -1,25 +1,14 @@
 import ToggleButton from 'react-bootstrap/ToggleButton';
 import ToggleButtonGroup from 'react-bootstrap/ToggleButtonGroup';
 import { connect } from 'react-redux';
-import { setSearchType } from '../actions';
+import { SearchType, setSearchType } from '../actions';
 import React from 'react';
 
 class RadioSelector extends React.Component {
   constructor(props) {
     super(props);
+    console.log(this.props.search_type)
     this.handleClick = this.handleClick.bind(this);}
-  //   this.state = {value:this.props.search_type}
-  // }
-  // componentDidMount() {
-  //   this.setState({ value: this.props.search_type })
-  // }
-
-  // componentWillUpdate() {
-  //   console.log('RadioSelector Updated')
-  //   console.log(this.props)
-  //   // this.handleClick({value=this.props.search_type, event=[]})
-  //   this.render()
-  // }
 
   handleClick(value, event) {
     this.props.setSearchType(value);
@@ -39,7 +28,7 @@ class RadioSelector extends React.Component {
             type="radio"
             name="radio"
             variant="secondary"
-            value={'COURSE'}
+            value={SearchType.COURSE}
           >
             Course
           </ToggleButton>
@@ -47,7 +36,7 @@ class RadioSelector extends React.Component {
             type="radio"
             name="radio"
             variant="secondary"
-            value={'INSTRUCTOR'}
+            value={SearchType.INSTRUCTOR}
           >
             Instructor
           </ToggleButton>

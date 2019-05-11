@@ -9,6 +9,7 @@ import TextField from '@material-ui/core/TextField';
 import Paper from '@material-ui/core/Paper';
 import MenuItem from '@material-ui/core/MenuItem';
 import lists from '../course_instructor_list.json';
+import { SearchType} from '../actions';
 
 const course_list = lists['courses'];
 const instructor_list = lists['instructors'];
@@ -107,7 +108,7 @@ class SearchAutocomplete extends React.Component {
     var initial_state = {
       search_type: this.props.search_type,
     };
-    if (this.props.search_type === 'COURSE') {
+    if (this.props.search_type === SearchType.COURSE) {
       initial_state['choices'] = course_list;
     } else {
       initial_state['choices'] = instructor_list;
@@ -117,7 +118,7 @@ class SearchAutocomplete extends React.Component {
 
   componentWillMount() {
     // Update the search list
-    if (this.props.search_type === 'COURSE') {
+    if (this.props.search_type === SearchType.COURSE) {
       this.setState({ choices: course_list });
     } else {
       this.setState({ choices: instructor_list });
@@ -137,7 +138,7 @@ class SearchAutocomplete extends React.Component {
 
     // Build a placeholder based on the search type
     var placeholder = '';
-    if (this.props.search_type === 'COURSE') {
+    if (this.props.search_type === SearchType.COURSE) {
       placeholder = 'Type a course name';
     } else {
       placeholder = 'Type an instructor name';

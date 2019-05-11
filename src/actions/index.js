@@ -35,6 +35,6 @@ export const SearchStatus = {
 };
 
 export const SearchType = {
-  COURSE: 'COURSE',
-  INSTRUCTOR: 'INSTRUCTOR',
+  COURSE: 'course',
+  INSTRUCTOR: 'instructor',
 };

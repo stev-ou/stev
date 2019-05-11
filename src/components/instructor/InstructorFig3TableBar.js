@@ -161,9 +161,6 @@ class InstructorFig3TableBar extends React.Component {
         mode: 'checkbox',
         selected: selected,
         clickToSelect: true,
-        style: (row, rowIndex) => {
-          return schemePaired[0];
-        },
         onSelect: (row, isSelect, rowIndex, e) => {
           // Change the rows hidden status
           display_questions[rowIndex] = !display_questions[rowIndex];
@@ -186,13 +183,13 @@ class InstructorFig3TableBar extends React.Component {
             {' '}
             Question responses for {result['instructor name']}, sorted by course
           </h3>
-          <BootstrapTable
+         <BootstrapTable
             keyField="qNumber"
             data={products}
             columns={columns}
             selectRow={selectRow}
-            rowStyle={{ fontSize: 0.9 * header_size * em }}
-          />
+            rowStyle={{ fontSize: 12 }} //fontSize: 0.9 * header_size * em
+          /> 
           <div className="question-fig">
             <Bar data={plot_result} options={plot_options} />
           </div>

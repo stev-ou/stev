@@ -42,10 +42,10 @@ class App extends React.Component {
 		const current = this.props.current_state
 		// Gets hit if the change was driven by redux state rather than the URL
 		if (prior['search_status']!==current['search_status'] || prior['search_type']!==current['search_type'] || prior['search_text']!==current['search_text'] ) {
-		if (this.props.history.location.pathname !== '/searchby/'+this.props.current_state.search_type+'/'+this.props.current_state.search_text && this.props.current_state.search_status === 'VALID') {
-		this.props.history.push('/searchby/'+this.props.current_state.search_type+'/'+this.props.current_state.search_text)}
+		if (this.props.history.location.pathname !== '/'+this.props.current_state.search_type+'/'+this.props.current_state.search_text && this.props.current_state.search_status === 'VALID') {
+		this.props.history.push('/'+this.props.current_state.search_type+'/'+this.props.current_state.search_text)}
 		else if (this.props.current_state.search_status === 'INVALID') {
-			this.props.history.push('/searchby/'+this.props.current_state.search_type)}
+			this.props.history.push('/'+this.props.current_state.search_type)}
 		this.setState({prior_state:this.props.current_state})
 		}
 

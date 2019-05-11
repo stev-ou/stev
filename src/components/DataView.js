@@ -12,7 +12,7 @@ import InstructorFig3TableBar from './instructor/InstructorFig3TableBar.js';
 const DataView = props => {
   const uuid = props.search_text;
   const search_type = props.search_type;
-  if (search_type === 'COURSE') {
+  if (search_type === 'course') {
     return (
       <div className="dataview-container">
         <div className="graphical-content">
@@ -51,8 +51,9 @@ const DataView = props => {
 
         <hr style={{ height: 30 }} />
 
-        <div className="graphical-content">
+        <div className="graphical-content"> {
           <InstructorFig3TableBar uuid={uuid.toString()} />
+        }
         </div>
       </div>
     );

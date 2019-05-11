@@ -157,9 +157,6 @@ class CourseFig4TableBar extends React.Component {
         mode: 'checkbox',
         selected: selected,
         clickToSelect: true,
-        style: (row, rowIndex) => {
-          return schemePaired[0];
-        },
         onSelect: (row, isSelect, rowIndex, e) => {
           // Change the rows hidden status
           display_questions[rowIndex] = !display_questions[rowIndex];
