@@ -22,8 +22,13 @@ class App extends React.Component {
 		const current_state = this.props.current_state
 		
 		// If state and URL different the first time the component mounts, take URL => State
-		if (url_state.search_type !==undefined && url_state.search_text !== undefined) {
+		if (url_state.search_type !==undefined) {
+		if (url_state.search_text !== undefined) {
 		this.props.setStatetoURL({...url_state, search_status: 'VALID', user_alerted:current_state['user_alerted']})}
+		
+		else if (url_state.search_type !== undefined) {
+			this.props.setStatetoURL({search_type:url_state['search_type'], search_status: 'INVALID', user_alerted:current_state['user_alerted']})
+		}}
 
 		// this.props.history.push(this.props.location.pathname)
 	}
@@ -32,10 +37,12 @@ class App extends React.Component {
 	componentDidUpdate(){
 		// Establish check for if undefined search_textis okay
 		var accept_undefined 
-		if(this.props.current_state.search_status === 'VALID') {accept_undefined = (this.props.current_state.search_text.toString() !== this.props.match.params.search_text)} 
-		else {
+		if(this.props.current_state.search_status === 'VALID') {accept_undefined = (this.props.current_state.search_text.toString() !== this.props.match.params.search_text)
+		}
+	else {
 			accept_undefined = (!['', undefined].includes(this.props.match.params.search_text))
 		}
+		console.log(accept_undefined)
 		// Check to see if the URL is different from the current state
 		if (this.props.match.params.search_type !== this.props.current_state.search_type || accept_undefined) {
 		const prior = this.state.prior_state

@@ -11,7 +11,7 @@ var em = obj['em'];
 var mobile = obj['mobile'];
 
 // Define the mobile modifiers
-var header_size = 1.1;
+var header_size = 1.2;
 var label_size = 1.25;
 if (mobile) {
   header_size = 2.75;
@@ -176,6 +176,7 @@ class InstructorFig3TableBar extends React.Component {
           return schemePaired[parseInt(2 * rowIndex)]; // returns the color code for this paired analysis
         },
       };
+      console.log(em)
 
       return (
         <div>
@@ -188,7 +189,7 @@ class InstructorFig3TableBar extends React.Component {
             data={products}
             columns={columns}
             selectRow={selectRow}
-            rowStyle={{ fontSize: 12 }} //fontSize: 0.9 * header_size * em
+            rowStyle = {{fontSize: header_size*em}}
           /> 
           <div className="question-fig">
             <Bar data={plot_result} options={plot_options} />

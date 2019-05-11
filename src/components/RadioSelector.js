@@ -7,7 +7,6 @@ import React from 'react';
 class RadioSelector extends React.Component {
   constructor(props) {
     super(props);
-    console.log(this.props.search_type)
     this.handleClick = this.handleClick.bind(this);}
 
   handleClick(value, event) {

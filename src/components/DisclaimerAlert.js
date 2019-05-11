@@ -10,8 +10,8 @@ class DisclaimerAlert extends React.Component {
 
 	createMessage() {
   	return (
-
-      <p> Student evaluations of teaching are known to have <a href='https://google.com'> inherent biases</a>. 
+      <p> Student evaluations of teaching are known to have <a href='https://google.com'> inherent biases. </a>. 
+      I'll write this better later.
     Please use this data as
      </p> )
 	}
