@@ -51,9 +51,9 @@ const DataView = props => {
 
         <hr style={{ height: 30 }} />
 
-        <div className="graphical-content"> {
-          <InstructorFig3TableBar uuid={uuid.toString()} />
-        }
+        <div className="graphical-content">
+          {' '}
+          {<InstructorFig3TableBar uuid={uuid.toString()} />}
         </div>
       </div>
     );

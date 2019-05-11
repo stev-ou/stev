@@ -7,7 +7,8 @@ import React from 'react';
 class RadioSelector extends React.Component {
   constructor(props) {
     super(props);
-    this.handleClick = this.handleClick.bind(this);}
+    this.handleClick = this.handleClick.bind(this);
+  }
 
   handleClick(value, event) {
     this.props.setSearchType(value);
@@ -15,7 +16,10 @@ class RadioSelector extends React.Component {
 
   render() {
     return (
-      <div className="d-flex flex-column" style={{ padding: '0.7em' , zIndex: 0}}>
+      <div
+        className="d-flex flex-column"
+        style={{ padding: '0.7em', zIndex: 0 }}
+      >
         <ToggleButtonGroup
           type="radio"
           name="options"

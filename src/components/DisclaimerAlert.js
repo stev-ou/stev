@@ -1,41 +1,41 @@
-// this will be an alert that is cued when the user first 
+// this will be an alert that is cued when the user first
 
-import React from 'react'
-import { confirmAlert } from './react-confirm-alert-mod'; 
-import 'react-confirm-alert/src/react-confirm-alert.css'; 
+import React from 'react';
+import { confirmAlert } from './react-confirm-alert-mod';
+import 'react-confirm-alert/src/react-confirm-alert.css';
 import { connect } from 'react-redux';
 import { alertUser } from '../actions';
 
 class DisclaimerAlert extends React.Component {
-
-	createMessage() {
-  	return (
-      <p> Student evaluations of teaching are known to have <a href='https://google.com'> inherent biases. </a>. 
-      I'll write this better later.
-    Please use this data as
-     </p> )
-	}
+  createMessage() {
+    return (
+      <p>
+        {' '}
+        Student evaluations of teaching are known to have{' '}
+        <a href="https://google.com"> inherent biases. </a>. I'll write this
+        better later. Please use this data as
+      </p>
+    );
+  }
   componentDidMount() {
-    if (!this.props.user_alerted){
-    confirmAlert({
-      title: 'Data Disclaimer',
-      message: this.createMessage(),
-      buttons: [
-        {
-          label: 'I Acknowledge',
-        },
-      ],
-      closeOnClickOutside: false
-    });
+    if (!this.props.user_alerted) {
+      confirmAlert({
+        title: 'Data Disclaimer',
+        message: this.createMessage(),
+        buttons: [
+          {
+            label: 'I Acknowledge',
+          },
+        ],
+        closeOnClickOutside: false,
+      });
+    }
+    this.props.alertUser();
   }
-    this.props.alertUser()
 
-  }
-  
   render() {
-  
-  return null;
-}
+    return null;
+  }
 }
 
 const mapStateToProps = state => {
@@ -44,5 +44,7 @@ const mapStateToProps = state => {
   };
 };
 
-
-export default connect(mapStateToProps, {alertUser})(DisclaimerAlert);
+export default connect(
+  mapStateToProps,
+  { alertUser }
+)(DisclaimerAlert);

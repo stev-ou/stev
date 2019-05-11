@@ -24,9 +24,12 @@ class Header extends React.Component {
         <div>
           <nav id="main_nav" className="navbar navbar-light navbar-expand-lg">
             <div className="container">
-              <button className="STEV-button navbar-brand" onClick={this.handleClick}>
-               <b>STEV</b> @ OU
-              </button> 
+              <button
+                className="STEV-button navbar-brand"
+                onClick={this.handleClick}
+              >
+                <b>STEV</b> @ OU
+              </button>
               <button
                 className="custom-toggler navbar-toggler"
                 type="button"
@@ -77,7 +80,10 @@ class Header extends React.Component {
       return (
         <nav id="main_nav" className="navbar navbar-light navbar-expand-lg">
           <div className="container">
-            <button className="STEV-button navbar-brand" onClick={this.handleClick}>
+            <button
+              className="STEV-button navbar-brand"
+              onClick={this.handleClick}
+            >
               <b>STEV</b> @ OU
             </button>
             <BackButton />
@@ -94,4 +100,7 @@ const mapStateToProps = state => {
   };
 };
 
-export default connect(mapStateToProps, {setSearchStatus})(Header);
+export default connect(
+  mapStateToProps,
+  { setSearchStatus }
+)(Header);

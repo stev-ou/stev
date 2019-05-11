@@ -1,7 +1,7 @@
 import React from 'react';
 import DataView from './DataView.js';
 import { connect } from 'react-redux';
-import DisclaimerAlert from './DisclaimerAlert.js'
+import DisclaimerAlert from './DisclaimerAlert.js';
 
 class LandingComponent extends React.Component {
   render() {
@@ -31,9 +31,10 @@ class LandingComponent extends React.Component {
     } else {
       return (
         <div>
-        <DisclaimerAlert />
-        <DataView />
-        </div>);
+          <DisclaimerAlert />
+          <DataView />
+        </div>
+      );
     }
   }
 }

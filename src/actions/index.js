@@ -4,20 +4,17 @@ export const setSearchStatus = content => ({
   status: content,
 });
 
-export const setSearchType = content => (
-{
+export const setSearchType = content => ({
   type: 'SET_SEARCH_TYPE',
   search_type: content,
 });
 
-export const setSearchText = content => (
-{
+export const setSearchText = content => ({
   type: 'SET_SEARCH_TEXT',
   text: content,
 });
 
-export const setStatetoURL = content => (
-{
+export const setStatetoURL = content => ({
   type: 'SET_STATE_TO_URL',
   search_type: content.search_type,
   search_text: content.search_text,
@@ -26,8 +23,8 @@ export const setStatetoURL = content => (
 });
 
 export const alertUser = content => ({
-  type: 'ALERT_USER'
-})
+  type: 'ALERT_USER',
+});
 
 export const SearchStatus = {
   VALID: 'VALID',

@@ -1,6 +1,6 @@
 /* eslint-disable react/prop-types, react/jsx-handler-names */
-import "react-select-2/dist/css/react-select-2.css";
-import "./../SearchAutocomplete.css"
+import 'react-select-2/dist/css/react-select-2.css';
+import './../SearchAutocomplete.css';
 
 import React from 'react';
 import Select from 'react-virtualized-select';
@@ -9,7 +9,7 @@ import TextField from '@material-ui/core/TextField';
 import Paper from '@material-ui/core/Paper';
 import MenuItem from '@material-ui/core/MenuItem';
 import lists from '../course_instructor_list.json';
-import { SearchType} from '../actions';
+import { SearchType } from '../actions';
 
 const course_list = lists['courses'];
 const instructor_list = lists['instructors'];
@@ -145,10 +145,7 @@ class SearchAutocomplete extends React.Component {
     }
 
     return (
-      <div
-        className="form-control w-80 header-elem"
-        style={{ padding: '0em'}}
-      >
+      <div className="form-control w-80 header-elem" style={{ padding: '0em' }}>
         <Select
           className={'search-form'}
           options={choices}

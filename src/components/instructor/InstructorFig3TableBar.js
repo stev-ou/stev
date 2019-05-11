@@ -176,7 +176,7 @@ class InstructorFig3TableBar extends React.Component {
           return schemePaired[parseInt(2 * rowIndex)]; // returns the color code for this paired analysis
         },
       };
-      console.log(em)
+      console.log(em);
 
       return (
         <div>
@@ -184,13 +184,13 @@ class InstructorFig3TableBar extends React.Component {
             {' '}
             Question responses for {result['instructor name']}, sorted by course
           </h3>
-         <BootstrapTable
+          <BootstrapTable
             keyField="qNumber"
             data={products}
             columns={columns}
             selectRow={selectRow}
-            rowStyle = {{fontSize: header_size*em}}
-          /> 
+            rowStyle={{ fontSize: header_size * em }}
+          />
           <div className="question-fig">
             <Bar data={plot_result} options={plot_options} />
           </div>

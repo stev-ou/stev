@@ -64,7 +64,7 @@ class CourseFig4TableBar extends React.Component {
           headerStyle: {
             width: '65%',
             textAlign: 'left',
-            fontSize: 1.1*header_size * em,
+            fontSize: 1.1 * header_size * em,
           },
         },
         {
@@ -184,7 +184,7 @@ class CourseFig4TableBar extends React.Component {
             data={products}
             columns={columns}
             selectRow={selectRow}
-            rowStyle={{fontSize:  header_size * em}}
+            rowStyle={{ fontSize: header_size * em }}
           />
           <div className="question-fig">
             <Bar data={plot_result} options={plot_options} />
