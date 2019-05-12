@@ -17,7 +17,6 @@ class Header extends React.Component {
 
   render() {
     if (this.props.valid_search === 'INVALID') {
-      //this.props.valid_search === 'INVALID' // This for debugging
       return (
         <div>
           <nav id="main_nav" className="navbar navbar-light navbar-expand-lg">
