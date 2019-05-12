@@ -2,9 +2,9 @@ import React from 'react';
 import '../App.css';
 
 
-class About extends React.Component {
+class GetInvolved extends React.Component {
   constructor(props) {
-    super()
+    super(props);
   }
   componentDidMount() {
   }
@@ -14,11 +14,11 @@ class About extends React.Component {
     return (
       <div>
         <h1>
-        About the Project
+        Get Involved (its lit)
         </h1>
       </div>
     );
   }
 }
 
-export default About
+export default GetInvolved

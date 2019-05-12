@@ -7,18 +7,29 @@ import { connect } from 'react-redux';
 import { alertUser } from '../actions';
 
 class DisclaimerAlert extends React.Component {
+  constructor(props) {
+    super(props)
+    this.navigateAway = this.navigateAway.bind(this)
+  }
+  navigateAway() {
+    console.log('Interested in biases')
+    this.props.history.push('/about')
+  }
   createMessage() {
     return (
       <p>
         {' '}
-        Student evaluations of teaching are known to have{' '}
-        <a href="https://google.com"> inherent biases. </a>. I'll write this
-        better later. Please use this data as
+        Student evaluations of teaching are known to have <a href='http://localhost:3000/about'>inherent biases</a>. {' '}
+        Please consider these biases when using the site.
       </p>
     );
   }
+  componentWillUnmount() {
+
+  }
   componentDidMount() {
     if (!this.props.user_alerted) {
+      this.props.alertUser();
       confirmAlert({
         title: 'Data Disclaimer',
         message: this.createMessage(),
@@ -30,8 +41,12 @@ class DisclaimerAlert extends React.Component {
         closeOnClickOutside: false,
       });
     }
-    this.props.alertUser();
   }
+  componentDidUpdate() {
+    if (!this.props.user_alerted) {
+
+
+  }}
 
   render() {
     return null;

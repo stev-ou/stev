@@ -4,9 +4,10 @@ import './App.css';
 import Landing from './components/Landing.js';
 import Header from './components/Header.js';
 import { connect } from 'react-redux';
-import { setStatetoURL, SearchStatus } from './actions';
+import { SearchType, setStatetoURL, SearchStatus } from './actions';
 import About from './components/About'
 //import Footer from './components/Footer.js';
+import GetInvolved from './components/GetInvolved'
 
 function initializeReactGA() {
   ReactGA.initialize('UA-138034707-1');
@@ -23,7 +24,7 @@ class App extends React.Component {
     const current_state = this.props.current_state;
 
     // If state and URL different the first time the component mounts, take URL => State
-    if (url_state.search_type !== undefined) {
+    if ([SearchType.COURSE, SearchType.INSTRUCTOR].includes(url_state.search_type)) {
       if (url_state.search_text !== undefined) {
         this.props.setStatetoURL({
           ...url_state,
@@ -42,17 +43,14 @@ class App extends React.Component {
     if (url_state.search_type === undefined) {
       this.props.history.push(
         '/' +
-              this.props.current_state.search_type )
+        this.props.current_state.search_type )
     }
 
   }
   componentDidUpdate() {
     // ROUTING
     // Check to see if search_type is about or getinvolved
-    if (this.props.match.params.search_type === 'about') {
-      return
-    }
-    else if (this.props.match.params.search_type === 'getinvolved') {
+    if (['about', 'getinvolved'].includes(this.props.match.params.search_type)) {
       return
     }
     // Establish check for if undefined search_textis okay
@@ -136,11 +134,19 @@ class App extends React.Component {
         </div>
         )
     }
+    else if (this.props.match.params.search_type === 'getinvolved') {
+  return (
+    <div>
+    <Header history={this.props.history}/>
+    <GetInvolved />
+    </div>
+    )
+    }
     else {
     return (
       <div>
         <Header history={this.props.history}/>
-        <Landing />
+        <Landing history={this.props.history}/>
       </div>
     );}
   }

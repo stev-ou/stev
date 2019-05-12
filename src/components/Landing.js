@@ -64,7 +64,7 @@ class LandingComponent extends React.Component {
     } else {
       return (
         <div>
-          <DisclaimerAlert />
+          <DisclaimerAlert history = {this.props.history}/>
           <DataView />
         </div>
       );

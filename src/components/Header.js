@@ -15,25 +15,23 @@ class Header extends React.Component {
   }
 
   handleClick(e) {
-  console.log(e.target.id)
-  if (['STEV', 'home'].includes(e.target.id)){
-  this.props.resetToDefaults();
-  this.props.history.push('/course')
   var hamburger = document.getElementById('hamburger')
+  if (['STEV', 'home'].includes(e.target.id)){
+  this.props.history.push('/course')
   if (hamburger.getAttribute("aria-expanded") === 'true') {
     hamburger.click()
   }
     }
-  else if (e.target.id === 'about') {
-    this.props.history.push('/about')
-    var hamburger = document.getElementById('hamburger')
-    hamburger.click()
+  else if (['about', 'getinvolved'].includes(e.target.id)) {
+    this.props.history.push('/'+e.target.id)
+    if (hamburger.getAttribute("aria-expanded") === 'true') {
+    hamburger.click() }
+    
   }
   else if (['navbarResponsive','span','header', 'collapsed-nav-items'].includes(e.target.id)) {
     return
   }
   else {
-    var hamburger = document.getElementById('hamburger')
     if (hamburger.getAttribute("aria-expanded") === 'true') {
       hamburger.click()
     }
@@ -50,7 +48,6 @@ class Header extends React.Component {
                 type="submit"
                 id='STEV'
                 className="STEV-navbar-button navbar-brand"
-                onClick={this.handleClick}
                 style={{outline: "none", fontSize: '1.4rem'}}
               >
                 <b>STEV</b> @ OU
@@ -73,13 +70,13 @@ class Header extends React.Component {
                   <div className="navbar-collapse collapse w-100 order-3 dual-collapse2" id='navbarResponsive'>
                     <ul id='collapsed-nav-items' className="navbar-nav ml-auto">
                   <li className="nav-item navbar-nav mr-auto">
-                    <button type='submit' className="STEV-navbar-button" id='home' style = {{outline:'none'}} onClick={this.handleClick}>Home</button>
+                    <button type='submit' className="STEV-navbar-button" id='home' style = {{outline:'none'}} >Home</button>
                   </li>
                     <li className="nav-item navbar-nav mr-auto">
-                    <button type='submit' className="STEV-navbar-button" id='about' style = {{outline:'none'}} onClick={this.handleClick}>About</button>
+                    <button type='submit' className="STEV-navbar-button" id='about' style = {{outline:'none'}} >About</button>
                   </li>
                   <li className="nav-item navbar-nav mr-auto">
-                    <button type='submit' className="STEV-navbar-button" id='getinvolved' style = {{outline:'none'}} onClick={this.handleClick} style={{marginRight: 0}}>Get Involved</button>
+                    <button type='submit' className="STEV-navbar-button" id='getinvolved' style = {{outline:'none', marginRight: 0}}>Get Involved</button>
                   </li>
                   </ul>
                   </div>
