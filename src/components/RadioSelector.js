@@ -1,36 +1,37 @@
 import ToggleButton from 'react-bootstrap/ToggleButton';
 import ToggleButtonGroup from 'react-bootstrap/ToggleButtonGroup';
 import { connect } from 'react-redux';
-import { setSearchType } from '../actions';
+import { SearchType, setSearchType } from '../actions';
 import React from 'react';
 
 class RadioSelector extends React.Component {
   constructor(props) {
     super(props);
-    this.handleChange = this.handleChange.bind(this);
-    this.state = { value: 'COURSE' };
+    this.handleClick = this.handleClick.bind(this);
   }
 
-  handleChange(value, event) {
+  handleClick(value, event) {
     this.props.setSearchType(value);
   }
 
   render() {
     return (
-      <div className="d-flex flex-column" style={{ padding: '0.7em' , zIndex: 0}}>
+      <div
+        className="d-flex flex-column"
+        style={{ padding: '0.7em', zIndex: 0 }}
+      >
         <ToggleButtonGroup
           type="radio"
           name="options"
-          defaultValue={'COURSE'}
-          onChange={this.handleChange}
+          value={this.props.search_type}
+          onChange={this.handleClick}
           style={{ position: 'sticky' }}
         >
           <ToggleButton
             type="radio"
             name="radio"
             variant="secondary"
-            defaultChecked
-            value={'COURSE'}
+            value={SearchType.COURSE}
           >
             Course
           </ToggleButton>
@@ -38,7 +39,7 @@ class RadioSelector extends React.Component {
             type="radio"
             name="radio"
             variant="secondary"
-            value={'INSTRUCTOR'}
+            value={SearchType.INSTRUCTOR}
           >
             Instructor
           </ToggleButton>
@@ -48,7 +49,13 @@ class RadioSelector extends React.Component {
   }
 }
 
+const mapStateToProps = state => {
+  return {
+    search_type: state.search_type,
+  };
+};
+
 export default connect(
-  null,
+  mapStateToProps,
   { setSearchType }
 )(RadioSelector);

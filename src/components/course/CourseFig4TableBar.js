@@ -11,7 +11,7 @@ var em = obj['em'];
 var mobile = obj['mobile'];
 
 // Define the mobile modifiers
-var header_size = 1.1;
+var header_size = 1.2;
 var label_size = 1.25;
 if (mobile) {
   header_size = 2.75;
@@ -64,7 +64,7 @@ class CourseFig4TableBar extends React.Component {
           headerStyle: {
             width: '65%',
             textAlign: 'left',
-            fontSize: header_size * em,
+            fontSize: 1.1 * header_size * em,
           },
         },
         {
@@ -157,9 +157,6 @@ class CourseFig4TableBar extends React.Component {
         mode: 'checkbox',
         selected: selected,
         clickToSelect: true,
-        style: (row, rowIndex) => {
-          return schemePaired[0];
-        },
         onSelect: (row, isSelect, rowIndex, e) => {
           // Change the rows hidden status
           display_questions[rowIndex] = !display_questions[rowIndex];
@@ -187,7 +184,7 @@ class CourseFig4TableBar extends React.Component {
             data={products}
             columns={columns}
             selectRow={selectRow}
-            rowStyle={{ fontSize: 0.9 * header_size * em }}
+            rowStyle={{ fontSize: header_size * em }}
           />
           <div className="question-fig">
             <Bar data={plot_result} options={plot_options} />

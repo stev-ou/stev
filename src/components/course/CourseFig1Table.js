@@ -12,7 +12,7 @@ import CourseChip from './CourseChip.js';
 import obj from '../MobileTools.js';
 import lists from '../../course_instructor_list.json';
 import { connect } from 'react-redux';
-import { setSearchType, setSearchText } from '../../actions';
+import { SearchType, setSearchType, setSearchText } from '../../actions';
 
 // Get instructor lists
 const instructor_list = lists['instructors'];
@@ -108,7 +108,7 @@ class CourseFig1Table extends React.Component {
     var instr_uuid = instr_dict[clicked];
     if (typeof instr_uuid != 'undefined') {
       // Now just need to pass to redux to trigger redux state change
-      this.props.setSearchType('INSTRUCTOR');
+      this.props.setSearchType(SearchType.INSTRUCTOR);
       this.props.setSearchText(instr_uuid);
     }
   }
