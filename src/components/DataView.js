@@ -8,11 +8,12 @@ import CourseFig4TableBar from './course/CourseFig4TableBar.js';
 import InstructorFig1Table from './instructor/InstructorFig1Table.js';
 import InstructorFig2Timeseries from './instructor/InstructorFig2Timeseries.js';
 import InstructorFig3TableBar from './instructor/InstructorFig3TableBar.js';
+import { SearchType } from '../actions';
 
 const DataView = props => {
   const uuid = props.search_text;
   const search_type = props.search_type;
-  if (search_type === 'course') {
+  if (search_type === SearchType.COURSE) {
     return (
       <div className="dataview-container">
         <div className="graphical-content">

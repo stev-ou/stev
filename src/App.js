@@ -54,7 +54,6 @@ class App extends React.Component {
         this.props.match.params.search_text
       );
     }
-    console.log(accept_undefined);
     // Check to see if the URL is different from the current state
     if (
       this.props.match.params.search_type !==

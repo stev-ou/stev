@@ -12,9 +12,7 @@ class Header extends React.Component {
   }
 
   handleClick() {
-    if (this.props.valid_search !== 'INVALID') {
-      this.props.setSearchStatus(SearchStatus.INVALID);
-    }
+    this.props.setSearchStatus(SearchStatus.INVALID);
   }
 
   render() {
@@ -25,8 +23,10 @@ class Header extends React.Component {
           <nav id="main_nav" className="navbar navbar-light navbar-expand-lg">
             <div className="container">
               <button
+                type="submit"
                 className="STEV-button navbar-brand"
                 onClick={this.handleClick}
+                style={{outline: "none"}}
               >
                 <b>STEV</b> @ OU
               </button>
