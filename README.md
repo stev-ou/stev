@@ -8,7 +8,6 @@ Website is available [here](http://35.193.175.5).
 
 Api backend is available here [here](http://35.188.130.122/api/v0).  
 
-
 ## Frontend Repo
 
 Bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
