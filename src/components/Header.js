@@ -1,31 +1,31 @@
 import React from 'react';
-import SearchForm from './SearchForm.js';
-import graph from '../img/graph.png';
 import { connect } from 'react-redux';
 import BackButton from './BackButton.js';
-import { setSearchStatus, SearchStatus } from '../actions';
+import { resetToDefaults } from '../actions';
 
 class Header extends React.Component {
   constructor(props) {
     super(props);
     this.handleClick = this.handleClick.bind(this);
+    console.log(this.props)
   }
 
-  handleClick() {
-    this.props.setSearchStatus(SearchStatus.INVALID);
+  handleClick(event) {
+    console.log(event)
+    this.props.resetToDefaults();
+    this.props.history.push('/course')
   }
 
   render() {
-    if (this.props.valid_search === 'INVALID') {
       return (
         <div>
-          <nav id="main_nav" className="navbar navbar-light navbar-expand-lg">
+          <nav id="main_nav" className="navbar navbar-light navbar-expand-lg bg-white fixed-top" style={{overflow: 'visible'}}> 
             <div className="container">
               <button
                 type="submit"
-                className="STEV-button navbar-brand"
+                className="STEV-navbar-button navbar-brand"
                 onClick={this.handleClick}
-                style={{outline: "none"}}
+                style={{outline: "none", fontSize: '1.4rem'}}
               >
                 <b>STEV</b> @ OU
               </button>
@@ -35,71 +35,35 @@ class Header extends React.Component {
                 data-toggle="collapse"
                 data-target="#navbarResponsive"
                 aria-controls="navbarResponsive"
-                aria-expanded="false"
+                aria-expanded="true"
                 aria-label="Toggle navigation"
               >
-                <span className="navbar-toggler-icon" />
+
+                <span className="navbar-toggler-icon"/>
+
               </button>
-              <div className="collapse navbar-collapse" id="navbarResponsive" />
+                  <div class="navbar-collapse collapse w-100 order-3 dual-collapse2" id='navbarResponsive'>
+                    <ul class="navbar-nav ml-auto">
+                  <li className="nav-item navbar-nav mr-auto">
+                    <button type='submit' className="STEV-navbar-button" onClick={this.handleClick}>Home</button>
+                  </li>
+                    <li className="nav-item navbar-nav mr-auto">
+                    <button type='submit' className="STEV-navbar-button" onClick={this.handleClick}>About</button>
+                  </li>
+                  <li className="nav-item navbar-nav mr-auto">
+                    <button type='submit' className="STEV-navbar-button" onClick={this.handleClick} style={{marginRight: 0}}>Get Involved</button>
+                  </li>
+                  </ul>
+                  </div>
+
             </div>
           </nav>
-
-          <div className="App-header">
-            <nav className="navbar sticky-top">
-              <div className="container">
-                <div className="col-xl-6 col-lg-6 col-md-6 col-sm-6 align-self-center">
-                  <h2 id="landing-title">
-                    <b>S</b>tudent-<b>T</b>eacher <b>E</b>valuation <b>V</b>
-                    isualizations at OU
-                  </h2>
-                  <h6 id="landing-subtitle">
-                    Search through large public datasets of previous course and
-                    instructor reviews at the University of Oklahoma
-                  </h6>
-                  <div id="search-form">
-                    <SearchForm />
-                  </div>
-                </div>
-                <div className="col-xl-6 col-lg-6 col-md-6 col-sm-6 align-self-center">
-                  <div id="graph-container">
-                    <img
-                      id="graph"
-                      className="img-fluid mx-auto d-block"
-                      src={graph}
-                      alt="Cool Graph!"
-                    />
-                  </div>
-                </div>
-              </div>
-            </nav>
-          </div>
         </div>
       );
-    } else {
-      return (
-        <nav id="main_nav" className="navbar navbar-light navbar-expand-lg">
-          <div className="container">
-            <button
-              className="STEV-button navbar-brand"
-              onClick={this.handleClick}
-            >
-              <b>STEV</b> @ OU
-            </button>
-            <BackButton />
-          </div>
-        </nav>
-      );
-    }
-  }
+}
 }
 
-const mapStateToProps = state => {
-  return {
-    valid_search: state.valid_search,
-  };
-};
-
 export default connect(
-  mapStateToProps,
-  { setSearchStatus }
+  null,
+  { resetToDefaults }
 )(Header);

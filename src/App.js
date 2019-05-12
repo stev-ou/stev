@@ -5,6 +5,7 @@ import Landing from './components/Landing.js';
 import Header from './components/Header.js';
 import { connect } from 'react-redux';
 import { setStatetoURL, SearchStatus } from './actions';
+import About from './components/About'
 //import Footer from './components/Footer.js';
 
 function initializeReactGA() {
@@ -38,11 +39,22 @@ class App extends React.Component {
       }
     }
 
-    // this.props.history.push(this.props.location.pathname)
+    if (url_state.search_type === undefined) {
+      this.props.history.push(
+        '/' +
+              this.props.current_state.search_type )
+    }
+
   }
-  // ROUTING
-  // Check to see if props.history are the same as state
   componentDidUpdate() {
+    // ROUTING
+    // Check to see if search_type is about or getinvolved
+    if (this.props.match.params.search_type === 'about') {
+      return
+    }
+    else if (this.props.match.params.search_type === 'getinvolved') {
+      return
+    }
     // Establish check for if undefined search_textis okay
     var accept_undefined;
     if (this.props.current_state.search_status === 'VALID') {
@@ -116,12 +128,21 @@ class App extends React.Component {
   }
 
   render() {
+    if (this.props.match.params.search_type === 'about') {
+      return (
+        <div>
+        <Header history={this.props.history}/>
+        <About />
+        </div>
+        )
+    }
+    else {
     return (
       <div>
-        <Header />
+        <Header history={this.props.history}/>
         <Landing />
       </div>
-    );
+    );}
   }
 }
 
