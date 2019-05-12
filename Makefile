@@ -8,3 +8,8 @@ pretty:
 
 image:
 	docker build . -t gcr.io/ou-reviews/stev
+
+.PHONY: clean
+
+clean:
+	rm -rf node_modules
