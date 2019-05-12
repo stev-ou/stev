@@ -176,7 +176,6 @@ class InstructorFig3TableBar extends React.Component {
           return schemePaired[parseInt(2 * rowIndex)]; // returns the color code for this paired analysis
         },
       };
-      console.log(em);
 
       return (
         <div>
