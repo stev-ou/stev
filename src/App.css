@@ -6,7 +6,6 @@ body { padding-top: 100px; }
     margin-top: 10px;
     margin-bottom: 10px;
 }
-
 }
 
 .App {
@@ -40,6 +39,8 @@ body { padding-top: 100px; }
   justify-content: center;
   line-height: 2;
   font-weight:100;
+  box-sizing: border-box;
+  display: block;
 }
 
 #main_hdr .header_form form#form_header [type=radio]:checked+label:before, #main_hdr .header_form form#form_header [type=radio]:not(:checked)+label:before {
@@ -196,8 +197,7 @@ body { padding-top: 100px; }
   background-color: inherit;
   cursor: pointer;
   border-style: none;
-  outline: none;
-  outline-width: 0;
+  outline: 0;
   margin-right: 3em;
   font-size: 1.1rem;
 }

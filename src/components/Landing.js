@@ -13,6 +13,7 @@ class LandingComponent extends React.Component {
       return (
         <div>
           <div className="App-landing">
+          <nav className='navbar sticky-top'>
               <div className="container">
                 <div className="col-xl-6 col-lg-6 col-md-6 col-sm-6 align-self-center">
                   <h2 id="landing-title">
@@ -38,6 +39,7 @@ class LandingComponent extends React.Component {
                   </div>
                 </div>
               </div>
+            </nav>
           </div>
         <div className="App">
           <div className="Info">
