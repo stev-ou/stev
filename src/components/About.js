@@ -12,10 +12,13 @@ class About extends React.Component {
 
   render() {
     return (
-      <div>
-        <h1>
+      <div className='dataview-container'>
+        <h3>
         About the Project
-        </h1>
+        </h3>
+        <p>
+        This page is currently under development.
+        </p>
       </div>
     );
   }
