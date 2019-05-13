@@ -13,9 +13,9 @@ class GetInvolved extends React.Component {
   render() {
     return (
       <div className='dataview-container'>
-        <h3>
-        Get Involved with the project
-        </h3>
+        <h2>
+        Get Involved
+        </h2>
         <p>
         This page is currently under development.
         </p>
