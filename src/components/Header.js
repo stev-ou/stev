@@ -3,18 +3,32 @@ import SearchForm from './SearchForm.js';
 import graph from '../img/graph.png';
 import { connect } from 'react-redux';
 import BackButton from './BackButton.js';
+import { setSearchStatus, SearchStatus } from '../actions';
 
 class Header extends React.Component {
+  constructor(props) {
+    super(props);
+    this.handleClick = this.handleClick.bind(this);
+  }
+
+  handleClick() {
+    this.props.setSearchStatus(SearchStatus.INVALID);
+  }
+
   render() {
     if (this.props.valid_search === 'INVALID') {
-      //this.props.valid_search === 'INVALID' // This for debugging
       return (
         <div>
           <nav id="main_nav" className="navbar navbar-light navbar-expand-lg">
             <div className="container">
-              <a className="navbar-brand" href="./">
+              <button
+                type="submit"
+                className="STEV-button navbar-brand"
+                onClick={this.handleClick}
+                style={{outline: "none"}}
+              >
                 <b>STEV</b> @ OU
-              </a>
+              </button>
               <button
                 className="custom-toggler navbar-toggler"
                 type="button"
@@ -65,22 +79,13 @@ class Header extends React.Component {
       return (
         <nav id="main_nav" className="navbar navbar-light navbar-expand-lg">
           <div className="container">
-            <a className="navbar-brand" href="./">
+            <button
+              className="STEV-button navbar-brand"
+              onClick={this.handleClick}
+            >
               <b>STEV</b> @ OU
-            </a>
+            </button>
             <BackButton />
-            {/*<button
-              className="custom-toggler navbar-toggler"
-              type="button"
-              data-toggle="collapse"
-              data-target="#navbarResponsive"
-              aria-controls="navbarResponsive"
-              aria-expanded="false"
-              aria-label="Toggle navigation"
-            > 
-              <span className="navbar-toggler-icon" />
-            </button> 
-            <div className="collapse navbar-collapse" id="navbarResponsive" /> */}
           </div>
         </nav>
       );
@@ -94,4 +99,7 @@ const mapStateToProps = state => {
   };
 };
 
-export default connect(mapStateToProps)(Header);
+export default connect(
+  mapStateToProps,
+  { setSearchStatus }
+)(Header);

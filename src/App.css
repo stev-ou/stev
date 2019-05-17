@@ -179,6 +179,13 @@
   font-size: 0.75em;
 }
 
+/* STEV button in navbar */
+.STEV-button {
+  background-color: inherit;
+  cursor: pointer;
+  border-style: none;
+}
+
 @media only screen and (max-width: 770px) {
   #landing-title {
     /*color: #62dafb;*/

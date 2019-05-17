@@ -14,12 +14,24 @@ export const setSearchText = content => ({
   text: content,
 });
 
+export const setStatetoURL = content => ({
+  type: 'SET_STATE_TO_URL',
+  search_type: content.search_type,
+  search_text: content.search_text,
+  user_alerted: content.user_alerted,
+  search_status: content.search_status,
+});
+
+export const alertUser = content => ({
+  type: 'ALERT_USER',
+});
+
 export const SearchStatus = {
   VALID: 'VALID',
   INVALID: 'INVALID',
 };
 
 export const SearchType = {
-  COURSE: 'COURSE',
-  INSTRUCTOR: 'INSTRUCTOR',
+  COURSE: 'course',
+  INSTRUCTOR: 'instructor',
 };
