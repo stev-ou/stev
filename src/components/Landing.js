@@ -13,7 +13,7 @@ class LandingComponent extends React.Component {
       return (
         <div>
           <div className="App-landing">
-          <nav className='navbar sticky-top'>
+            <nav className="navbar sticky-top">
               <div className="container">
                 <div className="col-xl-6 col-lg-6 col-md-6 col-sm-6 align-self-center">
                   <h2 id="landing-title">
@@ -41,30 +41,30 @@ class LandingComponent extends React.Component {
               </div>
             </nav>
           </div>
-        <div className="App">
-          <div className="Info">
-            <p style={{ fontSize: '0.8em', paddingTop: '2vw' }}>
-              {' '}
-              <b>Disclaimer</b>: This website is not affiliated with nor
-              approved by the University of Oklahoma. There is no warranty nor
-              any guarantee on the validity of the data.
-            </p>
+          <div className="App">
+            <div className="Info">
+              <p style={{ fontSize: '0.8em', paddingTop: '2vw' }}>
+                {' '}
+                <b>Disclaimer</b>: This website is not affiliated with nor
+                approved by the University of Oklahoma. There is no warranty nor
+                any guarantee on the validity of the data.
+              </p>
+            </div>
+            <a
+              className="App-link"
+              href="https:\/\/www.ou.edu/provost/course-evaluation-data"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              Link to data
+            </a>
           </div>
-          <a
-            className="App-link"
-            href="https:\/\/www.ou.edu/provost/course-evaluation-data"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Link to data
-          </a>
-        </div>
         </div>
       );
     } else {
       return (
         <div>
-          <DisclaimerAlert history = {this.props.history}/>
+          <DisclaimerAlert history={this.props.history} />
           <DataView />
         </div>
       );

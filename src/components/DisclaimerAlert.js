@@ -8,25 +8,24 @@ import { alertUser } from '../actions';
 
 class DisclaimerAlert extends React.Component {
   constructor(props) {
-    super(props)
-    this.navigateAway = this.navigateAway.bind(this)
+    super(props);
+    this.navigateAway = this.navigateAway.bind(this);
   }
   navigateAway() {
-    console.log('Interested in biases')
-    this.props.history.push('/about')
+    console.log('Interested in biases');
+    this.props.history.push('/about');
   }
   createMessage() {
     return (
       <p>
         {' '}
-        Student evaluations of teaching are known to have <a href='http://localhost:3000/about'>inherent biases</a>. {' '}
-        Please consider these biases when using the site.
+        Student evaluations of teaching are known to have{' '}
+        <a href="http://localhost:3000/about">inherent biases</a>. Please
+        consider these biases when using the site.
       </p>
     );
   }
-  componentWillUnmount() {
-
-  }
+  componentWillUnmount() {}
   componentDidMount() {
     if (!this.props.user_alerted) {
       this.props.alertUser();
@@ -44,9 +43,8 @@ class DisclaimerAlert extends React.Component {
   }
   componentDidUpdate() {
     if (!this.props.user_alerted) {
-
-
-  }}
+    }
+  }
 
   render() {
     return null;
