@@ -12,20 +12,16 @@ class DisclaimerAlert extends React.Component {
     this.navigateAway = this.navigateAway.bind(this)
   }
   navigateAway() {
-    console.log('Interested in biases')
     this.props.history.push('/about')
   }
   createMessage() {
     return (
       <p>
         {' '}
-        Student evaluations of teaching are known to have <a href='http://localhost:3000/about'>inherent biases</a>. {' '}
-        Please consider these biases when using the site.
+        Student evaluations of teaching are known to have <a href='/about#SETresearch'>inherent biases</a>. {' '}
+        Please consider the biases when drawing conclusions from the dataset.
       </p>
     );
-  }
-  componentWillUnmount() {
-
   }
   componentDidMount() {
     if (!this.props.user_alerted) {
@@ -42,11 +38,6 @@ class DisclaimerAlert extends React.Component {
       });
     }
   }
-  componentDidUpdate() {
-    if (!this.props.user_alerted) {
-
-
-  }}
 
   render() {
     return null;
