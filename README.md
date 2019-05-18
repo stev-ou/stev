@@ -58,7 +58,7 @@ $ make image
 $ make run
 ```
 
-**Clean:** Remove the node_modules folder
+**Clean:** Remove the node_modules folder (todo: remove old images, etc.)
 ```bash
 $ make clean
 ```
