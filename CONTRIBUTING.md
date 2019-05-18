@@ -66,5 +66,5 @@ open a pull request and our team will review the request. The PR must pass our
 CI/CD pipeline in order to be merged into master. In order to prevent
 unnecessary iterations, ensure all tests have run locally such that other
 functionality can be debugged upon opening the PR. If a number of contributions
-come from a single individual, our admins will gladly make you a mantainer of
-the project if interested. 
+come from an individual, our admins will gladly make you a maintainer of
+the project if there is mutual agreement. 
