@@ -8,12 +8,12 @@ any questions, feel free to drop us a line at
 
 #### Table of Contents
 
-**Contributing***
+Contributing
   * [Bug Reporting](#bug-reporting)
   * [Suggesting Improvements](#suggesting-improvements)
   * [Pull Requests](#pull-requests)
   
-**Getting Started**
+Getting Started
   * [Getting Started](#getting-started)
   * [Design Decisions](#design-decisions)
 
@@ -55,7 +55,7 @@ The backend is a Python service which creates a WSGI web server hosted behind
 Gunicorn. 
 
 In production, the frontend is bundled using Webpack and then served behind an
-Nginx reverse-proxy. This is all containerized and the nginx/react app are
+Nginx reverse-proxy. This is all containerized and the nginx/react app is
 served from Google Cloud Run simply running an instance (or multiple instances)
 of the frontend container. The backend is similarly packaged in a Docker image
 (using a Python base image) and run using Google Cloud Run. 
