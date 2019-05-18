@@ -39,7 +39,7 @@ application.
 
 ## Available Scripts
 
-The makefile includes some useful targets: 
+The makefile includes some useful targets:  
 **Pretty:** Formatting (run from frontend root) [**will override**]
 ```bash
 # commit before 
