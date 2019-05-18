@@ -14,8 +14,9 @@ class DisclaimerAlert extends React.Component {
     return (
       <p>
         {' '}
-        Student evaluations of teaching are known to have <a href='/about#SETresearch'>inherent biases</a>. {' '}
-        Please consider the biases when drawing conclusions from the dataset.
+        Student evaluations of teaching are known to have{' '}
+        <a href="/about#SETresearch">inherent biases</a>. Please consider the
+        biases when drawing conclusions from the dataset.
       </p>
     );
   }
