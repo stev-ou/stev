@@ -1,13 +1,6 @@
 import React from 'react';
-import '../App.css';
 
 class GetInvolved extends React.Component {
-  constructor(props) {
-    super(props);
-  }
-  componentDidMount() {}
-  componentDidUpdate() {}
-
   render() {
     return (
       <div className="dataview-container">

@@ -1,14 +1,13 @@
 import React from 'react';
-import '../App.css';
 
 class About extends React.Component {
   render() {
     return (
       <div className='container'>
       <div className='dataview-container'>
-        <h2 style={{marginBottom: '0.75em'}}>
+        <h1 style={{marginBottom: '0.75em'}}>
         <b>About the Project</b>
-        </h2>
+        </h1>
         <h3>
         Purpose
         </h3>
@@ -26,7 +25,7 @@ class About extends React.Component {
         We wanted to provide a visualization of course reviews that are <i>validated</i>, <i>extensive</i>, and <i>representative</i> of the enrolled students.
         Fortunately, verified student evaluations of teaching are administered through OU at <i>eval.ou.edu</i> at the end of each term. These evaluations are stored by the University and used by departments to analyze their programs and course-instructor matching.
         We believe students at OU should have a right to this information, and have built this website to offer functional, actionable views of the OU course evaluation data. 
-        <a id='SETresearch'>We</a> hope that students will use these evaluations as they plan their courses at OU, and have received unanimous approval from the OU <a href = "http://www.ou.edu/content/dam/sga/common/USG/Minutes/Session%20102/Congress%20Minutes%2004-23-19.pdf#page=5">Undergraduate Student Congress</a> attesting to the student interest in and support for this project.
+        Wehope that students will use these evaluations as they plan their courses at OU, and have received unanimous approval from the <span id = "SETresearch" >OU</span> <a href = "http://www.ou.edu/content/dam/sga/common/USG/Minutes/Session%20102/Congress%20Minutes%2004-23-19.pdf#page=5">Undergraduate Student Congress</a> attesting to the student interest in and support for this project.
         </p>
         <h3 >
         Research on Student-Teacher Evaluations
@@ -51,13 +50,14 @@ class About extends React.Component {
         <li><a href = "https://journals.sagepub.com/doi/full/10.3102/0034654313496870">On the Validity of Student Evaluation of Teaching: The State of the Art, P. Spooren (2013)</a>
         </li>
         </ul>
+        <p>
         <i>* Many referenced articles require subscription to access, but can be viewed through the OU WIFI.</i>
-        </div>
+        </p>
         <h3>
         Contact
         </h3>
         <p>
-        If you would like to get in touch with the students leading this project, please send us an email at <a href = "mailto:contact@evals.info">contact@evals.info</a>.
+        If you would like to get in touch with the project team, please email us at <a href = "mailto:contact@evals.info">contact@evals.info</a>.
         </p>
         <br/>
         <br/>
@@ -65,6 +65,7 @@ class About extends React.Component {
         <br/>
         <br/>
         <br/>
+      </div>
       </div>
     );
   }

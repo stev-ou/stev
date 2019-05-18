@@ -9,7 +9,6 @@ import { alertUser } from '../actions';
 class DisclaimerAlert extends React.Component {
   constructor(props) {
     super(props);
-    this.navigateAway = this.navigateAway.bind(this);
   }
   createMessage() {
     return (
