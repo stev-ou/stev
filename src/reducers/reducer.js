@@ -9,6 +9,8 @@ const initial_state = {
 
 const valid_search = (state = initial_state, action) => {
   switch (action.type) {
+    case 'RESET_TO_DEFAULTS':
+      return { initial_state, user_alerted: state['user_alerted'] };
     case 'SET_SEARCH_STATUS':
       return { ...state, valid_search: action.status };
     case 'SET_SEARCH_TEXT':

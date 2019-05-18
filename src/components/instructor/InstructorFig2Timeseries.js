@@ -40,17 +40,10 @@ class InstructorFig2Timeseries extends React.Component {
       return null;
     } else {
       var result = this.state.result;
-
-      //Use this to randomize color order
-      // colors.sort(function() {
-      //   return 0.5 - Math.random();
-      // });
-
-      // Modify the data to get it into the form needed by the TimeSeriesChart function
       // Build the data object for each Semester in the course over time
-      // Define some commonly accessed objs
       var all_semesters = result['instructor over time']['semesters'];
-
+      var ymin = 5;
+      var ymax = 1;
       var data = { labels: [], datasets: [] };
       data.labels = all_semesters;
 
@@ -64,6 +57,12 @@ class InstructorFig2Timeseries extends React.Component {
         for (var k = 0; k < all_semesters.length; k++) {
           if (valid_semesters.includes(all_semesters[k])) {
             course_data.push(course['ratings'][counter].toFixed(2));
+            if (course['ratings'][counter] < ymin + 0.1) {
+              ymin = Math.floor(course['ratings'][counter] - 0.1);
+            }
+            if (course['ratings'][counter] > ymax + 0.1) {
+              ymax = Math.ceil(course['ratings'][counter] + 0.1);
+            }
             counter += 1;
           } else {
             course_data.push(null);
@@ -109,6 +108,12 @@ class InstructorFig2Timeseries extends React.Component {
         backgroundColor: colors[1],
         borderColor: 'black',
         data: result['dept over time']['ratings'].map(function(each_element) {
+          if (each_element < ymin + 0.1) {
+            ymin = Math.floor(each_element - 0.1);
+          }
+          if (each_element > ymax + 0.1) {
+            ymax = Math.ceil(each_element + 0.1);
+          }
           return Number(each_element.toFixed(2));
         }),
       });
@@ -125,10 +130,14 @@ class InstructorFig2Timeseries extends React.Component {
         scales: {
           yAxes: [
             {
-              ticks: { fontSize: 0.75 * chart_legend_size * em },
+              ticks: {
+                fontSize: 0.75 * chart_legend_size * em,
+                min: ymin,
+                max: ymax,
+              },
               scaleLabel: {
                 display: true,
-                labelString: 'Rating',
+                labelString: 'Rating (1-5)',
                 fontSize: chart_legend_size * em,
               },
             },

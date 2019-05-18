@@ -8,8 +8,6 @@ const Root = ({ store }) => (
   <Provider store={store}>
     <Router>
       <Route path="/:search_type?/:search_text?" component={App} />
-      <Route path="/about" component={null} />
-      <Route path="/getinvolved" component={null} />
     </Router>
   </Provider>
 );
