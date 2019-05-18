@@ -42,8 +42,8 @@ class CourseFig3Timeseries extends React.Component {
     } else {
       var result = this.state.result;
       var all_semesters = result['course over time']['semesters'];
-      var ymin=5;
-      var ymax=1;
+      var ymin = 5;
+      var ymax = 1;
 
       var data = { labels: [], datasets: [] };
       data.labels = all_semesters;
@@ -60,11 +60,15 @@ class CourseFig3Timeseries extends React.Component {
             instr_data.push(
               result['instructors'][j]['ratings'][counter].toFixed(2)
             );
-            if (result['instructors'][j]['ratings'][counter]< (ymin+0.1)) {
-              ymin = Math.floor(result['instructors'][j]['ratings'][counter]- 0.1)
+            if (result['instructors'][j]['ratings'][counter] < ymin + 0.1) {
+              ymin = Math.floor(
+                result['instructors'][j]['ratings'][counter] - 0.1
+              );
             }
-            if (result['instructors'][j]['ratings'][counter]> (ymax+0.1)) {
-              ymax = Math.ceil(result['instructors'][j]['ratings'][counter]+ 0.1)
+            if (result['instructors'][j]['ratings'][counter] > ymax + 0.1) {
+              ymax = Math.ceil(
+                result['instructors'][j]['ratings'][counter] + 0.1
+              );
             }
             counter += 1;
           } else {
@@ -100,12 +104,12 @@ class CourseFig3Timeseries extends React.Component {
         backgroundColor: colors[0],
         borderColor: 'black',
         data: result['course over time']['ratings'].map(function(each_element) {
-            if (each_element < (ymin+0.1)) {
-              ymin = Math.floor(each_element - 0.1)
-            }
-            if (each_element > (ymax+0.1)) {
-              ymax = Math.ceil(each_element+ 0.1)
-            }
+          if (each_element < ymin + 0.1) {
+            ymin = Math.floor(each_element - 0.1);
+          }
+          if (each_element > ymax + 0.1) {
+            ymax = Math.ceil(each_element + 0.1);
+          }
           return Number(each_element.toFixed(2));
         }),
       });
@@ -117,12 +121,12 @@ class CourseFig3Timeseries extends React.Component {
         borderColor: 'black',
         hidden: 'true',
         data: result['dept over time']['ratings'].map(function(each_element) {
-            if (each_element < (ymin+0.1)) {
-              ymin = Math.floor(each_element - 0.1)
-            }
-            if (each_element > (ymax - 0.1)) {
-              ymax = Math.ceil(each_element + 0.1)
-            }
+          if (each_element < ymin + 0.1) {
+            ymin = Math.floor(each_element - 0.1);
+          }
+          if (each_element > ymax - 0.1) {
+            ymax = Math.ceil(each_element + 0.1);
+          }
           return Number(each_element.toFixed(2));
         }),
       });
@@ -139,9 +143,11 @@ class CourseFig3Timeseries extends React.Component {
         scales: {
           yAxes: [
             {
-              ticks: { fontSize: 0.75 * chart_legend_size * em,
-                        min: ymin,
-                        max: ymax},
+              ticks: {
+                fontSize: 0.75 * chart_legend_size * em,
+                min: ymin,
+                max: ymax,
+              },
               scaleLabel: {
                 display: true,
                 labelString: 'Rating (1-5)',

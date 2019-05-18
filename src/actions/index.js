@@ -15,8 +15,8 @@ export const setSearchText = content => ({
 });
 
 export const resetToDefaults = content => ({
-  type: 'RESET_TO_DEFAULTS'
-})
+  type: 'RESET_TO_DEFAULTS',
+});
 
 export const setStatetoURL = content => ({
   type: 'SET_STATE_TO_URL',

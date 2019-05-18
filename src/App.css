@@ -1,10 +1,15 @@
 /* This is for sticky navbar */
-body { padding-top: 100px; }
+body {
+  padding-top: 100px;
+}
+
 @media screen and (max-width: 768px) {
-    body { padding-top: 80px; }
-    .navbar-nav > .nav-item{
-    margin-top: 10px;
-    margin-bottom: 10px;
+  body {
+  padding-top: 80px;
+}
+  .navbar-nav > .nav-item {
+  margin-top: 10px;
+  margin-bottom: 10px;
 }
 }
 

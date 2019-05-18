@@ -1,7 +1,6 @@
 import React from 'react';
 import '../App.css';
 
-
 class About extends React.Component {
   render() {
     return (
@@ -71,4 +70,4 @@ class About extends React.Component {
   }
 }
 
-export default About
+export default About;

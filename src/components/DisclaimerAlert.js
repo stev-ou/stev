@@ -8,11 +8,8 @@ import { alertUser } from '../actions';
 
 class DisclaimerAlert extends React.Component {
   constructor(props) {
-    super(props)
-    this.navigateAway = this.navigateAway.bind(this)
-  }
-  navigateAway() {
-    this.props.history.push('/about')
+    super(props);
+    this.navigateAway = this.navigateAway.bind(this);
   }
   createMessage() {
     return (
@@ -23,6 +20,7 @@ class DisclaimerAlert extends React.Component {
       </p>
     );
   }
+
   componentDidMount() {
     if (!this.props.user_alerted) {
       this.props.alertUser();
