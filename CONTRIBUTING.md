@@ -25,7 +25,7 @@ include recommendations to address the issue.
 ## Suggesting Improvements
 Similar to bug reports, suggesting improvements or new features is also handled
 via GitHub. In order to file a suggestion/enhancement, open an issue in
-[GitHub](https://github.com/stev-ou/stev/issues) and assign the label "enhancement". 
+[GitHub](https://github.com/stev-ou/stev-api/issues) and assign the label "enhancement". 
 
 ## Getting Started
 The most involved way to contribute is adding to our source code. If you have
