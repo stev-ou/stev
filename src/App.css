@@ -89,7 +89,7 @@ body {
 }
 
 .App-link {
-  color:  #0645AD;
+  font-size: 0.9em;
   display: flex;
   align-items: center;
   justify-content: center;

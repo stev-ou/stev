@@ -14,7 +14,7 @@ class LandingComponent extends React.Component {
         <div>
           <div className="App-landing">
             <nav className="navbar sticky-top">
-              <div className="container">
+              <div className="container" style={{ paddingTop: '1vw' }}>
                 <div className="col-xl-6 col-lg-6 col-md-6 col-sm-6 align-self-center">
                   <h2 id="landing-title">
                     <b>S</b>tudent-<b>T</b>eacher <b>E</b>valuation <b>V</b>
@@ -52,11 +52,11 @@ class LandingComponent extends React.Component {
             </div>
             <a
               className="App-link"
-              href="https:\/\/www.ou.edu/provost/course-evaluation-data"
+              href="https://www.ou.edu/provost/course-evaluation-data"
               target="_blank"
               rel="noopener noreferrer"
             >
-              Link to data
+              Link to Dataset
             </a>
           </div>
         </div>
