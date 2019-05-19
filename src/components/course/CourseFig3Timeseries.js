@@ -1,6 +1,6 @@
 import React from 'react';
 import { Bar } from 'react-chartjs-2';
-// import * as Math from 'mathjs';
+import * as Math from 'mathjs';
 import { api_endpoint, colors } from '../../constants.js';
 import obj from '../MobileTools.js';
 
@@ -41,15 +41,9 @@ class CourseFig3Timeseries extends React.Component {
       return null;
     } else {
       var result = this.state.result;
-      // colors.sort(function() {
-      //   return 0.5 - Math.random();
-      // });
-      //Use this to randomize color order
-      // Modify the data to get it into the form needed by the TimeSeriesChart function
-
-      //Build the data object for each Semester in the course over time
-      // Define some commonly accessed objs
       var all_semesters = result['course over time']['semesters'];
+      var ymin = 5;
+      var ymax = 1;
 
       var data = { labels: [], datasets: [] };
       data.labels = all_semesters;
@@ -60,12 +54,22 @@ class CourseFig3Timeseries extends React.Component {
         var instr_data = [];
         var valid_semesters = result['instructors'][j]['semesters'];
         var counter = 0;
-        // Check through each semester that this course existed, and add this instructors rating if e
+        // Check through each semester that this course existed, and add this instructors rating if it exists
         for (var k = 0; k < all_semesters.length; k++) {
           if (valid_semesters.includes(all_semesters[k])) {
             instr_data.push(
               result['instructors'][j]['ratings'][counter].toFixed(2)
             );
+            if (result['instructors'][j]['ratings'][counter] < ymin + 0.1) {
+              ymin = Math.floor(
+                result['instructors'][j]['ratings'][counter] - 0.1
+              );
+            }
+            if (result['instructors'][j]['ratings'][counter] > ymax + 0.1) {
+              ymax = Math.ceil(
+                result['instructors'][j]['ratings'][counter] + 0.1
+              );
+            }
             counter += 1;
           } else {
             instr_data.push(null);
@@ -100,6 +104,12 @@ class CourseFig3Timeseries extends React.Component {
         backgroundColor: colors[0],
         borderColor: 'black',
         data: result['course over time']['ratings'].map(function(each_element) {
+          if (each_element < ymin + 0.1) {
+            ymin = Math.floor(each_element - 0.1);
+          }
+          if (each_element > ymax + 0.1) {
+            ymax = Math.ceil(each_element + 0.1);
+          }
           return Number(each_element.toFixed(2));
         }),
       });
@@ -111,6 +121,12 @@ class CourseFig3Timeseries extends React.Component {
         borderColor: 'black',
         hidden: 'true',
         data: result['dept over time']['ratings'].map(function(each_element) {
+          if (each_element < ymin + 0.1) {
+            ymin = Math.floor(each_element - 0.1);
+          }
+          if (each_element > ymax - 0.1) {
+            ymax = Math.ceil(each_element + 0.1);
+          }
           return Number(each_element.toFixed(2));
         }),
       });
@@ -127,10 +143,14 @@ class CourseFig3Timeseries extends React.Component {
         scales: {
           yAxes: [
             {
-              ticks: { fontSize: 0.75 * chart_legend_size * em },
+              ticks: {
+                fontSize: 0.75 * chart_legend_size * em,
+                min: ymin,
+                max: ymax,
+              },
               scaleLabel: {
                 display: true,
-                labelString: 'Rating',
+                labelString: 'Rating (1-5)',
                 fontSize: chart_legend_size * em,
               },
             },

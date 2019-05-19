@@ -12,13 +12,15 @@ class DisclaimerAlert extends React.Component {
       <p>
         {' '}
         Student evaluations of teaching are known to have{' '}
-        <a href="https://google.com"> inherent biases. </a>. I'll write this
-        better later. Please use this data as
+        <a href="/about#SETresearch">inherent biases</a>. Please consider the
+        biases when drawing conclusions from the dataset.
       </p>
     );
   }
+
   componentDidMount() {
     if (!this.props.user_alerted) {
+      this.props.alertUser();
       confirmAlert({
         title: 'Data Disclaimer',
         message: this.createMessage(),
@@ -30,7 +32,6 @@ class DisclaimerAlert extends React.Component {
         closeOnClickOutside: false,
       });
     }
-    this.props.alertUser();
   }
 
   render() {

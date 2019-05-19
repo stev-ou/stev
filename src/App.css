@@ -1,13 +1,28 @@
+/* This is for sticky navbar */
+body {
+  padding-top: 100px;
+}
+
+@media screen and (max-width: 768px) {
+  body {
+  padding-top: 80px;
+}
+  .navbar-nav > .nav-item {
+  margin-top: 10px;
+  margin-bottom: 10px;
+}
+}
+
 .App {
     margin-top:5em;
     padding-top: 6vw;
-    position: relative;
     min-height: 100%;
 }
 
 #main_nav {
     box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.2);/*, 0 6px 20px 0 rgba(0, 0, 0, 0.19);*/
     margin-bottom: 3em;
+    z-index: 10;
 }
 
 #graph {
@@ -22,13 +37,15 @@
     margin-bottom: 15px;
 }
 
-.App-header {
+.App-landing {
   font-family: 'Nunito', sans-serif;
   flex-direction: column;
   align-items: center;
   justify-content: center;
   line-height: 2;
   font-weight:100;
+  box-sizing: border-box;
+  display: block;
 }
 
 #main_hdr .header_form form#form_header [type=radio]:checked+label:before, #main_hdr .header_form form#form_header [type=radio]:not(:checked)+label:before {
@@ -72,7 +89,7 @@
 }
 
 .App-link {
-  color:  #0645AD;
+  font-size: 0.9em;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -138,6 +155,7 @@
 .dataview-container {
   padding-left: 12vw;
   padding-right: 12vw;
+  z-index: 0;
 }
 
 /* Css for table1, course */
@@ -179,11 +197,21 @@
   font-size: 0.75em;
 }
 
-/* STEV button in navbar */
-.STEV-button {
+/* STEV button in navbar and other links */
+.STEV-navbar-button {
   background-color: inherit;
   cursor: pointer;
   border-style: none;
+  outline: 0;
+  margin-right: 3em;
+  font-size: 1.1rem;
+}
+
+.quote {
+  text-align: center !important;
+}
+.justify-page {
+  text-align: justify;
 }
 
 @media only screen and (max-width: 770px) {
@@ -225,8 +253,8 @@
 }
 
   .dataview-container {
-  padding-left: 8vw;
-  padding-right: 8vw;
+  padding-left: 4vw;
+  padding-right: 4vw;
 }
 .table-header {
   font-size: 5em;
