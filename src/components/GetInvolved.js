@@ -12,8 +12,8 @@ const GetInvolved = props => (
         opportunities to contribute, no matter your skillset. Those with
         software development experience are encouraged to jump into the code and submit
         a pull request (more on that <a href="#pull-requests">below</a>). For those with non-technical backgrounds, there are still a number of ways to
-        contribute to the project through sharing the website with other OU students, finding bugs,
-        or suggesting content improvements. A recommended ways to get involved are listed below.{' '}
+        contribute to the project through sharing the website with OU students, finding bugs,
+        or suggesting content improvements. The recommended ways to get involved are listed below.{' '}
       </p>
       <h3>Current Contribution Suggestions</h3>
       <p>
@@ -24,7 +24,7 @@ const GetInvolved = props => (
           <b>Sharing the Website:</b> The easiest way for you to contribute to and
           be a part of this project is to share the link with your friends and peers at OU. The more people 
           who are behind this project, the more support we will have in encouraging OU administrators to 
-          provide more valuable datasets toward improving the website's features.
+          provide broader datasets toward improving the website's features.
         </li>
         <li>
           <b>Bug Tracking:</b> If you discover a bug with the application, we
