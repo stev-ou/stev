@@ -33,7 +33,11 @@ const GetInvolved = props => (
           <b>Bug Tracking:</b> If you discover a bug with the application, we
           would appreciate your feedback so the bug can be fixed. In order to
           report a bug, please create an issue on our{' '}
-          <a target="_blank" href="https://github.com/stev-ou/stev/issues">
+          <a
+            target="_blank"
+            rel="noopener noreferrer"
+            href="https://github.com/stev-ou/stev/issues"
+          >
             GitHub page
           </a>
           , including in the description the steps required to reproduce the
@@ -41,7 +45,7 @@ const GetInvolved = props => (
         </li>
         <li>
           <b>Lack of Data:</b> If you notice a lack of data (you search for a
-          course/instructor and it does not exist in our system), create an
+          course/ instructor and it does not exist in our system), create an
           issue in the same way as above, including the data you expected and
           what you received (if any). This is especially valuable since our team
           has continually attempted to work with the university, with very
@@ -68,7 +72,6 @@ const GetInvolved = props => (
           <a
             rel="noopener noreferrer"
             target="_blank"
-            rel="noopener noreferrer"
             href="https://github.com/stev-ou"
           >
             GitHub
