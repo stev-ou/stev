@@ -7,9 +7,6 @@ import { connect } from 'react-redux';
 import { alertUser } from '../actions';
 
 class DisclaimerAlert extends React.Component {
-  constructor(props) {
-    super(props);
-  }
   createMessage() {
     return (
       <p>
