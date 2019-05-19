@@ -89,7 +89,7 @@ body {
 }
 
 .App-link {
-  color:  #0645AD;
+  font-size: 0.9em;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -207,6 +207,13 @@ body {
   font-size: 1.1rem;
 }
 
+.quote {
+  text-align: center !important;
+}
+.justify-page {
+  text-align: justify;
+}
+
 @media only screen and (max-width: 770px) {
   #landing-title {
     /*color: #62dafb;*/
@@ -246,8 +253,8 @@ body {
 }
 
   .dataview-container {
-  padding-left: 8vw;
-  padding-right: 8vw;
+  padding-left: 4vw;
+  padding-right: 4vw;
 }
 .table-header {
   font-size: 5em;

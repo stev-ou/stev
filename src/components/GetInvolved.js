@@ -1,9 +1,8 @@
 import React from 'react';
-import '../App.css';
 
 const GetInvolved = props => (
   <div className="container">
-    <div className="dataview-container">
+    <div className="dataview-container justify-page">
       <h1 style={{ marginBottom: '.75em' }}>
         <b>Get Involved</b>
       </h1>

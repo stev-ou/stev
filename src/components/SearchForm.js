@@ -64,7 +64,7 @@ class SearchForm extends React.Component {
     return (
       <div className="row" style={{ zIndex: 2 }}>
         <div className="col-lg-12">
-          <form className="validate" onSubmit={this.handleSubmit}>
+          <form onSubmit={this.handleSubmit}>
             {/*<div className="input-group mb-3">*/}
             <SearchAutocomplete
               className="w-100"

@@ -145,7 +145,10 @@ class SearchAutocomplete extends React.Component {
     }
 
     return (
-      <div className="form-control w-80 header-elem" style={{ padding: '0em' }}>
+      <div
+        className="form-control w-80 header-elem"
+        style={{ padding: '0em', border: 'None' }}
+      >
         <Select
           className={'search-form'}
           options={choices}
