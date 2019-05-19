@@ -1,42 +1,66 @@
 # STEV 
-[![Build Status](https://travis-ci.com/stev-ou/stev.svg?branch=master)](https://travis-ci.com/stev-ou/stev)  
+[![Build
+Status](https://travis-ci.com/stev-ou/stev.svg?branch=master)](https://travis-ci.com/stev-ou/stev)  
 Student-Teacher Evaluation Visualization -> "Steve"  
 
-A project to create a better data visualization for anonymous student reviews of professors/courses/departments at the University of Oklahoma. The reviews are currently available in individual, non-queryable pdfs (a collection of thousands of pdfs) at the following website - http://www.ou.edu/provost/course-evaluation-data. We want to create a data visualization to present this information and make it accessible to students.  
+A project to create a better data visualization for anonymous student reviews of
+professors/courses/departments at the University of Oklahoma. The reviews are
+currently available in individual, non-queryable pdfs (a collection of thousands
+of pdfs) at the following website -
+http://www.ou.edu/provost/course-evaluation-data. We want to create a data
+visualization to present this information and make it accessible to students.  
 
-Website is available [here](http://35.193.175.5).  
+## Building
 
-Api backend is available here [here](http://35.188.130.122/api/v0).  
+The application was bootstrapped with [Create React
+App](https://github.com/facebook/create-react-app).
+In order to build and run the application, ensure the following are installed:
 
-## Frontend Repo
+```
+GNU Make
+Nodejs
+npm
+```
 
-Bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+After cloning the repository, change directory into `stev` and run:
+
+``` bash
+$ make install
+```
+
+## Running
+
+In the root directory, you can: 
+- Begin development, with `npm start` or `yarn start`.
+- Create a production bundle with `npm run build` or `yarn build`.
+
+Navigate to `localhost:3000` to view the development server running the
+application. 
 
 ## Available Scripts
 
-Formatting (run from frontend root) [**will override**]
+The makefile includes some useful targets:  
+**Pretty:** Formatting (run from frontend root) [**will override**]
 ```bash
 # commit before 
 $ make pretty
-# review changes
-$ git diff 
 ```
 
-In the project directory, you can run: **use yarn**
-- To begin the development, run `npm start` or `yarn start`.
-- To create a production bundle, use `npm run build` or `yarn build`.
-
-## Prereq's
-- run `npm install` to install deps
-
-## Deploying
-
-Manually:
-
+**Image:** Create a docker image
 ```bash
-$ docker build . -t samjett/ou-reviews
-$ docker push samjett/ou-reviews:latest
-$ docker run -d -p 3000:80 samjett/ou-reviews:latest
+# REQUIRES DOCKER
+$ make image
 ```
 
-Now Makefile includes appropriate targets.
+**Run:** Run a container of the entire frontend application
+```bash
+# REQUIRES DOCKER
+$ make run
+```
+
+**Clean:** Remove the node_modules folder (todo: remove old images, etc.)
+```bash
+$ make clean
+```
+
+

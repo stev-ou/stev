@@ -1,3 +1,7 @@
+.PHONY: install
+install:
+	bash install.sh
+
 .PHONY: pretty
 
 pretty: 
@@ -8,3 +12,12 @@ pretty:
 
 image:
 	docker build . -t gcr.io/ou-reviews/stev
+
+.PHONY: run
+run: image
+	docker run -d -p 3000:80 gcr.io/ou-reviews/stev:latest
+
+.PHONY: clean
+
+clean:
+	rm -rf node_modules
