@@ -13,7 +13,7 @@ import json
 import requests
 
 # Define the base api string
-base_api_string = 'http://35.188.130.122/api/v0/'
+base_api_string = 'http://api.evals.info/api/v0/'
 
 def get_lists():
 	# Define the json object
