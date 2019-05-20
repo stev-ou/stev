@@ -15,7 +15,7 @@ image:
 
 .PHONY: run
 run: image
-	docker run -d -p 3000:80 gcr.io/ou-reviews/stev:latest
+	docker run -d -p 3000:8080 gcr.io/ou-reviews/stev:latest
 
 .PHONY: clean
 
