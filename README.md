@@ -12,14 +12,20 @@ visualization to present this information and make it accessible to students.
 
 ## Building
 
-The application was bootstrapped with [Create React
-App](https://github.com/facebook/create-react-app).
 In order to build and run the application, ensure the following are installed:
 
 ```
-GNU Make
-Nodejs
-npm
+GNU Make (v3.81)
+Nodejs (v10.x or higher)
+npm (v6.x or higher)
+```
+
+The following tools are also required due to upstream errors in pngquant lib 
+(in order to build from source):
+
+```
+gcc
+libpng-dev
 ```
 
 After cloning the repository, change directory into `stev` and run:
@@ -27,6 +33,8 @@ After cloning the repository, change directory into `stev` and run:
 ``` bash
 $ make install
 ```
+
+In order to build images/containers, you must also install `docker`.
 
 ## Running
 
@@ -63,4 +71,7 @@ $ make run
 $ make clean
 ```
 
+## Misc
 
+The application was bootstrapped with [Create React
+App](https://github.com/facebook/create-react-app).

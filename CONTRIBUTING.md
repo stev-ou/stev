@@ -36,7 +36,8 @@ then clone your forked repository. After obtaining a local copy of the source, f
 instructions in the README to build the application. Upon successfully building
 the application, you can branch from master to implement a new feature or bug
 fix. Once you have completed your desired changes and tested your code, open a pull 
-request for others to review.
+request for others to review. If it is your first time contributing, check our GitHub 
+for [good first issues](https://github.com/stev-ou/stev/contribute).
 
 ## Design Overview
 In order to provide a minimal foundation for understanding the source, here lies
