@@ -34,6 +34,8 @@ After cloning the repository, change directory into `stev` and run:
 $ make install
 ```
 
+In order to build images/containers, you must also install `docker`.
+
 ## Running
 
 In the root directory, you can: 
