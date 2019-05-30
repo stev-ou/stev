@@ -20,7 +20,7 @@ var api_endpoint;
 if (!DEBUG) {
   api_endpoint = 'https://stev-api-h74xgrgcea-uc.a.run.app/api/v0/';
 } else {
-  api_endpoint = 'http://127.0.0.1/api/v0/';
+  api_endpoint = 'http://127.0.0.1:5050/api/v0/';
 }
 
 export { api_endpoint };
