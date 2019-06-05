@@ -18,7 +18,7 @@ class LandingComponent extends React.Component {
                 <div className="col-xl-6 col-lg-6 col-md-6 col-sm-6 align-self-center">
                   <h2 id="landing-title">
                     <b>S</b>tudent-<b>T</b>eacher <b>E</b>valuation <b>V</b>
-                    isualizations at OU
+                    isualizations at <b>OU</b>
                   </h2>
                   <h6 id="landing-subtitle">
                     Search through large public datasets of previous course and

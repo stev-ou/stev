@@ -4,10 +4,10 @@ import { withStyles } from '@material-ui/core/styles';
 import Chip from '@material-ui/core/Chip';
 import Tooltip from '@material-ui/core/Tooltip';
 import obj from '../MobileTools.js';
-import { api_endpoint } from '../../constants.js';
+import { api_endpoint, dept_chip_colors } from '../../constants.js';
 
 const mobile = obj['mobile'];
-var justify = 'left';
+var justify = 'right';
 var loc = 'right'
 var transparency = '0.87'
 if (mobile) {
@@ -22,8 +22,8 @@ const styles = theme => ({
     justifyContent: justify,
     textAlign: justify,
     flexWrap: 'wrap',
-    paddingTop: '0.15em',
-    paddingBottom: '0.55em',
+    paddingTop: '0.05em',
+    paddingBottom: '0.25em',
   },
 
   chip: {
@@ -39,7 +39,7 @@ const styles = theme => ({
   htmlTooltip: {
     backgroundColor: 'rgba(245,245,249,'+transparency+')',
     color: 'rgba(0, 0, 0, '+transparency+')',
-    maxWidth: '20em',
+    maxWidth: '24em',
     fontSize: theme.typography.pxToRem(14),
     border: '1px solid #dadde9',
     '& b': {
@@ -69,13 +69,10 @@ class InstructorChips extends React.Component {
     if (!this.state.loadedAPI) {
       return null;
     } else {
-
     const data = this.state.data
-    console.log(data)
     const classes =this.state.classes
   // YEARS CHIP DETAILS
   // Define the Number of Years Chip Label
-  const years_label = years => years.toString()+' Years at OU';
   const bg_color_dict = {
     1: '#40BF42',
     2: '#ba68c8',
@@ -92,21 +89,34 @@ class InstructorChips extends React.Component {
   } else {
     return '#FF4E4E'
   }}
-  const years_tooltip = sem => 'According to our dataset, this instructor has taught at OU since '+sem+ '.'
   const years = data['num_years']
-  const y_label = years_label(years);
+  const y_label = years.toString()+' Years Teaching at OU'
   const y_color = years_color(years);
-  const y_tooltip = years_tooltip(data['most_recent_semester']);
+  const y_tooltip = 'According to our limited dataset, '+data['name']+' has taught at OU since '+data['most_recent_semester']+ '.'
 
   // DEPARTMENT CHIP DETAILS
-  var depts_chip;
+  var depts_chips= [];
+  var d;
   const depts = data['depts_taught']
   for (var i=0; i<depts.length;i++) {
-    console.log(depts[i])
-    
+    d = depts[i]
+    depts_chips.push((<Tooltip title={data['name']+' has historically taught in the '+d+ ' department/subject.'} 
+          classes={{
+            popper: classes.htmlPopper,
+            tooltip: classes.htmlTooltip,
+          }}
+          placement = {loc} key = {i.toString()}>
+          <Chip
+            label={d}
+            className={classes.chip}
+            variant="outlined"
+            style={{ color: '#ffffff', backgroundColor: dept_chip_colors[d]}}
+          />
+        </Tooltip>))
   }
-  const myhtml = (<h2> Can I store this way? </h2>)
+
   return (
+    <div>
     <div className="chip-container">
       <div className={classes.root}>
         <Tooltip
@@ -124,9 +134,14 @@ class InstructorChips extends React.Component {
             style={{ color: '#ffffff', backgroundColor: y_color}}
           />
         </Tooltip>
-        {myhtml}
+        </div>
+        </div>
+        <div className="chip-container">
+        <div className={classes.root}>
+        {depts_chips}
+        </div>
+        </div>
       </div>
-    </div>
   );
 }}}
 

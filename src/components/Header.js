@@ -52,9 +52,9 @@ class Header extends React.Component {
               type="submit"
               id="STEV"
               className="STEV-navbar-button navbar-brand"
-              style={{ outline: 'none', fontSize: '1.4rem' }}
+              style={{ outline: 'none', fontSize: '1.5rem', fontWeight: 700}}
             >
-              <b>STEV</b> @ OU
+              STEV @ OU
             </button>
             <button
               id="hamburger"
