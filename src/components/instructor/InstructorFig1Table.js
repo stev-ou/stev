@@ -10,6 +10,7 @@ import Paper from '@material-ui/core/Paper';
 import { api_endpoint } from '../../constants.js';
 import obj from '../MobileTools.js';
 import lists from '../../course_instructor_list.json';
+import InstructorChips from './InstructorChips.js';
 import { connect } from 'react-redux';
 import { SearchType, setSearchType, setSearchText } from '../../actions';
 
@@ -123,7 +124,7 @@ class InstructorFig1Table extends React.Component {
           item['course name'];
         item['id'] = i + 1;
       });
-      return <MyTable data={table_data} handleClick={this.handleClick} />;
+      return <MyTable uuid={this.state.uuid} data={table_data} handleClick={this.handleClick} />;
     }
   }
 }
@@ -136,6 +137,7 @@ class CustomizedTable extends React.Component {
       classes: props.classes,
       data: props.data,
       rows: props.data.courses,
+      uuid:props.uuid
     };
   }
 
@@ -149,6 +151,7 @@ class CustomizedTable extends React.Component {
           {' '}
           {data['instructor name']}
         </h1>
+        <InstructorChips uuid = {this.state.uuid} />
         <h2 className="subtitle">
           {data['instructor name']} has taught these courses in the
           <b> previous 3 years</b>

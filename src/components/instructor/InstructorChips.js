@@ -1,0 +1,137 @@
+import React from 'react';
+import PropTypes from 'prop-types';
+import { withStyles } from '@material-ui/core/styles';
+import Chip from '@material-ui/core/Chip';
+import Tooltip from '@material-ui/core/Tooltip';
+import obj from '../MobileTools.js';
+import { api_endpoint } from '../../constants.js';
+
+const mobile = obj['mobile'];
+var justify = 'left';
+var loc = 'right'
+var transparency = '0.87'
+if (mobile) {
+  justify = 'center';
+  transparency = '1.0'
+  loc = 'bottom'
+}
+
+const styles = theme => ({
+  root: {
+    display: 'flex',
+    justifyContent: justify,
+    textAlign: justify,
+    flexWrap: 'wrap',
+    paddingTop: '0.15em',
+    paddingBottom: '0.55em',
+  },
+
+  chip: {
+    margin: theme.spacing.unit,
+    color: 'primary',
+    fontSize: '1.1em',
+  },
+  palette: {
+    primary: {
+      main: '#4abcds',
+    },
+  },
+  htmlTooltip: {
+    backgroundColor: 'rgba(245,245,249,'+transparency+')',
+    color: 'rgba(0, 0, 0, '+transparency+')',
+    maxWidth: '20em',
+    fontSize: theme.typography.pxToRem(14),
+    border: '1px solid #dadde9',
+    '& b': {
+      fontWeight: theme.typography.fontWeightMedium,
+    },
+  },
+});
+// This is the function that will fetch the desired data from the api
+const API = api_endpoint + 'instructors/';
+
+class InstructorChips extends React.Component {
+  constructor(props) {
+    super(props)
+    //Define classes as props
+    const {classes}=props
+    this.state = {'data':{}, 'loadedAPI':false, 'classes':classes, 'uuid':props.uuid}
+  }
+
+  componentDidMount() {
+    // This will call the api when the component "Mounts", i.e. when the page is accessed
+    fetch(API + this.state.uuid.toString() + '/chip')
+      .then(response => response.json())
+      .then(data => this.setState({ data: data.result, loadedAPI: true }));
+  }
+
+  render() {
+    if (!this.state.loadedAPI) {
+      return null;
+    } else {
+
+    const data = this.state.data
+    console.log(data)
+    const classes =this.state.classes
+  // YEARS CHIP DETAILS
+  // Define the Number of Years Chip Label
+  const years_label = years => years.toString()+' Years at OU';
+  const bg_color_dict = {
+    1: '#40BF42',
+    2: '#ba68c8',
+    3: '#439ad2',
+    4: '#697689',
+    5: '#6699CC',
+    6: '#4E8098',
+    7: '#FF8C42',
+    8: '#5555F2',
+    9: '#44C29A',
+  };
+  const years_color = years => {if (years<10) {
+    return bg_color_dict[years]
+  } else {
+    return '#FF4E4E'
+  }}
+  const years_tooltip = sem => 'According to our dataset, this instructor has taught at OU since '+sem+ '.'
+  const years = data['num_years']
+  const y_label = years_label(years);
+  const y_color = years_color(years);
+  const y_tooltip = years_tooltip(data['most_recent_semester']);
+
+  // DEPARTMENT CHIP DETAILS
+  var depts_chip;
+  const depts = data['depts_taught']
+  for (var i=0; i<depts.length;i++) {
+    console.log(depts[i])
+    
+  }
+  const myhtml = (<h2> Can I store this way? </h2>)
+  return (
+    <div className="chip-container">
+      <div className={classes.root}>
+        <Tooltip
+          title={y_tooltip}
+          classes={{
+            popper: classes.htmlPopper,
+            tooltip: classes.htmlTooltip,
+          }}
+          placement= {loc}
+        >
+          <Chip
+            label={y_label}
+            className={classes.chip}
+            variant="outlined"
+            style={{ color: '#ffffff', backgroundColor: y_color}}
+          />
+        </Tooltip>
+        {myhtml}
+      </div>
+    </div>
+  );
+}}}
+
+InstructorChips.propTypes = {
+  classes: PropTypes.object.isRequired,
+};
+
+export default withStyles(styles)(InstructorChips);
