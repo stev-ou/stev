@@ -13,7 +13,7 @@ import obj from '../MobileTools.js';
 import lists from '../../course_instructor_list.json';
 import { connect } from 'react-redux';
 import { SearchType, setSearchType, setSearchText } from '../../actions';
-import WaitSpinner from '../WaitSpinner'
+import WaitSpinner from '../WaitSpinner';
 
 // Get instructor lists
 const instructor_list = lists['instructors'];
@@ -36,12 +36,12 @@ const CustomTableCell = withStyles(theme => ({
     fontWeight: 'bold',
     padding: theme.spacing(table_padding),
     paddingTop: theme.spacing(0.5 * table_padding),
-    paddingBottom:theme.spacing(0.5 * table_padding),
+    paddingBottom: theme.spacing(0.5 * table_padding),
   },
   body: {
     padding: theme.spacing(table_padding),
     paddingTop: theme.spacing(0.5 * table_padding),
-    paddingBottom:theme.spacing(0.5 * table_padding),
+    paddingBottom: theme.spacing(0.5 * table_padding),
   },
 }))(TableCell);
 
@@ -116,7 +116,7 @@ class CourseFig1Table extends React.Component {
 
   render() {
     if (!this.state.loadedAPI) {
-      return <WaitSpinner wait={2000}/> // This controls how long to wait before displaying spinner
+      return <WaitSpinner wait={2000} />; // This controls how long to wait before displaying spinner
     } else {
       let MyTable = withStyles(styles)(CustomizedTable); // This is important
       // Get the data to pass to the table

@@ -13,7 +13,7 @@ import lists from '../../course_instructor_list.json';
 import InstructorChips from './InstructorChips.js';
 import { connect } from 'react-redux';
 import { SearchType, setSearchType, setSearchText } from '../../actions';
-import WaitSpinner from '../WaitSpinner'
+import WaitSpinner from '../WaitSpinner';
 
 // Get course list
 const course_list = lists['courses'];
@@ -36,12 +36,12 @@ const CustomTableCell = withStyles(theme => ({
     fontWeight: 'bold',
     padding: theme.spacing(table_padding),
     paddingTop: theme.spacing(0.5 * table_padding),
-    paddingBottom:theme.spacing(0.5 * table_padding),
+    paddingBottom: theme.spacing(0.5 * table_padding),
   },
   body: {
     padding: theme.spacing(table_padding),
     paddingTop: theme.spacing(0.5 * table_padding),
-    paddingBottom:theme.spacing(0.5 * table_padding),
+    paddingBottom: theme.spacing(0.5 * table_padding),
   },
 }))(TableCell);
 
@@ -109,7 +109,7 @@ class InstructorFig1Table extends React.Component {
 
   render() {
     if (!this.state.loadedAPI) {
-      return (<WaitSpinner wait={2000}/>) // This controls how long to wait before displaying spinner
+      return <WaitSpinner wait={2000} />; // This controls how long to wait before displaying spinner
     } else {
       let MyTable = withStyles(styles)(CustomizedTable); // This is important
       // Get the data ready to pass to the table by rounding and adding ids
@@ -125,7 +125,13 @@ class InstructorFig1Table extends React.Component {
           item['course name'];
         item['id'] = i + 1;
       });
-      return <MyTable uuid={this.state.uuid} data={table_data} handleClick={this.handleClick} />;
+      return (
+        <MyTable
+          uuid={this.state.uuid}
+          data={table_data}
+          handleClick={this.handleClick}
+        />
+      );
     }
   }
 }
@@ -138,7 +144,7 @@ class CustomizedTable extends React.Component {
       classes: props.classes,
       data: props.data,
       rows: props.data.courses,
-      uuid:props.uuid
+      uuid: props.uuid,
     };
   }
 
@@ -152,7 +158,7 @@ class CustomizedTable extends React.Component {
           {' '}
           {data['instructor name']}
         </h1>
-        <InstructorChips uuid = {this.state.uuid} />
+        <InstructorChips uuid={this.state.uuid} />
         <h2 className="subtitle">
           {data['instructor name']} has taught these courses in the
           <b> previous 3 years</b>

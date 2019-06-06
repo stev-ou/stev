@@ -7,7 +7,7 @@ import obj from '../MobileTools.js';
 
 const mobile = obj['mobile'];
 var justify = 'left';
-var loc = 'right'
+var loc = 'right';
 if (mobile) {
   justify = 'center';
   loc = 'bottom';
@@ -15,10 +15,10 @@ if (mobile) {
 
 const styles = theme => ({
   root: {
-    opacity:1,
+    opacity: 1,
     display: 'flex',
     justifyContent: justify,
-    textAlign:justify,
+    textAlign: justify,
     flexWrap: 'wrap',
     paddingTop: '0.15em',
     paddingBottom: '0.15em',
@@ -35,7 +35,7 @@ const styles = theme => ({
     },
   },
   htmlTooltip: {
-    textAlign:justify,
+    textAlign: justify,
     backgroundColor: '#f5f5f9',
     color: 'rgba(0, 0, 0, 1)',
     maxWidth: '20em',
@@ -102,14 +102,14 @@ function CourseChip(props) {
       <div className={classes.root}>
         <Tooltip
           leaveTouchDelay={1000}
-          enterTouchDelay={0} 
+          enterTouchDelay={0}
           title={tooltip}
           classes={{
             tooltip: classes.htmlTooltip,
-            touch: classes.htmlTooltip
+            touch: classes.htmlTooltip,
           }}
           placement={loc}
-          style = {{opacity: 1, backgroundColor: '#f5f5f9'}}
+          style={{ opacity: 1, backgroundColor: '#f5f5f9' }}
         >
           <Chip
             label={label}
