@@ -4,10 +4,11 @@ import './App.css';
 import Landing from './components/Landing.js';
 import Header from './components/Header.js';
 import { connect } from 'react-redux';
-import { SearchType, setStatetoURL, SearchStatus } from './actions';
+import { SearchType, setStatetoURL, SearchStatus, setCourseList, setInstructorList } from './actions';
 import About from './components/About';
 //import Footer from './components/Footer.js';
 import GetInvolved from './components/GetInvolved';
+import { api_endpoint } from './constants.js';
 
 function initializeReactGA() {
   ReactGA.initialize('UA-138034707-1');
@@ -18,6 +19,18 @@ class App extends React.Component {
   constructor(props) {
     super(props);
     this.state = { prior_state: this.props.current_state };
+  }
+  componentWillMount() {
+    // Fetch the course list
+      fetch(api_endpoint + 'courses/all')
+      .then(response => response.json())
+      .then(data => this.props.setCourseList(data.result))
+    // Fetch the instructor list
+      fetch(api_endpoint + 'instructors/all')
+      .then(response => response.json())
+      .then(data =>
+        this.props.setInstructorList(data.result)
+      );
   }
   componentDidMount() {
     const url_state = this.props.match.params;
@@ -166,5 +179,5 @@ const mapStateToProps = state => {
 initializeReactGA();
 export default connect(
   mapStateToProps,
-  { setStatetoURL }
+  { setStatetoURL, setCourseList, setInstructorList}
 )(App);
