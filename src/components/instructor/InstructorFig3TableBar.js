@@ -183,7 +183,7 @@ class InstructorFig3TableBar extends React.Component {
         <div>
           <h3 className="subtitle">
             {' '}
-            Question responses for {result['instructor name']}, sorted by course
+            Question responses for {result['instructor name']} over the <b>previous 3 years</b>, sorted by course
           </h3>
           <BootstrapTable
             keyField="qNumber"
