@@ -10,12 +10,13 @@ import Paper from '@material-ui/core/Paper';
 import { api_endpoint } from '../../constants.js';
 import CourseChip from './CourseChip.js';
 import obj from '../MobileTools.js';
-import lists from '../../course_instructor_list.json';
+// import lists from '../../course_instructor_list.json';
 import { connect } from 'react-redux';
 import { SearchType, setSearchType, setSearchText } from '../../actions';
+import WaitSpinner from '../WaitSpinner';
 
 // Get instructor lists
-const instructor_list = lists['instructors'];
+// const instructor_list = lists['instructors'];
 
 // Define mobile parameters
 var em = obj['em'];
@@ -33,14 +34,14 @@ const CustomTableCell = withStyles(theme => ({
     color: theme.palette.common.white,
     fontSize: head_text_size + 'rem',
     fontWeight: 'bold',
-    padding: table_padding * theme.spacing.unit,
-    paddingTop: 0.5 * table_padding * theme.spacing.unit,
-    paddingBottom: 0.5 * table_padding * theme.spacing.unit,
+    padding: theme.spacing(table_padding),
+    paddingTop: theme.spacing(0.5 * table_padding),
+    paddingBottom: theme.spacing(0.5 * table_padding),
   },
   body: {
-    padding: table_padding * theme.spacing.unit,
-    paddingTop: 0.5 * table_padding * theme.spacing.unit,
-    paddingBottom: 0.5 * table_padding * theme.spacing.unit,
+    padding: theme.spacing(table_padding),
+    paddingTop: theme.spacing(0.5 * table_padding),
+    paddingBottom: theme.spacing(0.5 * table_padding),
   },
 }))(TableCell);
 
@@ -63,7 +64,7 @@ const styles = theme => ({
   },
   table: {},
   tableRow: {
-    padding: theme.spacing.unit,
+    padding: theme.spacing(1),
     '&:nth-of-type(odd)': {
       backgroundColor: theme.palette.background.default, // Might want to change this if desired
     },
@@ -80,7 +81,7 @@ const API = api_endpoint + 'courses/';
 class CourseFig1Table extends React.Component {
   constructor(props) {
     super(props);
-    this.state = { data: [], uuid: props.uuid, info: {}, loadedAPI: false };
+    this.state = { data: [], uuid: props.uuid, info: {}, loadedAPI: false, instructor_list: props.instructor_list };
     this.handleClick = this.handleClick.bind(this);
   }
 
@@ -97,9 +98,16 @@ class CourseFig1Table extends React.Component {
       );
   }
 
+  componentDidUpdate() {
+      if (this.props.instructor_list.length !== this.state.instructor_list.length ) {
+      this.setState({instructor_list: this.props.instructor_list})
+    }
+  }
+
   handleClick(event, id, child_state) {
     var clicked = child_state.rows[id - 1]['name'];
     // Convert instructor list to dict/hash
+    var instructor_list = this.state.instructor_list
     var instr_dict = instructor_list.reduce((obj, item) => {
       obj[item['label'].toString()] = item['value'];
       return obj;
@@ -114,8 +122,8 @@ class CourseFig1Table extends React.Component {
   }
 
   render() {
-    if (!this.state.loadedAPI) {
-      return null;
+    if (!this.state.loadedAPI || this.state.instructor_list.length === 0) {
+      return <WaitSpinner wait={2000} />; // This controls how long to wait before displaying spinner
     } else {
       let MyTable = withStyles(styles)(CustomizedTable); // This is important
       // Get the data to pass to the table
@@ -213,7 +221,13 @@ CustomizedTable.propTypes = {
   classes: PropTypes.object.isRequired,
 };
 
+const mapStatetoProps = state => {
+  return {
+    instructor_list: state.instructor_list,
+  };
+};
+
 export default connect(
-  null,
+  mapStatetoProps,
   { setSearchType, setSearchText }
 )(CourseFig1Table);
