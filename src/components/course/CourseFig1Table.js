@@ -13,7 +13,8 @@ import obj from '../MobileTools.js';
 import lists from '../../course_instructor_list.json';
 import { connect } from 'react-redux';
 import { SearchType, setSearchType, setSearchText } from '../../actions';
-
+ import Loader from 'react-loader-spinner'
+ 
 // Get instructor lists
 const instructor_list = lists['instructors'];
 

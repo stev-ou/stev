@@ -190,6 +190,7 @@ body {
 /* Chip */
 .chip-container {
   align-items: left;
+  opacity: 1!important;
 }
 
 .back-button {
@@ -276,6 +277,7 @@ body {
 /* Chip */
 .chip-container {
   align-items: center;
+  opacity: 1!important;
 }
 
   #landing-subtitle {

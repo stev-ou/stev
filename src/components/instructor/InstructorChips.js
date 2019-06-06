@@ -7,12 +7,10 @@ import obj from '../MobileTools.js';
 import { api_endpoint, dept_chip_colors } from '../../constants.js';
 
 const mobile = obj['mobile'];
-var justify = 'right';
+var justify = 'left';
 var loc = 'right'
-var transparency = '0.87'
 if (mobile) {
   justify = 'center';
-  transparency = '1.0'
   loc = 'bottom'
 }
 
@@ -23,7 +21,7 @@ const styles = theme => ({
     textAlign: justify,
     flexWrap: 'wrap',
     paddingTop: '0.05em',
-    paddingBottom: '0.25em',
+    paddingBottom: '0.05em',
   },
 
   chip: {
@@ -33,13 +31,15 @@ const styles = theme => ({
   },
   palette: {
     primary: {
-      main: '#4abcds',
+      main: 'rgba(245,245,249,1)',
     },
   },
   htmlTooltip: {
-    backgroundColor: 'rgba(245,245,249,'+transparency+')',
-    color: 'rgba(0, 0, 0, '+transparency+')',
+    textAlign: justify,
+    backgroundColor: 'rgba(245,245,249,1)',
+    color: 'rgba(0, 0, 0, 1)',
     maxWidth: '24em',
+    opacity:1,
     fontSize: theme.typography.pxToRem(14),
     border: '1px solid #dadde9',
     '& b': {
@@ -100,7 +100,7 @@ class InstructorChips extends React.Component {
   const depts = data['depts_taught']
   for (var i=0; i<depts.length;i++) {
     d = depts[i]
-    depts_chips.push((<Tooltip title={data['name']+' has historically taught in the '+d+ ' department/subject.'} 
+    depts_chips.push((<Tooltip leaveTouchDelay={1000} enterTouchDelay={0} title={data['name']+' has historically taught in the '+d+ ' department/subject.'} 
           classes={{
             popper: classes.htmlPopper,
             tooltip: classes.htmlTooltip,
@@ -120,6 +120,8 @@ class InstructorChips extends React.Component {
     <div className="chip-container">
       <div className={classes.root}>
         <Tooltip
+          leaveTouchDelay={1000}
+          enterTouchDelay={0} 
           title={y_tooltip}
           classes={{
             popper: classes.htmlPopper,
