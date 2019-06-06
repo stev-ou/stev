@@ -45,6 +45,14 @@ In the root directory, you can:
 Navigate to `localhost:3000` to view the development server running the
 application. 
 
+## Tests
+
+To run tests, use:
+
+``` bash
+$ npm test
+```
+
 ## Available Scripts
 
 The makefile includes some useful targets:  
