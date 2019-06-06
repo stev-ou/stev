@@ -1,3 +1,6 @@
+notifications:
+  slack: stev-ou:aUr5603GLTxr0IAEuvjXAowo
+
 language: python
 python:
   # - "3.6" # uncomment to test 3.6 compatability
