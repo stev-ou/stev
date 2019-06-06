@@ -1,10 +1,9 @@
 notifications:
   slack: stev-ou:aUr5603GLTxr0IAEuvjXAowo
 
-language: python
-python:
-  # - "3.6" # uncomment to test 3.6 compatability
-  # - "3.7"  # 3.7.0 development branch only - below installs stable
+language: node_js
+node_js:
+  - 8
 matrix:
   include:
     - python: 3.7
@@ -15,17 +14,14 @@ install:
   - echo "nothing to install"
 # command to run tests
 script:
-  - echo "no tests now"
-#   - python3 -m unittest discover -v -s tests/
-#   - pylint --errors-only backend/
-#   - cd ..
-
-
+  - npm run build
+  - npm test
 
 # Cache Gcloud SDK between commands
 cache:
   directories:
     - "$HOME/google-cloud-sdk/"
+    - node_modules
 
 # Install services
 services:
