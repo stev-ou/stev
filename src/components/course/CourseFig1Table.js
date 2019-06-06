@@ -116,7 +116,7 @@ class CourseFig1Table extends React.Component {
 
   render() {
     if (!this.state.loadedAPI) {
-      return <WaitSpinner wait={2500}/> // This controls how long to wait before displaying spinner
+      return <WaitSpinner wait={2000}/> // This controls how long to wait before displaying spinner
     } else {
       let MyTable = withStyles(styles)(CustomizedTable); // This is important
       // Get the data to pass to the table

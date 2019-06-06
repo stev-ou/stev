@@ -13,6 +13,7 @@ import lists from '../../course_instructor_list.json';
 import InstructorChips from './InstructorChips.js';
 import { connect } from 'react-redux';
 import { SearchType, setSearchType, setSearchText } from '../../actions';
+import WaitSpinner from '../WaitSpinner'
 
 // Get course list
 const course_list = lists['courses'];
@@ -108,7 +109,7 @@ class InstructorFig1Table extends React.Component {
 
   render() {
     if (!this.state.loadedAPI) {
-      return null;
+      return (<WaitSpinner wait={2000}/>) // This controls how long to wait before displaying spinner
     } else {
       let MyTable = withStyles(styles)(CustomizedTable); // This is important
       // Get the data ready to pass to the table by rounding and adding ids

@@ -41,7 +41,7 @@ const styles = theme => ({
     maxWidth: '24em',
     opacity:1,
     fontSize: theme.typography.pxToRem(14),
-    border: '1px solid #dadde9',
+    border: '2px solid #dadde9',
     '& b': {
       fontWeight: theme.typography.fontWeightMedium,
     },
@@ -100,7 +100,7 @@ class InstructorChips extends React.Component {
   const depts = data['depts_taught']
   for (var i=0; i<depts.length;i++) {
     d = depts[i]
-    depts_chips.push((<Tooltip leaveTouchDelay={1000} enterTouchDelay={0} title={data['name']+' has historically taught in the '+d+ ' department/subject.'} 
+    depts_chips.push((<Tooltip leaveTouchDelay={1000} enterTouchDelay={0} title={data['name']+' has taught in the '+d+ ' department/subject.'} 
           classes={{
             popper: classes.htmlPopper,
             tooltip: classes.htmlTooltip,

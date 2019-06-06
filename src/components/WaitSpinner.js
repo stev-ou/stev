@@ -7,9 +7,7 @@ var em = obj['em'];
 class WaitSpinner extends React.Component {
   constructor(props){
     super(props)
-    console.log(props)
-    this.show.bind(this)
-    this.state = {unmounted:false,visibility : "hidden", wait: this.props.wait}
+    this.state = {visibility : "hidden", wait: this.props.wait}
   }
 
   componentDidMount() {
@@ -22,14 +20,14 @@ class WaitSpinner extends React.Component {
 
   componentWillUnmount(){
     clearTimeout(this.timer)
-    this.setState({unmounted:true})
   }
   show() {
-      if (!this.state.unmounted) {
         this.setState({visibility: "visible"});
-      }
     }
   render() {
+    if (this.state.visibility ==="hidden"){
+      return null;}
+      else {
         return (
             <div style={{visibility:this.state.visibility, textAlign: 'center'}}>
         <h4 style={{paddingBottom: 5*em}}> Please wait a moment for the data to load </h4>
@@ -38,5 +36,5 @@ class WaitSpinner extends React.Component {
         )
     }
 }
-
+}
 export default WaitSpinner;
