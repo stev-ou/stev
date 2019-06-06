@@ -13,7 +13,6 @@ install:
   - npm install
 # command to run tests
 script:
-  - npm run build
   - npm test
 
 # Cache Gcloud SDK between commands
