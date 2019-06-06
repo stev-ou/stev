@@ -1,18 +1,14 @@
 /* eslint-disable react/prop-types, react/jsx-handler-names */
 import 'react-select-2/dist/css/react-select-2.css';
 import './../SearchAutocomplete.css';
-
+import { connect } from 'react-redux';
 import React from 'react';
 import Select from 'react-virtualized-select';
 import Typography from '@material-ui/core/Typography';
 import TextField from '@material-ui/core/TextField';
 import Paper from '@material-ui/core/Paper';
 import MenuItem from '@material-ui/core/MenuItem';
-import lists from '../course_instructor_list.json';
 import { SearchType } from '../actions';
-
-const course_list = lists['courses'];
-const instructor_list = lists['instructors'];
 
 function NoOptionsMessage(props) {
   return (
@@ -106,42 +102,34 @@ class SearchAutocomplete extends React.Component {
   constructor(props) {
     super(props);
     var initial_state = {
-      search_type: this.props.search_type,
+      search_type: props.search_type,
+      course_list: props.course_list,
+      instructor_list: props.instructor_list,
     };
-    if (this.props.search_type === SearchType.COURSE) {
-      initial_state['choices'] = course_list;
-    } else {
-      initial_state['choices'] = instructor_list;
-    }
     this.state = initial_state;
-  }
-
-  componentWillMount() {
-    // Update the search list
-    if (this.props.search_type === SearchType.COURSE) {
-      this.setState({ choices: course_list });
-    } else {
-      this.setState({ choices: instructor_list });
-    }
   }
 
   componentDidUpdate(prevProps) {
     if (!(this.props.search_type === this.state.search_type)) {
-      // Check if it's a new user, you can also use some unique property, like the ID  (this.props.user.id !== prevProps.user.id)
+      // Check if it's a new user, you can also use some unique property, like the ID 
       this.setState({ search_type: this.props.search_type });
-      this.componentWillMount();
+    }
+    if (this.state.course_list.length !== this.props.course_list.length || this.state.instructor_list.length !== this.props.instructor_list.length) {
+      this.setState({course_list: this.props.course_list, instructor_list: this.props.instructor_list})
     }
   }
 
   render() {
-    var choices = this.state.choices;
-
+    var choices = [];
     // Build a placeholder based on the search type
     var placeholder = '';
     if (this.props.search_type === SearchType.COURSE) {
       placeholder = 'Type a course name';
+      choices = this.state.course_list
+
     } else {
       placeholder = 'Type an instructor name';
+      choices = this.state.instructor_list
     }
 
     return (
@@ -163,5 +151,17 @@ class SearchAutocomplete extends React.Component {
     );
   }
 }
+const mapStateToProps = state => {
+  return {
+    course_list: state.course_list,
+    instructor_list: state.instructor_list,
+    search_type: state.search_type,
+  };
+};
 
-export default SearchAutocomplete;
+export default connect(
+  mapStateToProps,
+  null
+)(SearchAutocomplete);
+
+
