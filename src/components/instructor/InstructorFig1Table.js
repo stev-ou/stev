@@ -9,12 +9,12 @@ import TableRow from '@material-ui/core/TableRow';
 import Paper from '@material-ui/core/Paper';
 import { api_endpoint } from '../../constants.js';
 import obj from '../MobileTools.js';
-import lists from '../../course_instructor_list.json';
+// import lists from '../../course_instructor_list.json';
+import InstructorChips from './InstructorChips.js';
 import { connect } from 'react-redux';
 import { SearchType, setSearchType, setSearchText } from '../../actions';
+import WaitSpinner from '../WaitSpinner';
 
-// Get course list
-const course_list = lists['courses'];
 
 // Define mobile parameters
 var em = obj['em'];
@@ -32,14 +32,14 @@ const CustomTableCell = withStyles(theme => ({
     color: theme.palette.common.white,
     fontSize: head_text_size + 'rem',
     fontWeight: 'bold',
-    padding: table_padding * theme.spacing.unit,
-    paddingTop: 0.5 * table_padding * theme.spacing.unit,
-    paddingBottom: 0.5 * table_padding * theme.spacing.unit,
+    padding: theme.spacing(table_padding),
+    paddingTop: theme.spacing(0.5 * table_padding),
+    paddingBottom: theme.spacing(0.5 * table_padding),
   },
   body: {
-    padding: table_padding * theme.spacing.unit,
-    paddingTop: 0.5 * table_padding * theme.spacing.unit,
-    paddingBottom: 0.5 * table_padding * theme.spacing.unit,
+    padding: theme.spacing(table_padding),
+    paddingTop: theme.spacing(0.5 * table_padding),
+    paddingBottom: theme.spacing(0.5 * table_padding),
   },
 }))(TableCell);
 
@@ -62,7 +62,7 @@ const styles = theme => ({
   },
   table: {},
   tableRow: {
-    padding: theme.spacing.unit,
+    padding: theme.spacing(1),
     '&:nth-of-type(odd)': {
       backgroundColor: theme.palette.background.default, // Might want to change this if desired
     },
@@ -78,7 +78,7 @@ const API = api_endpoint + 'instructors/';
 class InstructorFig1Table extends React.Component {
   constructor(props) {
     super(props);
-    this.state = { loadedAPI: false, data: [], uuid: props.uuid };
+    this.state = { loadedAPI: false, data: [], uuid: props.uuid, course_list: props.course_list};
     this.handleClick = this.handleClick.bind(this);
   }
 
@@ -88,10 +88,16 @@ class InstructorFig1Table extends React.Component {
       .then(response => response.json())
       .then(data => this.setState({ data: data.result, loadedAPI: true }));
   }
+  componentDidUpdate() {
+      if (this.props.course_list.length !== this.state.course_list.length ) {
+      this.setState({course_list: this.props.course_list})
+    }
+  }
 
   handleClick(event, id, child_state) {
     var clicked = child_state.rows[id - 1]['display name'];
     // Convert course list to dict/hash
+    var course_list = this.state.course_list
     var course_dict = course_list.reduce((obj, item) => {
       obj[item['label'].toString()] = item['value'].toString();
       return obj;
@@ -106,8 +112,8 @@ class InstructorFig1Table extends React.Component {
   }
 
   render() {
-    if (!this.state.loadedAPI) {
-      return null;
+    if (!this.state.loadedAPI || this.state.course_list.length === 0) {
+      return <WaitSpinner wait={2000} />; // This controls how long to wait before displaying spinner
     } else {
       let MyTable = withStyles(styles)(CustomizedTable); // This is important
       // Get the data ready to pass to the table by rounding and adding ids
@@ -123,7 +129,13 @@ class InstructorFig1Table extends React.Component {
           item['course name'];
         item['id'] = i + 1;
       });
-      return <MyTable data={table_data} handleClick={this.handleClick} />;
+      return (
+        <MyTable
+          uuid={this.state.uuid}
+          data={table_data}
+          handleClick={this.handleClick}
+        />
+      );
     }
   }
 }
@@ -136,6 +148,7 @@ class CustomizedTable extends React.Component {
       classes: props.classes,
       data: props.data,
       rows: props.data.courses,
+      uuid: props.uuid,
     };
   }
 
@@ -149,6 +162,7 @@ class CustomizedTable extends React.Component {
           {' '}
           {data['instructor name']}
         </h1>
+        <InstructorChips uuid={this.state.uuid} />
         <h2 className="subtitle">
           {data['instructor name']} has taught these courses in the
           <b> previous 3 years</b>
@@ -211,7 +225,13 @@ CustomizedTable.propTypes = {
   classes: PropTypes.object.isRequired,
 };
 
+const mapStatetoProps = state => {
+  return {
+    course_list: state.course_list,
+  };
+};
+
 export default connect(
-  null,
+  mapStatetoProps,
   { setSearchType, setSearchText }
 )(InstructorFig1Table);

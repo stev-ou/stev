@@ -1,10 +1,12 @@
 import React from 'react';
 import { Bar } from 'react-chartjs-2';
-import { schemePaired } from 'd3-scale-chromatic'; // This is the colors for the bar chart
+import { schemeSet3 } from 'd3-scale-chromatic'; // This is the colors for the bar chart
 import { api_endpoint } from '../../constants.js';
 import 'react-bootstrap-table-next/dist/react-bootstrap-table2.min.css';
 import BootstrapTable from 'react-bootstrap-table-next';
 import obj from '../MobileTools.js';
+
+var question_colors = schemeSet3.slice(2)
 
 // Define mobile parameters
 var em = obj['em'];
@@ -83,10 +85,10 @@ class InstructorFig3TableBar extends React.Component {
         plot_result.datasets.push({
           label: 'Question ' + (j + 1).toString(),
           id: j + 1,
-          backgroundColor: schemePaired[2 * j],
+          backgroundColor: question_colors[j],
           borderColor: 'rgba(255,255,255,1)',
           borderWidth: 1,
-          hoverBackgroundColor: schemePaired[2 * j + 1],
+          hoverBackgroundColor: question_colors[j + 1],
           hidden: !display_questions[j],
           hoverBorderColor: 'rgba(255,255,255,1)',
           data: result.questions[j].ratings.map(function(each_element) {
@@ -173,7 +175,7 @@ class InstructorFig3TableBar extends React.Component {
           this.setState({ display_questions: display_questions });
         },
         bgColor: (row, rowIndex) => {
-          return schemePaired[parseInt(2 * rowIndex)]; // returns the color code for this paired analysis
+          return question_colors[parseInt(rowIndex)]; // returns the color code for this paired analysis
         },
       };
 
@@ -181,7 +183,7 @@ class InstructorFig3TableBar extends React.Component {
         <div>
           <h3 className="subtitle">
             {' '}
-            Question responses for {result['instructor name']}, sorted by course
+            Question responses for {result['instructor name']} over the <b>previous 3 years</b>, sorted by course
           </h3>
           <BootstrapTable
             keyField="qNumber"
