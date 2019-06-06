@@ -9,14 +9,12 @@ import TableRow from '@material-ui/core/TableRow';
 import Paper from '@material-ui/core/Paper';
 import { api_endpoint } from '../../constants.js';
 import obj from '../MobileTools.js';
-import lists from '../../course_instructor_list.json';
+// import lists from '../../course_instructor_list.json';
 import InstructorChips from './InstructorChips.js';
 import { connect } from 'react-redux';
 import { SearchType, setSearchType, setSearchText } from '../../actions';
 import WaitSpinner from '../WaitSpinner';
 
-// Get course list
-const course_list = lists['courses'];
 
 // Define mobile parameters
 var em = obj['em'];
@@ -80,7 +78,7 @@ const API = api_endpoint + 'instructors/';
 class InstructorFig1Table extends React.Component {
   constructor(props) {
     super(props);
-    this.state = { loadedAPI: false, data: [], uuid: props.uuid };
+    this.state = { loadedAPI: false, data: [], uuid: props.uuid, course_list: props.course_list};
     this.handleClick = this.handleClick.bind(this);
   }
 
@@ -90,10 +88,16 @@ class InstructorFig1Table extends React.Component {
       .then(response => response.json())
       .then(data => this.setState({ data: data.result, loadedAPI: true }));
   }
+  componentDidUpdate() {
+      if (this.props.course_list.length !== this.state.course_list.length ) {
+      this.setState({course_list: this.props.course_list})
+    }
+  }
 
   handleClick(event, id, child_state) {
     var clicked = child_state.rows[id - 1]['display name'];
     // Convert course list to dict/hash
+    var course_list = this.state.course_list
     var course_dict = course_list.reduce((obj, item) => {
       obj[item['label'].toString()] = item['value'].toString();
       return obj;
@@ -108,7 +112,7 @@ class InstructorFig1Table extends React.Component {
   }
 
   render() {
-    if (!this.state.loadedAPI) {
+    if (!this.state.loadedAPI || this.state.course_list.length === 0) {
       return <WaitSpinner wait={2000} />; // This controls how long to wait before displaying spinner
     } else {
       let MyTable = withStyles(styles)(CustomizedTable); // This is important
@@ -221,7 +225,13 @@ CustomizedTable.propTypes = {
   classes: PropTypes.object.isRequired,
 };
 
+const mapStatetoProps = state => {
+  return {
+    course_list: state.course_list,
+  };
+};
+
 export default connect(
-  null,
+  mapStatetoProps,
   { setSearchType, setSearchText }
 )(InstructorFig1Table);
