@@ -25,7 +25,7 @@ const styles = theme => ({
   },
 
   chip: {
-    margin: theme.spacing.unit,
+    margin: theme.spacing(1),
     color: 'primary',
     fontSize: '1.1em',
   },

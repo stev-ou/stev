@@ -33,14 +33,14 @@ const CustomTableCell = withStyles(theme => ({
     color: theme.palette.common.white,
     fontSize: head_text_size + 'rem',
     fontWeight: 'bold',
-    padding: table_padding * theme.spacing.unit,
-    paddingTop: 0.5 * table_padding * theme.spacing.unit,
-    paddingBottom: 0.5 * table_padding * theme.spacing.unit,
+    padding: theme.spacing(table_padding),
+    paddingTop: theme.spacing(0.5 * table_padding),
+    paddingBottom:theme.spacing(0.5 * table_padding),
   },
   body: {
-    padding: table_padding * theme.spacing.unit,
-    paddingTop: 0.5 * table_padding * theme.spacing.unit,
-    paddingBottom: 0.5 * table_padding * theme.spacing.unit,
+    padding: theme.spacing(table_padding),
+    paddingTop: theme.spacing(0.5 * table_padding),
+    paddingBottom:theme.spacing(0.5 * table_padding),
   },
 }))(TableCell);
 
@@ -63,7 +63,7 @@ const styles = theme => ({
   },
   table: {},
   tableRow: {
-    padding: theme.spacing.unit,
+    padding: theme.spacing(1),
     '&:nth-of-type(odd)': {
       backgroundColor: theme.palette.background.default, // Might want to change this if desired
     },

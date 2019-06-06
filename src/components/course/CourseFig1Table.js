@@ -13,8 +13,8 @@ import obj from '../MobileTools.js';
 import lists from '../../course_instructor_list.json';
 import { connect } from 'react-redux';
 import { SearchType, setSearchType, setSearchText } from '../../actions';
- import Loader from 'react-loader-spinner'
- 
+import WaitSpinner from '../WaitSpinner'
+
 // Get instructor lists
 const instructor_list = lists['instructors'];
 
@@ -34,14 +34,14 @@ const CustomTableCell = withStyles(theme => ({
     color: theme.palette.common.white,
     fontSize: head_text_size + 'rem',
     fontWeight: 'bold',
-    padding: table_padding * theme.spacing.unit,
-    paddingTop: 0.5 * table_padding * theme.spacing.unit,
-    paddingBottom: 0.5 * table_padding * theme.spacing.unit,
+    padding: theme.spacing(table_padding),
+    paddingTop: theme.spacing(0.5 * table_padding),
+    paddingBottom:theme.spacing(0.5 * table_padding),
   },
   body: {
-    padding: table_padding * theme.spacing.unit,
-    paddingTop: 0.5 * table_padding * theme.spacing.unit,
-    paddingBottom: 0.5 * table_padding * theme.spacing.unit,
+    padding: theme.spacing(table_padding),
+    paddingTop: theme.spacing(0.5 * table_padding),
+    paddingBottom:theme.spacing(0.5 * table_padding),
   },
 }))(TableCell);
 
@@ -64,7 +64,7 @@ const styles = theme => ({
   },
   table: {},
   tableRow: {
-    padding: theme.spacing.unit,
+    padding: theme.spacing(1),
     '&:nth-of-type(odd)': {
       backgroundColor: theme.palette.background.default, // Might want to change this if desired
     },
@@ -116,7 +116,7 @@ class CourseFig1Table extends React.Component {
 
   render() {
     if (!this.state.loadedAPI) {
-      return null;
+      return <WaitSpinner wait={2500}/> // This controls how long to wait before displaying spinner
     } else {
       let MyTable = withStyles(styles)(CustomizedTable); // This is important
       // Get the data to pass to the table
