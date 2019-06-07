@@ -1,104 +1,13 @@
-/* eslint-disable react/prop-types, react/jsx-handler-names */
-import 'react-select-2/dist/css/react-select-2.css';
-import './../SearchAutocomplete.css';
+
 import { connect } from 'react-redux';
-import React from 'react';
-import Select from 'react-virtualized-select';
-import Typography from '@material-ui/core/Typography';
-import TextField from '@material-ui/core/TextField';
-import Paper from '@material-ui/core/Paper';
-import MenuItem from '@material-ui/core/MenuItem';
+import React  from 'react';
+import Select from 'react-select-virtualized';
+// import Select from 'react-select';
+// import {components} from 'react-select'
 import { SearchType } from '../actions';
 
-function NoOptionsMessage(props) {
-  return (
-    <Typography
-      color="textSecondary"
-      className={props.selectProps.classes.noOptionsMessage}
-      {...props.innerProps}
-    >
-      {props.children}
-    </Typography>
-  );
-}
-
-function inputComponent({ inputRef, ...props }) {
-  return <div ref={inputRef} {...props} />;
-}
-
-function Control(props) {
-  return (
-    <TextField
-      fullWidth
-      InputProps={{
-        inputComponent,
-        inputProps: {
-          className: props.selectProps.classes.input,
-          inputRef: props.innerRef,
-          children: props.children,
-          ...props.innerProps,
-        },
-      }}
-      {...props.selectProps.textFieldProps}
-    />
-  );
-}
-
-function Option(props) {
-  return (
-    <MenuItem
-      buttonRef={props.innerRef}
-      selected={props.isFocused}
-      className={props.selectProps.classes.options}
-      {...props.innerProps}
-    >
-      {props.children}
-    </MenuItem>
-  );
-}
-
-function Placeholder(props) {
-  return (
-    <Typography
-      color="textSecondary"
-      className={props.selectProps.classes.placeholder}
-      {...props.innerProps}
-    >
-      {props.children}
-    </Typography>
-  );
-}
-
-function ValueContainer(props) {
-  return (
-    <div className={props.selectProps.classes.valueContainer}>
-      {props.children}
-    </div>
-  );
-}
-
-function Menu(props) {
-  return (
-    <Paper
-      square
-      className={props.selectProps.classes.paper}
-      {...props.innerProps}
-    >
-      {props.children}
-    </Paper>
-  );
-}
-
-const components = {
-  Control,
-  Menu,
-  NoOptionsMessage,
-  Option,
-  Placeholder,
-  ValueContainer,
-};
-
 class SearchAutocomplete extends React.Component {
+
   constructor(props) {
     super(props);
     var initial_state = {
@@ -120,9 +29,9 @@ class SearchAutocomplete extends React.Component {
   }
 
   render() {
-    var choices = [];
+    var choices;
     // Build a placeholder based on the search type
-    var placeholder = '';
+    var placeholder;
     if (this.props.search_type === SearchType.COURSE) {
       placeholder = 'Type a course name';
       choices = this.state.course_list
@@ -140,12 +49,30 @@ class SearchAutocomplete extends React.Component {
         <Select
           className={'search-form'}
           options={choices}
-          components={components}
           placeholder={placeholder}
           value={this.props.value}
+          optionHeight={35}
+          components={{
+              Option: ({ innerRef,children, innerProps }) => (
+              <div className={"custom-option"} ref={innerRef} {...innerProps}>
+                {children}
+              </div>
+            )
+          }}
           onChange={this.props.onChange}
-          isClearable
-          menuIsOpen
+          optionClassName={'custom-option'}
+          styles={{
+            control: (base) => ({ ...base, color: 'green' }),
+            option: base => ({
+              ...base,
+              border: `1px dotted #00B8D9`,
+              height: '100%',
+              padding: '100px'
+            }),
+          }}
+          autoFocus={true}
+          menuIsOpen={true}
+          defaultMenuIsOpen={true}
         />
       </div>
     );
