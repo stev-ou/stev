@@ -41,7 +41,9 @@ class SearchAutocomplete extends React.Component {
       placeholder = 'Type an instructor name';
       choices = this.state.instructor_list;
     }
-
+    if (this.state.course_list.length *this.state.instructor_list.length === 0) {
+      choices = [{label:'Currently loading options, please wait (~10 seconds)...', value:1}]
+    }
     return (
       <div
         className="form-control w-80 header-elem"
