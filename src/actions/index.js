@@ -16,13 +16,13 @@ export const setSearchText = content => ({
 
 export const setCourseList = content => ({
   type: 'SET_COURSE_LIST',
-  list: content
-})
+  list: content,
+});
 
 export const setInstructorList = content => ({
   type: 'SET_INSTRUCTOR_LIST',
-  list: content
-})
+  list: content,
+});
 
 export const resetToDefaults = content => ({
   type: 'RESET_TO_DEFAULTS',

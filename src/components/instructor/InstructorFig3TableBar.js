@@ -6,7 +6,7 @@ import 'react-bootstrap-table-next/dist/react-bootstrap-table2.min.css';
 import BootstrapTable from 'react-bootstrap-table-next';
 import obj from '../MobileTools.js';
 
-var question_colors = schemeSet3.slice(2)
+var question_colors = schemeSet3.slice(2);
 
 // Define mobile parameters
 var em = obj['em'];
@@ -183,7 +183,8 @@ class InstructorFig3TableBar extends React.Component {
         <div>
           <h3 className="subtitle">
             {' '}
-            Question responses for {result['instructor name']} over the <b>previous 3 years</b>, sorted by course
+            Question responses for {result['instructor name']} over the{' '}
+            <b>previous 3 years</b>, sorted by course
           </h3>
           <BootstrapTable
             keyField="qNumber"

@@ -4,7 +4,13 @@ import './App.css';
 import Landing from './components/Landing.js';
 import Header from './components/Header.js';
 import { connect } from 'react-redux';
-import { SearchType, setStatetoURL, SearchStatus, setCourseList, setInstructorList } from './actions';
+import {
+  SearchType,
+  setStatetoURL,
+  SearchStatus,
+  setCourseList,
+  setInstructorList,
+} from './actions';
 import About from './components/About';
 //import Footer from './components/Footer.js';
 import GetInvolved from './components/GetInvolved';
@@ -22,15 +28,13 @@ class App extends React.Component {
   }
   componentWillMount() {
     // Fetch the course list
-      fetch(api_endpoint + 'courses/all')
+    fetch(api_endpoint + 'courses/all')
       .then(response => response.json())
-      .then(data => this.props.setCourseList(data.result))
+      .then(data => this.props.setCourseList(data.result));
     // Fetch the instructor list
-      fetch(api_endpoint + 'instructors/all')
+    fetch(api_endpoint + 'instructors/all')
       .then(response => response.json())
-      .then(data =>
-        this.props.setInstructorList(data.result)
-      );
+      .then(data => this.props.setInstructorList(data.result));
   }
   componentDidMount() {
     const url_state = this.props.match.params;
@@ -179,5 +183,5 @@ const mapStateToProps = state => {
 initializeReactGA();
 export default connect(
   mapStateToProps,
-  { setStatetoURL, setCourseList, setInstructorList}
+  { setStatetoURL, setCourseList, setInstructorList }
 )(App);

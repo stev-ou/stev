@@ -15,7 +15,6 @@ import { connect } from 'react-redux';
 import { SearchType, setSearchType, setSearchText } from '../../actions';
 import WaitSpinner from '../WaitSpinner';
 
-
 // Define mobile parameters
 var em = obj['em'];
 var mobile = obj['mobile'];
@@ -78,7 +77,12 @@ const API = api_endpoint + 'instructors/';
 class InstructorFig1Table extends React.Component {
   constructor(props) {
     super(props);
-    this.state = { loadedAPI: false, data: [], uuid: props.uuid, course_list: props.course_list};
+    this.state = {
+      loadedAPI: false,
+      data: [],
+      uuid: props.uuid,
+      course_list: props.course_list,
+    };
     this.handleClick = this.handleClick.bind(this);
   }
 
@@ -89,15 +93,15 @@ class InstructorFig1Table extends React.Component {
       .then(data => this.setState({ data: data.result, loadedAPI: true }));
   }
   componentDidUpdate() {
-      if (this.props.course_list.length !== this.state.course_list.length ) {
-      this.setState({course_list: this.props.course_list})
+    if (this.props.course_list.length !== this.state.course_list.length) {
+      this.setState({ course_list: this.props.course_list });
     }
   }
 
   handleClick(event, id, child_state) {
     var clicked = child_state.rows[id - 1]['display name'];
     // Convert course list to dict/hash
-    var course_list = this.state.course_list
+    var course_list = this.state.course_list;
     var course_dict = course_list.reduce((obj, item) => {
       obj[item['label'].toString()] = item['value'].toString();
       return obj;

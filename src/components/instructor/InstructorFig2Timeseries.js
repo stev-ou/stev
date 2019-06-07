@@ -117,11 +117,11 @@ class InstructorFig2Timeseries extends React.Component {
           return Number(each_element.toFixed(2));
         }),
       });
-      if (ymax >5) {
-        ymax=5
+      if (ymax > 5) {
+        ymax = 5;
       }
-      if (ymin<1) {
-        ymin=1
+      if (ymin < 1) {
+        ymin = 1;
       }
 
       const options = {

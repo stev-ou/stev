@@ -6,7 +6,7 @@ const initial_state = {
   search_text: '',
   user_alerted: false,
   course_list: [],
-  instructor_list: []
+  instructor_list: [],
 };
 
 const valid_search = (state = initial_state, action) => {
@@ -14,9 +14,9 @@ const valid_search = (state = initial_state, action) => {
     case 'RESET_TO_DEFAULTS':
       return { initial_state, user_alerted: state['user_alerted'] };
     case 'SET_COURSE_LIST':
-      return {...state, course_list: action.list}
+      return { ...state, course_list: action.list };
     case 'SET_INSTRUCTOR_LIST':
-      return {...state, instructor_list: action.list}
+      return { ...state, instructor_list: action.list };
     case 'SET_SEARCH_STATUS':
       return { ...state, valid_search: action.status };
     case 'SET_SEARCH_TEXT':

@@ -1,11 +1,9 @@
-
 import { connect } from 'react-redux';
-import React  from 'react';
+import React from 'react';
 import Select from 'react-select-virtualized';
 import { SearchType } from '../actions';
 
 class SearchAutocomplete extends React.Component {
-
   constructor(props) {
     super(props);
     var initial_state = {
@@ -18,11 +16,17 @@ class SearchAutocomplete extends React.Component {
 
   componentDidUpdate(prevProps) {
     if (!(this.props.search_type === this.state.search_type)) {
-      // Check if it's a new user, you can also use some unique property, like the ID 
+      // Check if it's a new user, you can also use some unique property, like the ID
       this.setState({ search_type: this.props.search_type });
     }
-    if (this.state.course_list.length !== this.props.course_list.length || this.state.instructor_list.length !== this.props.instructor_list.length) {
-      this.setState({course_list: this.props.course_list, instructor_list: this.props.instructor_list})
+    if (
+      this.state.course_list.length !== this.props.course_list.length ||
+      this.state.instructor_list.length !== this.props.instructor_list.length
+    ) {
+      this.setState({
+        course_list: this.props.course_list,
+        instructor_list: this.props.instructor_list,
+      });
     }
   }
 
@@ -32,11 +36,10 @@ class SearchAutocomplete extends React.Component {
     var placeholder;
     if (this.props.search_type === SearchType.COURSE) {
       placeholder = 'Type a course name';
-      choices = this.state.course_list
-
+      choices = this.state.course_list;
     } else {
       placeholder = 'Type an instructor name';
-      choices = this.state.instructor_list
+      choices = this.state.instructor_list;
     }
 
     return (
@@ -69,5 +72,3 @@ export default connect(
   mapStateToProps,
   null
 )(SearchAutocomplete);
-
-

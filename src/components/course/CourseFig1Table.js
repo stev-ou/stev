@@ -81,7 +81,13 @@ const API = api_endpoint + 'courses/';
 class CourseFig1Table extends React.Component {
   constructor(props) {
     super(props);
-    this.state = { data: [], uuid: props.uuid, info: {}, loadedAPI: false, instructor_list: props.instructor_list };
+    this.state = {
+      data: [],
+      uuid: props.uuid,
+      info: {},
+      loadedAPI: false,
+      instructor_list: props.instructor_list,
+    };
     this.handleClick = this.handleClick.bind(this);
   }
 
@@ -99,15 +105,17 @@ class CourseFig1Table extends React.Component {
   }
 
   componentDidUpdate() {
-      if (this.props.instructor_list.length !== this.state.instructor_list.length ) {
-      this.setState({instructor_list: this.props.instructor_list})
+    if (
+      this.props.instructor_list.length !== this.state.instructor_list.length
+    ) {
+      this.setState({ instructor_list: this.props.instructor_list });
     }
   }
 
   handleClick(event, id, child_state) {
     var clicked = child_state.rows[id - 1]['name'];
     // Convert instructor list to dict/hash
-    var instructor_list = this.state.instructor_list
+    var instructor_list = this.state.instructor_list;
     var instr_dict = instructor_list.reduce((obj, item) => {
       obj[item['label'].toString()] = item['value'];
       return obj;

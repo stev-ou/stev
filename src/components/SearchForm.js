@@ -63,7 +63,7 @@ class SearchForm extends React.Component {
     }
     return (
       <div className="row" style={{ zIndex: 2 }}>
-        <div className="col-lg-12" style = {{paddingRight: 5, paddingLeft: 5}}>
+        <div className="col-lg-12">
           <form onSubmit={this.handleSubmit}>
             {/*<div className="input-group mb-3">*/}
             <SearchAutocomplete
