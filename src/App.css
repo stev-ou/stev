@@ -218,16 +218,11 @@ body {
 .ReactVirtualized__List {
   padding: 0.4rem;
   cursor: pointer;
-  display: block;
   font-size: 1em;
   z-index: 2;
   height: inherit;
   left: 0px;
-  /*position: absolute;*/
   width: 100%;
-  /*top: 0px;*/
-  flex-wrap: wrap;
-  flex-direction: column;
 }
 .fast-option {
   line-height:13px !important;
@@ -308,7 +303,7 @@ body {
   }
   /*Specific to React select virtualized */
   .ReactVirtualized__List {
-  font-size: 0.85em;
+  font-size: 0.83em;
  }
 
   #graph-container {
