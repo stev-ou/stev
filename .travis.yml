@@ -1,12 +1,14 @@
 notifications:
   slack: stev-ou:aUr5603GLTxr0IAEuvjXAowo
 
-language: node_js
-node_js:
-  - 8
+language: python #node_js
+python:
+#node_js:
+#  - 8
 matrix:
   include:
     - python: 3.7
+    - node_js: 8
       dist: xenial
       sudo: true
 
