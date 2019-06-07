@@ -2,8 +2,6 @@
 import { connect } from 'react-redux';
 import React  from 'react';
 import Select from 'react-select-virtualized';
-// import Select from 'react-select';
-// import {components} from 'react-select'
 import { SearchType } from '../actions';
 
 class SearchAutocomplete extends React.Component {
@@ -51,28 +49,9 @@ class SearchAutocomplete extends React.Component {
           options={choices}
           placeholder={placeholder}
           value={this.props.value}
-          optionHeight={35}
-          components={{
-              Option: ({ innerRef,children, innerProps }) => (
-              <div className={"custom-option"} ref={innerRef} {...innerProps}>
-                {children}
-              </div>
-            )
-          }}
+          optionHeight={30}
           onChange={this.props.onChange}
-          optionClassName={'custom-option'}
-          styles={{
-            control: (base) => ({ ...base, color: 'green' }),
-            option: base => ({
-              ...base,
-              border: `1px dotted #00B8D9`,
-              height: '100%',
-              padding: '100px'
-            }),
-          }}
           autoFocus={true}
-          menuIsOpen={true}
-          defaultMenuIsOpen={true}
         />
       </div>
     );

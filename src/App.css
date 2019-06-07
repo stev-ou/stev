@@ -12,10 +12,6 @@ body {
   margin-bottom: 10px;
 }
 }
-.custom-option {
-  color: blue;
-  font-size: 1px;
-}
 
 .App {
     margin-top:5em;
@@ -120,9 +116,6 @@ body {
 #search-form{
   padding-top: 0.75em;
   padding-bottom: 1.5em;
-  padding-left: 0.5em;
-  /*color: rgba(255,0,0,1);*/
-    
   }
 
 #landing-title {
@@ -220,6 +213,7 @@ body {
 .justify-page {
   text-align: justify;
 }
+
 /*Specific to React select virtualized */
 .ReactVirtualized__List {
   padding: 0.4rem;
