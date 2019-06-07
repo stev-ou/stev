@@ -1,15 +1,13 @@
 notifications:
   slack: stev-ou:aUr5603GLTxr0IAEuvjXAowo
 
-language: python #node_js
-python:
-#node_js:
-#  - 8
+language: node_js
+#python:
+node_js:
+  - 8
 matrix:
   include:
-    - python: 3.7
-    - node_js: 8
-      dist: xenial
+    - dist: xenial
       sudo: true
 
 # command to install dependencies
@@ -37,7 +35,7 @@ env:
     - CLOUDSDK_COMPUTE_ZONE=us-central1-c
 
 before_deploy:
-  - if [ ! -d "$HOME/google-cloud-sdk/bin" ]; then rm -rf $HOME/google-cloud-sdk; export CLOUDSDK_CORE_DISABLE_PROMPTS=1; curl https://sdk.cloud.google.com | bash; fi
+  - if [ ! -d "$HOME/google-cloud-sdk/bin" ]; then rm -rf $HOME/google-cloud-sdk; export CLOUDSDK_CORE_DISABLE_PROMPTS=1; curl https://sdk.cloud.google.com | bash > /dev/null; fi
   - source /home/travis/google-cloud-sdk/path.bash.inc
   - gcloud --quiet version
   - gcloud --quiet components update
