@@ -116,7 +116,6 @@ body {
 #search-form{
   padding-top: 0.75em;
   padding-bottom: 1.5em;
-    
   }
 
 #landing-title {
@@ -215,6 +214,24 @@ body {
   text-align: justify;
 }
 
+/*Specific to React select virtualized */
+.ReactVirtualized__List {
+  padding: 0.4rem;
+  cursor: pointer;
+  display: block;
+  font-size: 1em;
+  z-index: 2;
+  height: inherit;
+  left: 0px;
+  /*position: absolute;*/
+  width: 100%;
+  /*top: 0px;*/
+  flex-wrap: wrap;
+  flex-direction: column;
+}
+.fast-option {
+  line-height:13px !important;
+}
 @media only screen and (max-width: 770px) {
   #landing-title {
     /*color: #62dafb;*/
@@ -289,6 +306,11 @@ body {
     padding-top: 1em;
     padding-bottom: 1.5em;
   }
+  /*Specific to React select virtualized */
+  .ReactVirtualized__List {
+  font-size: 0.85em;
+ }
+
   #graph-container {
     margin-left: 0em;
 }
