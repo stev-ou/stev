@@ -20,7 +20,8 @@ echo "y" | gcloud auth configure-docker
 docker push gcr.io/ou-reviews/stev:latest
 
 gcloud --quiet config set project $PROJECT_NAME
-#gcloud --quiet config set compute/zone ${CLOUDSDK_COMPUTE_ZONE}
+gcloud --quiet config set run/platform managed
+gcloud --quiet config set run/region us-central1 
 
 # update
 # gcloud compute instances update-container ou-reviews \
