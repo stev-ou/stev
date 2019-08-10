@@ -10,11 +10,11 @@ pretty:
 .PHONY: image
 
 image:
-	docker build . -t gcr.io/ou-reviews/stev
+	docker build . -t gcr.io/stev-ou/stev
 
 .PHONY: run
 run: image
-	docker run -d -p 3000:8080 gcr.io/ou-reviews/stev:latest
+	docker run -d -p 3000:8080 gcr.io/stev-ou/stev:latest
 
 .PHONY: clean
 

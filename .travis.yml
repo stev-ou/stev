@@ -31,7 +31,7 @@ services:
 env:
   global:
     - GOOGLE_APPLICATION_CREDENTIALS=~/gcloud-service-key.json
-    - PROJECT_NAME=ou-reviews
+    - PROJECT_NAME=stev-ou
     - CLOUDSDK_COMPUTE_ZONE=us-central1-c
 
 before_deploy:
