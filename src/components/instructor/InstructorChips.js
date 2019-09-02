@@ -4,7 +4,21 @@ import { withStyles } from '@material-ui/core/styles';
 import Chip from '@material-ui/core/Chip';
 import Tooltip from '@material-ui/core/Tooltip';
 import obj from '../MobileTools.js';
-import { api_endpoint, dept_chip_colors } from '../../constants.js';
+import { api_endpoint } from '../../constants.js';
+
+// We'll use this function to generate a color string for chips based on department name
+var stringToColour = function(str) {
+  var hash = 0;
+  for (var i = 0; i < str.length; i++) {
+    hash = str.charCodeAt(i) + ((hash << 5) - hash);
+  }
+  var colour = '#';
+  for (i = 0; i < 3; i++) {
+    var value = (hash >> (i * 8)) & 0xFF;
+    colour += ('00' + value.toString(16)).substr(-2);
+  }
+  return colour;
+}
 
 const mobile = obj['mobile'];
 var justify = 'left';
@@ -130,7 +144,7 @@ class InstructorChips extends React.Component {
               label={d}
               className={classes.chip}
               variant="outlined"
-              style={{ color: '#ffffff', backgroundColor: dept_chip_colors[d] }}
+              style={{ color: '#ffffff', backgroundColor: stringToColour(d)}}
             />
           </Tooltip>
         );
