@@ -7,6 +7,8 @@ import {
   setSearchText,
   SearchType,
 } from '../actions';
+import HelpOutlineIcon from '@material-ui/icons/HelpOutline';
+import Tooltip from '@material-ui/core/Tooltip';
 import SearchAutocomplete from './SearchAutocomplete.js';
 import RadioSelector from './RadioSelector.js';
 
@@ -75,6 +77,11 @@ class SearchForm extends React.Component {
             <div className="form-check-inline">
               <h6 style={{ margin: 'auto' }}> Search by: {'  '}</h6>
               <RadioSelector style={{ padding: '0em' }} />
+            </div>
+            <div style={{display:'inline', float: 'right', marginTop: '0.1em'}}>
+              <Tooltip placement='left' title="Some Text">
+              <HelpOutlineIcon />
+              </Tooltip>
             </div>
           </form>
         </div>
