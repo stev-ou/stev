@@ -119,12 +119,6 @@ body {
     background-color: #f5f5f5;
 }
 
-#help-icon {
-  align-self: right;
-  margin-left: 0px;
-  float: right;
-}
-
 #search-form{
   color: #545B62;
   padding-top: 0.75em;
@@ -213,6 +207,8 @@ body {
 
 /* STEV button in navbar and other links */
 .STEV-navbar-button {
+  letter-spacing: 1px;
+  font-weight: bold;
   background-color: inherit;
   cursor: pointer;
   border-style: none;
@@ -327,6 +323,13 @@ body {
     box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.2);/*, 0 6px 20px 0 rgba(0, 0, 0, 0.19);*/
     margin-bottom: 1.5em;
 }
+
+  .marginlesscontainer {
+    padding-left: 0rem;
+    padding-right: 0rem;
+  }
+
+
   .App {
     margin-top:0em;
     margin-left:0em;

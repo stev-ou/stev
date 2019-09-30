@@ -14,7 +14,7 @@ class LandingComponent extends React.Component {
         <div>
           <div className="App-landing">
             <nav className="navbar sticky-top">
-              <div className="container" style={{ paddingTop: '1vw' }}>
+              <div className="marginlesscontainer container" style={{ paddingTop: '1vw'}}>
                 <div className="col-xl-6 col-lg-6 col-md-6 col-sm-6 align-self-center">
                   <h2 id="landing-title" >
                     <text className="boldSTEV">S</text>tudent-<text className="boldSTEV">T</text>
