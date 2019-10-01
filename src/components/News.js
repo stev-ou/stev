@@ -7,7 +7,7 @@ const News = props => (
         <b>News</b>
       </h1>
       <h5><b>09/24/2019 - The Lost Ogle</b></h5>
-      <a target='_blank' href='https://www.thelostogle.com/2019/09/24/ou-grads-create-rating-app-to-discreetly-trash-talk-professors/'>
+      <a target='_blank' rel="noopener noreferrer" href='https://www.thelostogle.com/2019/09/24/ou-grads-create-rating-app-to-discreetly-trash-talk-professors/'>
           OU grads create rating app to discreetly trash-talk professors
          </a>
          <div style={{marginLeft:'2em'}}>
@@ -15,13 +15,13 @@ const News = props => (
          </div>
       <br />
       <h5><b>09/22/2019 - OU Daily</b></h5>
-      <a target='_blank' href='http://www.oudaily.com/news/ou-graduates-create-new-app-to-show-instructor-evaluations-for/article_48b4d150-dd45-11e9-b042-576e83ad8549.html'>
+      <a target='_blank' rel="noopener noreferrer" href='http://www.oudaily.com/news/ou-graduates-create-new-app-to-show-instructor-evaluations-for/article_48b4d150-dd45-11e9-b042-576e83ad8549.html'>
       OU graduates create new app to show instructor evaluations for courses
       </a>
       <br />
       <br />
       <h5><b>04/24/2019 - OU Daily</b></h5>
-      <a target='_blank' href='http://www.oudaily.com/news/undergraduate-student-congress-sees-resolutions-on-teacher-evaluations-collegiate-recovery/article_11fc825a-6650-11e9-88d9-27d2da2c3db0.html'>
+      <a target='_blank' rel="noopener noreferrer" href='http://www.oudaily.com/news/undergraduate-student-congress-sees-resolutions-on-teacher-evaluations-collegiate-recovery/article_11fc825a-6650-11e9-88d9-27d2da2c3db0.html'>
       Undergraduate Student Congress sees resolutions on teacher evaluations, collegiate recovery program in final meeting
          </a>
         <br />
@@ -31,7 +31,7 @@ const News = props => (
       <br />
       <br />
       <h5><b>12/11/2002 - OU Daily</b></h5>
-      <a target='_blank' href='http://www.oudaily.com/students-need-access-to-evaluation-reports/article_e3f27c7c-c837-5409-a90a-334e9cc7a67f.html'>
+      <a target='_blank' rel="noopener noreferrer" href='http://www.oudaily.com/students-need-access-to-evaluation-reports/article_e3f27c7c-c837-5409-a90a-334e9cc7a67f.html'>
       Undergraduate Student Congress sees resolutions on teacher evaluations, collegiate recovery program in final meeting
       </a>
       <br />

@@ -17,9 +17,9 @@ const GetInvolved = props => (
         suggesting content improvements. The recommended ways to get involved
         are listed below.{' '}
       </p>
-      <h3>Current Contribution Suggestions</h3>
+      <h3>Recommendations</h3>
       <p>
-        <i>Updated Summer 2019</i>
+        <i>Updated Fall 2019</i>
       </p>
       <ul>
         <li>
@@ -49,7 +49,9 @@ const GetInvolved = props => (
           issue in the same way as above, including the data you expected and
           what you received (if any). This is especially valuable since our team
           has continually attempted to work with the university, with very
-          little receptivity or action on the university's behalf. As we collect
+          little receptivity or action on the university's behalf. At present, only
+          approximately 90% of course evaluations are made public, as this decision
+          is left to the discretion of each professor. As we collect
           more information about the demand for missing evaluations, we gain
           further support for our efforts to gather more data from OU.
         </li>
