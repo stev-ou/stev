@@ -21,7 +21,7 @@ class Header extends React.Component {
       if (hamburger.getAttribute('aria-expanded') === 'true') {
         hamburger.click();
       }
-    } else if (['about', 'getinvolved'].includes(e.target.id)) {
+    } else if (['about', 'getinvolved', 'news'].includes(e.target.id)) {
       this.props.history.push('/' + e.target.id);
       if (hamburger.getAttribute('aria-expanded') === 'true') {
         hamburger.click();
@@ -93,6 +93,16 @@ class Header extends React.Component {
                     style={{ outline: 'none' }}
                   >
                     About
+                  </button>
+                </li>
+                <li className="nav-item navbar-nav mr-auto">
+                  <button
+                    type="submit"
+                    className="STEV-navbar-button"
+                    id="news"
+                    style={{ outline: 'none' }}
+                  >
+                    News
                   </button>
                 </li>
                 <li className="nav-item navbar-nav mr-auto">
