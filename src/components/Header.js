@@ -22,7 +22,7 @@ class Header extends React.Component {
         hamburger.click();
       }
     } else if (['about', 'getinvolved', 'news'].includes(e.target.id)) {
-      this.props.history.push('/' + e.target.id);
+      this.props.history.push('/' + e.target.id + '#top');
       if (hamburger.getAttribute('aria-expanded') === 'true') {
         hamburger.click();
       }
