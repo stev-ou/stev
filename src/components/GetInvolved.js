@@ -1,4 +1,6 @@
 import React from 'react';
+import fulldata from '../static/2019-10-06-Reviews.csv';
+import aggregateddata from '../static/2019-10-06-Aggregated-Reviews.csv';
 
 const GetInvolved = props => (
   <div className="container">
@@ -129,6 +131,41 @@ const GetInvolved = props => (
         contributions to the STEV source code, we would be happy to welcome you
         as a project maintainer or administrator.
       </p>
+      <h3>Dataset Access</h3>
+      <p>We have a few API's built out to access the data (see{' '}       
+        <a
+          target="_blank"
+          rel="noopener noreferrer"
+          href="https://github.com/stev-ou/stev-api/blob/master/README.md"
+        >
+         source code repository
+        </a>), but if you would like the full dataset easy access to the full dataset, you can download from the following links: </p>
+        <a
+          target="_blank"
+          rel="noopener noreferrer"
+          href={fulldata}
+        >
+          Full Dataset (57 MB)
+        </a>
+        <br/>
+        <ul>
+        <li>
+        Considers individual question responses (5 values per instructor-course combination)
+        </li>
+        </ul>
+        <a
+          target="_blank"
+          rel="noopener noreferrer"
+          href={aggregateddata}
+        >
+          Aggregated Dataset (11 MB)
+        </a>{' '}
+        <br/>
+        <ul>
+        <li>
+        Question responses aggregated by instructor/course (1 value per instructor-course combination)
+        </li>
+        </ul>
       <h3>Contact</h3>
       If you would like to get in touch with the project team, please email us
       at{' '}

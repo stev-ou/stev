@@ -1,7 +1,7 @@
 import React from 'react';
 import DataView from './DataView.js';
 import SearchForm from './SearchForm.js';
-import graph from '../img/graph.png';
+import graph from '../static/graph.png';
 import { connect } from 'react-redux';
 import DisclaimerAlert from './DisclaimerAlert.js';
 
