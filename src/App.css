@@ -126,11 +126,13 @@ body {
   }
 
 #landing-title {
+    letter-spacing: 0.5px;
     color: #545B62;
     text-align: left;
   }
 
 #landing-subtitle {
+  letter-spacing: 0.5px;
   color: #545B62;
   padding-top:0.25em;
   padding-bottom: 0.25em;
@@ -207,8 +209,7 @@ body {
 
 /* STEV button in navbar and other links */
 .STEV-navbar-button {
-  letter-spacing: 1px;
-  font-weight: bold;
+  letter-spacing: 0.5px;
   background-color: inherit;
   cursor: pointer;
   border-style: none;
