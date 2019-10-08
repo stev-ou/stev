@@ -1,4 +1,6 @@
 import React from 'react';
+import fulldata from '../static/2019-10-06-Reviews.csv';
+import aggregateddata from '../static/2019-10-06-Aggregated-Reviews.csv';
 
 const GetInvolved = props => (
   <div className="container">
@@ -17,9 +19,9 @@ const GetInvolved = props => (
         suggesting content improvements. The recommended ways to get involved
         are listed below.{' '}
       </p>
-      <h3>Current Contribution Suggestions</h3>
+      <h3>Recommendations</h3>
       <p>
-        <i>Updated Summer 2019</i>
+        <i>Updated Fall 2019</i>
       </p>
       <ul>
         <li>
@@ -49,7 +51,9 @@ const GetInvolved = props => (
           issue in the same way as above, including the data you expected and
           what you received (if any). This is especially valuable since our team
           has continually attempted to work with the university, with very
-          little receptivity or action on the university's behalf. As we collect
+          little receptivity or action on the university's behalf. At present, only
+          approximately 90% of course evaluations are made public, as this decision
+          is left to the discretion of each professor. As we collect
           more information about the demand for missing evaluations, we gain
           further support for our efforts to gather more data from OU.
         </li>
@@ -127,6 +131,41 @@ const GetInvolved = props => (
         contributions to the STEV source code, we would be happy to welcome you
         as a project maintainer or administrator.
       </p>
+      <h3>Dataset Access</h3>
+      <p>We have a few API's built out to access the data (see{' '}       
+        <a
+          target="_blank"
+          rel="noopener noreferrer"
+          href="https://github.com/stev-ou/stev-api/blob/master/README.md"
+        >
+         source code repository
+        </a>), but if you would like the full dataset easy access to the full dataset, you can download from the following links: </p>
+        <a
+          target="_blank"
+          rel="noopener noreferrer"
+          href={fulldata}
+        >
+          Full Dataset (57 MB)
+        </a>
+        <br/>
+        <ul>
+        <li>
+        Considers individual question responses (5 values per instructor-course combination)
+        </li>
+        </ul>
+        <a
+          target="_blank"
+          rel="noopener noreferrer"
+          href={aggregateddata}
+        >
+          Aggregated Dataset (11 MB)
+        </a>{' '}
+        <br/>
+        <ul>
+        <li>
+        Question responses aggregated by instructor/course (1 value per instructor-course combination)
+        </li>
+        </ul>
       <h3>Contact</h3>
       If you would like to get in touch with the project team, please email us
       at{' '}

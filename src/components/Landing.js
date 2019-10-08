@@ -1,7 +1,7 @@
 import React from 'react';
 import DataView from './DataView.js';
 import SearchForm from './SearchForm.js';
-import graph from '../img/graph.png';
+import graph from '../static/graph.png';
 import { connect } from 'react-redux';
 import DisclaimerAlert from './DisclaimerAlert.js';
 
@@ -14,11 +14,12 @@ class LandingComponent extends React.Component {
         <div>
           <div className="App-landing">
             <nav className="navbar sticky-top">
-              <div className="container" style={{ paddingTop: '1vw' }}>
+              <div className="marginlesscontainer container" style={{ paddingTop: '1vw'}}>
                 <div className="col-xl-6 col-lg-6 col-md-6 col-sm-6 align-self-center">
-                  <h2 id="landing-title">
-                    <b>S</b>tudent-<b>T</b>eacher <b>E</b>valuation <b>V</b>
-                    isualizations at <b>OU</b>
+                  <h2 id="landing-title" >
+                    <text className="boldSTEV">S</text>tudent-<text className="boldSTEV">T</text>
+                    eacher <text className="boldSTEV">E</text>valuation <text className="boldSTEV">V</text>
+                    isualizations at <text className="boldSTEV">OU</text>
                   </h2>
                   <h6 id="landing-subtitle">
                     Search through large public datasets of previous course and

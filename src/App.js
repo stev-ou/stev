@@ -12,6 +12,7 @@ import {
   setInstructorList,
 } from './actions';
 import About from './components/About';
+import News from './components/News';
 //import Footer from './components/Footer.js';
 import GetInvolved from './components/GetInvolved';
 import { api_endpoint } from './constants.js';
@@ -156,6 +157,14 @@ class App extends React.Component {
         <div>
           <Header history={this.props.history} />
           <GetInvolved />
+        </div>
+      );
+    } 
+    else if (this.props.match.params.search_type === 'news') {
+      return (
+        <div>
+          <Header history={this.props.history} />
+          <News />
         </div>
       );
     } else {
