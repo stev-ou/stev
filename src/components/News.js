@@ -6,6 +6,12 @@ const News = props => (
       <h1 style={{ marginBottom: '0.75em' }}>
         <b>News</b>
       </h1>
+      <h5><b>010/08/2019 - AME Blog at OU</b></h5>
+      <a target='_blank' rel="noopener noreferrer" href='https://blogs.ou.edu/ame/2019/10/08/ame-graduate-students-create-evaluation-app'>
+      AME Graduate Students Create Evaluation App
+      </a>
+      <br />
+      <br />
       <h5><b>09/24/2019 - The Lost Ogle</b></h5>
       <a target='_blank' rel="noopener noreferrer" href='https://www.thelostogle.com/2019/09/24/ou-grads-create-rating-app-to-discreetly-trash-talk-professors/'>
           OU grads create rating app to discreetly trash-talk professors
@@ -25,8 +31,16 @@ const News = props => (
       Undergraduate Student Congress sees resolutions on teacher evaluations, collegiate recovery program in final meeting
          </a>
         <br />
-      <hr></hr>
-      
+      <hr />
+      This is a blog post from Sam Jett and Zach Schuermann that details some analyses on the aggregated student reviews dataset, examining the differences in course ratings observed by instructor genders, course levels (e.g. first-year vs graduate courses), college, and course enrollment.
+      <br />
+      <br />
+      <h5><b>10/24/2019 - OpenBits Blog</b></h5>
+      <a target='_blank' rel="noopener noreferrer" href='https://openbits.app/posts/STEV-analysis/'>
+      Analysis of Student-Teacher Evaluations
+      </a>
+      <br />
+
       The following article is not related to the STEV project, but provides some scope on OU's decision to publicize student evaluation data.
       <br />
       <br />
