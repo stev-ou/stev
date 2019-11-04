@@ -14,7 +14,7 @@ class DisclaimerAlert extends React.Component {
         Student evaluations of teaching are known to have{' '}
         <a href="/about#SETresearch">inherent biases</a>. These 
         biases were assessed in the{' '}
-        <a href="https://openbits.app/stev-analysis" target='_blank' rel="noopener noreferrer">
+        <a href="https://openbits.app/posts/stev-analysis" target='_blank' rel="noopener noreferrer">
           blog post here</a>. Please consider biases in the data when using this app.
       </p>
     );
