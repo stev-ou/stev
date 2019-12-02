@@ -30,16 +30,17 @@ const News = props => (
       <a target='_blank' rel="noopener noreferrer" href='http://www.oudaily.com/news/undergraduate-student-congress-sees-resolutions-on-teacher-evaluations-collegiate-recovery/article_11fc825a-6650-11e9-88d9-27d2da2c3db0.html'>
       Undergraduate Student Congress sees resolutions on teacher evaluations, collegiate recovery program in final meeting
          </a>
-        <br />
+      <br />
       <hr />
       This is a blog post from Sam Jett and Zach Schuermann that details some analyses on the aggregated student reviews dataset, examining the differences in course ratings observed by instructor genders, course levels (e.g. first-year vs graduate courses), college, and course enrollment.
       <br />
       <br />
-      <h5><b>10/24/2019 - OpenBits Blog</b></h5>
+      <h5><b>11/02/2019 - OpenBits Blog</b></h5>
       <a target='_blank' rel="noopener noreferrer" href='https://openbits.app/posts/STEV-analysis/'>
       Analysis of Student-Teacher Evaluations
       </a>
       <br />
+      <hr />
 
       The following article is not related to the STEV project, but provides some scope on OU's decision to publicize student evaluation data.
       <br />
