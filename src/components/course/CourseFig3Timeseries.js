@@ -150,6 +150,7 @@ class CourseFig3Timeseries extends React.Component {
             {
               ticks: {
                 fontSize: 0.75 * chart_legend_size * em,
+                stepSize: 1,
                 min: ymin,
                 max: ymax,
               },

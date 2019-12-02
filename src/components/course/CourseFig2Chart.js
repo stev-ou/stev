@@ -116,10 +116,18 @@ class CourseFig2Chart extends React.Component {
       var course_ranking = ordinal_suffix_of(result['course ranking']);
 
       // Determine what scale to plot the averages on
-      var min_rating = Math.min(bar_data.datasets[0].data.map(Number)) - 0.2;
-      var max_rating = Math.max(bar_data.datasets[0].data.map(Number)) + 0.2;
-      if (max_rating >= 5) {
+      var max_rating = Math.ceil(Math.max(bar_data.datasets[0].data.map(function(e) {
+        return Number(e) + 0.1
+      })));
+      var min_rating = Math.floor(Math.min(bar_data.datasets[0].data.map(function(e) {
+        return Number(e) - 0.1
+      })));
+      // Ensure in ranges
+      if (max_rating > 5) {
         max_rating = 5;
+      }
+      if (min_rating < 1) {
+        min_rating = 1;
       }
       // Calculate total enrollment
       var total_enrollment = Math.floor(Math.sum(donut_data.datasets[0].data));
@@ -178,14 +186,18 @@ class CourseFig2Chart extends React.Component {
           display: false,
         },
       };
+      // Commenting this out as backend messed up the rankings
+      //    <h2 className="subtitle">
+      //     This course is ranked {course_ranking} out of{' '}
+      //      {result['dept']['courses in dept']} courses in the{' '}
+      //      {result['dept']['dept name']} department for the{' '}
+      //      <b>{result['most recent sem']}</b> semester.
+      //    </h2> 
 
       return (
         <div>
           <h2 className="subtitle">
-            This course is ranked {course_ranking} out of{' '}
-            {result['dept']['courses in dept']} courses in the{' '}
-            {result['dept']['dept name']} department for the{' '}
-            <b>{result['most recent sem']}</b> semester.
+          <b>{result['most recent sem']}</b>: Rankings and Enrollment
           </h2>
           <div className="row" style={{ align: 'left' }}>
             <div className="col-md-8" id="fig2bar-container">

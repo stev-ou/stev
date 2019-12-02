@@ -53,7 +53,7 @@ class InstructorFig2Timeseries extends React.Component {
         var course_data = [];
         var valid_semesters = result['courses'][j]['semesters'];
         var counter = 0;
-        // Check through each semester that this course existed, and add this instructors rating if e
+        // Check through each semester that this course existed, and add this instructors rating if so
         for (var k = 0; k < all_semesters.length; k++) {
           if (valid_semesters.includes(all_semesters[k])) {
             course_data.push(course['ratings'][counter].toFixed(2));
@@ -137,9 +137,10 @@ class InstructorFig2Timeseries extends React.Component {
           yAxes: [
             {
               ticks: {
+                stepSize: 1,
                 fontSize: 0.75 * chart_legend_size * em,
                 min: ymin,
-                max: ymax,
+                max: ymax
               },
               scaleLabel: {
                 display: true,

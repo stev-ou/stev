@@ -73,6 +73,10 @@ class InstructorFig3TableBar extends React.Component {
       var result = this.state.result;
       var display_questions = this.state.display_questions;
 
+      // Initialize at opposite max value, then decrement/increment if found
+      var ymin = 5;
+      var ymax = 1;
+
       // Lets build our plot results to take data from the api and turn them into the form usable by the bar chart
       var plot_result = {};
 
@@ -113,23 +117,50 @@ class InstructorFig3TableBar extends React.Component {
           hidden: !display_questions[j],
           hoverBorderColor: 'rgba(255,255,255,1)',
           data: result.questions[j].ratings.map(function(each_element) {
-            if (each_element === 'none') {
+            if (each_element !== 0) {
+              if (each_element - 0.1 < ymin) {
+                ymin = Math.floor(each_element - 0.1);
+              }
+              if (each_element + 0.1 > ymax) {
+                ymax = Math.ceil(each_element + 0.1);
+              }
+            }
+            if (each_element === 'none' || each_element === 0) {
               return null;
             } else {
               return Number(each_element.toFixed(2));
             }
           }),
         });
+        // Check to get only questions that exist for this course
+        var non_empty_questions_length = result.questions[j].ratings.filter(e => e !== 0).length;
 
+        // This modifies the data for the table
+        var q = String(result.questions[j]['question']); 
+        // These are temporary fixes for a backend issue - 191203
+        if (q == "The instructor was well"){
+          q = "The instructor was well-organized and made adequate preparation for class";
+        }
+        if (q == "The instructor related course material to professional practice and") {
+          q = "The instructor related course material to professional practice and/or research";
+        }
         // This modifies the data for the table
         products.push({
           qNumber: j + 1,
-          question: result.questions[j]['question'],
+          question: q,
           avgRating: (
-            result.questions[j]['ratings'].reduce((a, b) => a + b, 0) /
-            result.questions[j]['ratings'].length
+            result.questions[j].ratings.reduce((a, b) => a + b, 0) /
+            non_empty_questions_length
           ).toFixed(2),
         });
+      }
+
+      // Check to make sure ymin, ymax in valid range
+      if (ymax > 5) {
+        ymax = 5;
+      }
+      if (ymin < 1) {
+        ymin = 1;
       }
       // Chart options
       var plot_options = {
@@ -146,8 +177,8 @@ class InstructorFig3TableBar extends React.Component {
               },
               ticks: {
                 beginAtZero: false,
-                min: 1,
-                max: 5,
+                min: ymin,
+                max: ymax,
                 stepSize: 1,
                 fontSize: 0.75 * label_size * em,
               },
