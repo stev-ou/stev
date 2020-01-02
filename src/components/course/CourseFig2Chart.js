@@ -18,22 +18,6 @@ if (mobile) {
   chart_legend_size = 2;
 }
 
-// This function will add the proper suffix, i.e 1st, 2nd, 3rd, given integer input
-function ordinal_suffix_of(i) {
-  var j = i % 10,
-    k = i % 100;
-  if (j === 1 && k !== 11) {
-    return i + 'st';
-  }
-  if (j === 2 && k !== 12) {
-    return i + 'nd';
-  }
-  if (j === 3 && k !== 13) {
-    return i + 'rd';
-  }
-  return i + 'th';
-}
-
 // Define API input string
 const API = api_endpoint + 'courses/';
 
@@ -112,8 +96,8 @@ class CourseFig2Chart extends React.Component {
         donut_data.datasets[0].backgroundColor.push(schemeSet3[i + 3]);
       }
 
-      // This turns the ranking into a 1st, 2nd, etc.
-      var course_ranking = ordinal_suffix_of(result['course ranking']);
+      // This turns the ranking into a 1st, 2nd, etc. (DEPRECATED)
+      // var course_ranking = ordinal_suffix_of(result['course ranking']);
 
       // Determine what scale to plot the averages on
       var max_rating = Math.ceil(Math.max(bar_data.datasets[0].data.map(function(e) {

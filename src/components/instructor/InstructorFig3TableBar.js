@@ -116,6 +116,7 @@ class InstructorFig3TableBar extends React.Component {
           hoverBackgroundColor: shadeColor(question_colors[j], -10),
           hidden: !display_questions[j],
           hoverBorderColor: 'rgba(255,255,255,1)',
+          // eslint-disable-next-line
           data: result.questions[j].ratings.map(function(each_element) {
             if (each_element !== 0) {
               if (each_element - 0.1 < ymin) {
@@ -138,10 +139,10 @@ class InstructorFig3TableBar extends React.Component {
         // This modifies the data for the table
         var q = String(result.questions[j]['question']); 
         // These are temporary fixes for a backend issue - 191203
-        if (q == "The instructor was well"){
+        if (q === "The instructor was well"){
           q = "The instructor was well-organized and made adequate preparation for class";
         }
-        if (q == "The instructor related course material to professional practice and") {
+        if (q === "The instructor related course material to professional practice and") {
           q = "The instructor related course material to professional practice and/or research";
         }
         // This modifies the data for the table
