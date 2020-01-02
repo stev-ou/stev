@@ -74,6 +74,10 @@ class CourseFig4TableBar extends React.Component {
       // Lets build our plot results to take data from the api and turn them into the form usable by the bar chart
       var plot_result = {};
 
+      // Initialize at opposite max value, then decrement/increment if found
+      var ymin = 5;
+      var ymax = 1;
+
       plot_result['labels'] = result.instructors;
       plot_result.datasets = [];
 
@@ -110,18 +114,39 @@ class CourseFig4TableBar extends React.Component {
           hoverBackgroundColor: shadeColor(question_colors[j], -10),
           hidden: !display_questions[j],
           hoverBorderColor: 'rgba(255,255,255,1)',
+          // eslint-disable-next-line
           data: result.questions[j].ratings.map(function(each_element) {
-            return Number(each_element.toFixed(2));
+            if (each_element !== 0) {
+              if (each_element - 0.1 < ymin) {
+                ymin = Math.floor(each_element - 0.1);
+              }
+              if (each_element + 0.1 > ymax) {
+                ymax = Math.ceil(each_element + 0.1);
+              }
+            }
+            if (each_element === 'none' || each_element === 0) {
+              return null;
+            } else {
+              return Number(each_element.toFixed(2));
+            }
           }),
         });
 
         // This modifies the data for the table
+        var q = String(result.questions[j]['question']); 
+        // These are temporary fixes for a backend issue - 191203
+        if (q === "The instructor was well"){
+          q = "The instructor was well-organized and made adequate preparation for class.";
+        }
+        if (q === "The instructor related course material to professional practice and") {
+          q = "The instructor related course material to professional practice and/or research";
+        }
         products.push({
           qNumber: j + 1,
-          question: result.questions[j]['question'],
+          question: q,
           avgRating: (
             result.questions[j]['ratings'].reduce((a, b) => a + b, 0) /
-            result.questions[j]['ratings'].length
+            result.questions[j]['ratings'].filter(e => e !== "none" || e!== 0).length
           ).toFixed(2),
         });
       }
@@ -139,9 +164,8 @@ class CourseFig4TableBar extends React.Component {
                 fontSize: 1.2 * label_size * em,
               },
               ticks: {
-                beginAtZero: false,
-                min: 1,
-                max: 5,
+                min: ymin,
+                max: ymax,
                 stepSize: 1,
                 fontSize: 0.75 * label_size * em,
               },
