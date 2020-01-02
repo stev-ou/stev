@@ -3,7 +3,7 @@
   "version": "0.2.0",
   "private": true,
   "dependencies": {
-    "@material-ui/core": "^4.7.1",
+    "@material-ui/core": "^4.8.2",
     "@material-ui/icons": "^4.5.1",
     "bootstrap": "^4.4.1",
     "chart.js": "^2.9.3",
@@ -17,7 +17,7 @@
     "rcolor": "^1.0.1",
     "react": "^16.12.0",
     "react-bootstrap": "^1.0.0-beta.16",
-    "react-bootstrap-table-next": "^3.3.2",
+    "react-bootstrap-table-next": "^3.3.3",
     "react-chartjs-2": "^2.8.0",
     "react-confirm-alert": "^2.4.1",
     "react-dom": "^16.12.0",
@@ -25,14 +25,14 @@
     "react-loader-spinner": "^2.3.0",
     "react-redux": "^7.1.3",
     "react-router-dom": "^5.1.2",
-    "react-scripts": "^3.2.0",
+    "react-scripts": "^3.3.0",
     "react-select": "^2.4.4",
     "react-select-virtualized": "^1.3.4",
     "react-virtualized": "^9.21.2",
-    "redux": "^4.0.4",
+    "redux": "^4.0.5",
     "set-value": "^3.0.1",
     "shebang-regex": "^3.0.0",
-    "typescript": "^3.7.2"
+    "typescript": "^3.7.4"
   },
   "scripts": {
     "start": "react-scripts start",
