@@ -10,7 +10,7 @@
     "core-util-is": "^1.0.2",
     "d3-color": "^1.4.0",
     "d3-scale-chromatic": "^1.5.0",
-    "handlebars": "^4.5.3",
+    "handlebars": "^4.7.7",
     "jquery": "^3.4.1",
     "mathjs": "^5.10.3",
     "prettier": "^1.19.1",
