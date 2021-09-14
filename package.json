@@ -30,7 +30,7 @@
     "react-select-virtualized": "^1.3.4",
     "react-virtualized": "^9.21.2",
     "redux": "^4.0.5",
-    "set-value": "^3.0.1",
+    "set-value": "^4.0.1",
     "shebang-regex": "^3.0.0",
     "typescript": "^3.7.4"
   },
